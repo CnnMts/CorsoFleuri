@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  node:
+    build: .
+    container_name: corsofleuri
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8081:8081"
+    command: npm start
+  php:
+    image: php:8.1-fpm
+    container_name: php-fpm
+    volumes:
+      - ./html:/var/www/html
+    ports:
+      - "9000:9000"
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    ports:
+      - "2373:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
