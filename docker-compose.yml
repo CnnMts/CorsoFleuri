@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - "8081:8081"
+      - "8082:8082"
   php:
     image: php:8.1-fpm
     container_name: php-fpm
@@ -29,7 +29,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadmin_corsofleuri
     environment:
       PMA_HOST: db
       PMA_USER: root
