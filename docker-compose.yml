@@ -8,7 +8,6 @@ services:
       - .:/usr/src/app
     ports:
       - "8081:8081"
-    command: npm start
   php:
     image: php:8.1-fpm
     container_name: php-fpm
