@@ -2,8 +2,10 @@
 namespace App\Controllers;
 
 use PDO;
+use App\Controllers\Controller;
+use App\Utils\{Route};
 
-class DbTestController {
+class DbTestController extends Controller {
     #[Route("GET", "/dbtest")]
     public function index() {
         error_log('Execution de DbTestController::index()');
@@ -16,6 +18,8 @@ class DbTestController {
         $charset = 'utf8mb4';
 
         $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
+        error_log("Tentative de connexion avec DSN: $dsn, user: $user");
+
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -25,16 +29,16 @@ class DbTestController {
             $pdo = new PDO($dsn, $user, $pass, $options);
             $stmt = $pdo->query("SHOW TABLES");
             $tables = $stmt->fetchAll();
-            echo json_encode([
-                "status"  => "success",
-                "message" => "Connexion réussie !",
-                "tables"  => $tables
-            ]);
+            return [
+                'status'  => 'success',
+                'message' => 'Connexion réussie !',
+                'tables'  => $tables
+            ];
         } catch (\PDOException $e) {
-            echo json_encode([
-                "status"  => "error",
-                "message" => $e->getMessage()
-            ]);
+            return [
+                'status'  => 'error',
+                'message' => $e->getMessage()
+            ];
         }
     }
 }

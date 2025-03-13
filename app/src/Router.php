@@ -22,6 +22,9 @@ class Router {
      * @param array $controllers List of controller classes to register
      */
     public function registerControllers(array $controllers) {
+        foreach ($this->routes as $route => $handler) {
+            error_log("Route enregistrée : " . $route);
+        }
         foreach ($controllers as $controller) {
             $reflection = new \ReflectionClass($controller);
             foreach ($reflection->getMethods() as $method) {

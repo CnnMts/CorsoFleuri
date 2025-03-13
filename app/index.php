@@ -20,6 +20,11 @@ $controllers = [
     DbTestController::class
 ];
 
+
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = trim($uri, '/'); // "dbtest" dans ce cas
+error_log("URI extrait: " . $uri);
+
 $router = new Router();
 $router->registerControllers($controllers);
 $router->run();
