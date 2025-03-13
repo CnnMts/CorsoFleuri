@@ -1,7 +1,3 @@
-FROM node:20.18.2
-WORKDIR /src
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 8082
-CMD ["npm", "run", "dev"]
+FROM php:8.1-fpm
+
+RUN docker-php-ext-install pdo pdo_mysql
