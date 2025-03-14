@@ -6,7 +6,8 @@ ini_set('display_errors', 1);
 require 'vendor/autoload.php';
 
 use App\Router;
-use App\Controllers\{User, Auth, Product, Order, OrderItem, DbTestController, Role, Unit, PaymentMethod, OrderStatus};
+use App\Controllers\{User, Auth, Product, Order, OrderItem, DbTestController, Role, Unit, PaymentMethod, OrderStatus, Menu, MenuProduct, Category};
+
 
 $controllers = [
     User::class,
@@ -18,7 +19,11 @@ $controllers = [
     Role::class,
     Unit::class,
     PaymentMethod::class,
-    OrderStatus::class
+    OrderStatus::class,
+    DbTestController::class,
+    Category::class,
+    Menu::class,
+    MenuProduct::class
 ];
 
 
