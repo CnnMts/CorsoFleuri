@@ -5,43 +5,43 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\OrderItemModel;
 use App\Utils\{Route,HttpException};
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+// use App\Middlewares\AuthMiddleware;
+// use App\Middlewares\RoleMiddleware;
 
 class OrderItem extends Controller {
-  protected object $order;
+  protected object $orderItem;
 
   public function __construct($param) {
-    $this->order = new OrderItemModel();
+    $this->orderItem = new OrderItemModel();
 
     parent::__construct($param);
   }
 
-  #[Route("POST", "/orderitems", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function toto() {
-    $this->order->add($this->body);
+  #[Route("POST", "/orderItem")]
+  public function createOrderItem() {
+    $this->orderItem->add($this->body);
 
-    return $this->order->getLast();
+    return $this->orderItem->getLast();
   }
 
-  #[Route("DELETE", "/orderitems/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function deleteOrder() {
-    return $this->order->delete(intval($this->params['id']));
+  #[Route("DELETE", "/orderItem/:id")]
+  public function deleteOrderItem() {
+    return $this->orderItem->delete(intval($this->params['id']));
   }
 
-  #[Route("GET", "/orderitems/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])] 
-  public function getOrder() {
-    return $this->order->get(intval($this->params['id']));
+  #[Route("GET", "/orderItem/:id")] 
+  public function getOrderItem() {
+    return $this->orderItem->get(intval($this->params['id']));
   }
 
-  #[Route("GET", "/orderitems", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function getOrders() {
+  #[Route("GET", "/orderItem")]
+  public function getOrderItems() {
       $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
-      return $this->order->getAll($limit);
+      return $this->orderItem->getAll($limit);
   }
 
-  #[Route("PATCH", "/orderitems/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function updateorder() {
+  #[Route("PATCH", "/orderItem/:id")]
+  public function updateOrderItem() {
     try {
       $id = intval($this->params['id']);
       $data = $this->body;
@@ -52,17 +52,19 @@ class OrderItem extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->order->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff($this->orderItem->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
         throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
       }
 
-      $this->order->update($data, intval($id));
+      $this->orderItem->update($data, intval($id));
 
       # Let's return the updated order
-      return $this->order->get($id);
+      return $this->orderItem->get($id);
     } catch (HttpException $e) {
       throw $e;
     }
   }
 }
+
+//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]

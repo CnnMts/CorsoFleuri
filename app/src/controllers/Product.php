@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\ProductModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+// use App\Middlewares\AuthMiddleware;
+// use App\Middlewares\RoleMiddleware;
 
 class Product extends Controller {
   protected object $product;
@@ -18,14 +18,14 @@ class Product extends Controller {
     parent::__construct($param);
   }
 
-  #[Route("POST", "/products", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function toto() {
+  #[Route("POST", "/product")]
+  public function createProduct() {
     $this->product->add($this->body);
 
     return $this->product->getLast();
   }
 
-  #[Route("DELETE", "/products/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+  #[Route("DELETE", "/product/:id")]
   public function deleteProduct() {
     return $this->product->delete(intval($this->params['id']));
   }
@@ -41,7 +41,7 @@ class Product extends Controller {
       return $this->product->getAll($limit);
   }
 
-  #[Route("PATCH", "/products/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+  #[Route("PATCH", "/product/:id")]
   public function updateProduct() {
     try {
       $id = intval($this->params['id']);
@@ -67,3 +67,5 @@ class Product extends Controller {
     }
   }
 }
+
+//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]

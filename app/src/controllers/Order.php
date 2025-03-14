@@ -17,30 +17,30 @@ class Order extends Controller {
     parent::__construct($param);
   }
 
-  #[Route("POST", "/orders", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function toto() {
+  #[Route("POST", "/orders")]
+  public function createOrder() {
     $this->order->add($this->body);
 
     return $this->order->getLast();
   }
 
-  #[Route("DELETE", "/orders/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+  #[Route("DELETE", "/orders/:id")]
   public function deleteOrder() {
     return $this->order->delete(intval($this->params['id']));
   }
 
-  #[Route("GET", "/orders/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])] 
+  #[Route("GET", "/orders/:id")] 
   public function getOrder() {
     return $this->order->get(intval($this->params['id']));
   }
 
-  #[Route("GET", "/orders", middlewares: [AuthMiddleware::class])]
+  #[Route("GET", "/orders")]
   public function getOrders() {
       $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
       return $this->order->getAll($limit);
   }
 
-  #[Route("PATCH", "/orders/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+  #[Route("PATCH", "/orders/:id")]
   public function updateorder() {
     try {
       $id = intval($this->params['id']);
@@ -66,3 +66,5 @@ class Order extends Controller {
     }
   }
 }
+
+//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]

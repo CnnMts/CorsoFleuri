@@ -4,15 +4,25 @@ namespace App\Models;
 
 use \PDO;
 use stdClass;
+use \Exception;
+use App\Utils\{HttpException};
 
-class DeliveryModel extends SqlConnect {
-  private $table = "deliveries";
-  public $authorized_fields_to_update = ['order_id', 'status_id'];
+class PaymentMethodModel extends SqlConnect {
+  private $table = "payment_method";
+  public $authorized_fields_to_update = ['name'];
 
   public function add(array $data) {
+    $query = "SELECT name FROM $this->table WHERE name = :name";
+    $req = $this->db->prepare($query);
+    $req->execute(["name" => $data["name"]]);
+    
+    if ($req->rowCount() > 0) {
+      throw new HttpException("Payment Method already exists!", 400);
+    }
+
     $query = "
-      INSERT INTO $this->table (order_id)
-      VALUES (:order_id)
+      INSERT INTO $this->table (name)
+      VALUES (:name)
     ";
 
     $req = $this->db->prepare($query);
@@ -20,12 +30,28 @@ class DeliveryModel extends SqlConnect {
   }
 
   public function delete(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("Payment Method doesn't exists !", 400);
+    }
+
     $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
     return new stdClass();
   }
 
   public function get(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("Payment Method doesn't exists !", 400);
+    }
+
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
@@ -36,17 +62,21 @@ class DeliveryModel extends SqlConnect {
     $query = "SELECT * FROM {$this->table}";
     
     if ($limit !== null) {
-      $query .= " LIMIT :limit";
-      $params = [':limit' => (int)$limit];
+        $query .= " LIMIT :limit";
+        $params = [':limit' => (int)$limit];
     } else {
-      $params = [];
+        $params = [];
     }
     
     $req = $this->db->prepare($query);
     foreach ($params as $key => $value) {
-      $req->bindValue($key, $value, PDO::PARAM_INT);
+        $req->bindValue($key, $value, PDO::PARAM_INT);
     }
     $req->execute();
+
+    if ($req->rowCount() == 0) {
+      throw new HttpException("No Payment Methods !", 400);
+    }
     
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -64,10 +94,10 @@ class DeliveryModel extends SqlConnect {
     $fields = [];
 
     foreach ($data as $key => $value) {
-      if (in_array($key, $this->authorized_fields_to_update)) {
-        $fields[] = "$key = :$key";
-        $params[":$key"] = $value;
-      }
+        if (in_array($key, $this->authorized_fields_to_update)) {
+            $fields[] = "$key = :$key";
+            $params[":$key"] = $value;
+        }
     }
 
     $params[':id'] = $id;
