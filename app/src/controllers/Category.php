@@ -17,30 +17,37 @@ class Category extends Controller {
     parent::__construct($param);
   }
 
-  #[Route("POST", "/category",/* middlewares: [AuthMiddleware::class, [RoleMiddleware::class]]*/)]
+  /*========================= POST ==========================================*/
+
+  #[Route("POST", "/category",
+  /* middlewares: [AuthMiddleware::class, [RoleMiddleware::class]]*/)]
   public function add() {
     $this->category->add($this->body);
 
     return $this->category->getLast();
   }
 
-  #[Route("DELETE", "/category/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function deleteOrder() {
-    return $this->category->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/category/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])] 
-  public function getOrder() {
+  #[Route("GET", "/category/:id", 
+  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)] 
+  public function getCategory() {
     return $this->category->get(intval($this->params['id']));
   }
 
-  #[Route("GET", "/category", middlewares: [AuthMiddleware::class])]
-  public function getOrders() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+  /*========================= GET ALL =======================================*/
+
+  #[Route("GET", "/category", /*middlewares: [AuthMiddleware::class]*/)]
+  public function getCategories() {
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->category->getAll($limit);
   }
 
-  #[Route("PATCH", "/category/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+  /*========================= PATCH =========================================*/
+
+  #[Route("PATCH", "/category/:id", 
+  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
   public function updateorder() {
     try {
       $id = intval($this->params['id']);
@@ -52,9 +59,11 @@ class Category extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->category->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->category->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException("Missing fields: " . 
+          implode(", ", $missingFields), 400);
       }
 
       $this->category->update($data, intval($id));
@@ -64,5 +73,13 @@ class Category extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETED =======================================*/
+
+  #[Route("DELETE", "/category/:id", 
+  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
+  public function deleteCategory() {
+    return $this->category->delete(intval($this->params['id']));
   }
 }
