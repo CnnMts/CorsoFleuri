@@ -7,12 +7,12 @@ use stdClass;
 
 class OrderModel extends SqlConnect {
   private $table = "orders";
-  public $authorized_fields_to_update = ['user_id', 'status_id'];
+  public $authorized_fields_to_update = ['status_id', 'discount_id', 'payment_method_id'];
 
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (user_id)
-      VALUES (:user_id)
+      INSERT INTO $this->table (status_id, discount_id, payment_method_id)
+      VALUES (:status_id, :discount_id, :payment_method_id)
     ";
 
     $req = $this->db->prepare($query);

@@ -6,14 +6,14 @@ use \PDO;
 use stdClass;
 
 class OrderItemModel extends SqlConnect {
-  private $table = "order_items";
-  public $authorized_fields_to_update = ['order_id', 'product_id', 'quantity'];
+  private $table = "order_item";
+  public $authorized_fields_to_update = ['order_id', 'type', 'item_id', 'quantity'];
 
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (order_id, product_id, quantity)
-      VALUES (:order_id, :product_id, :quantity)
-    ";
+    INSERT INTO $this->table (order_id, type, item_id, quantity)
+    VALUES (:order_id, :type, :item_id, :quantity)
+  ";
 
     $req = $this->db->prepare($query);
     $req->execute($data);
