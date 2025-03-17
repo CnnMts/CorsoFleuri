@@ -3,50 +3,50 @@
 namespace App\Controllers;
 
 use App\Controllers\Controller;
-use App\Models\UserModel;
+use App\Models\RoleModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
 // use App\Middlewares\AuthMiddleware;
 // use App\Middlewares\RoleMiddleware;
 
-class User extends Controller {
-  protected object $user;
+class Role extends Controller {
+  protected object $role;
 
   public function __construct($param) {
-    $this->user = new UserModel();
+    $this->role = new RoleModel();
 
     parent::__construct($param);
   }
 
-  /*========================= POST ==========================================*/
+    /*========================= POST ========================================*/
 
-  #[Route("POST", "/user")]
-  public function createUser() {
-    $this->user->add($this->body);
+  #[Route("POST", "/role")]
+  public function createRole() {
+    $this->role->add($this->body);
 
-    return $this->user->getLast();
+    return $this->role->getLast();
   }
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/user/:id")] 
-  public function getUser() {
-    return $this->user->get(intval($this->params['id']));
+  #[Route("GET", "/role/:id")] 
+  public function getRole() {
+    return $this->role->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/user")]
-  public function getUsers() {
+  #[Route("GET", "/role")]
+  public function getRoles() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
-      return $this->user->getAll($limit);
+      return $this->role->getAll($limit);
   }
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/user/:id")]
-  public function updateUser() {
+  #[Route("PATCH", "/role/:id")]
+  public function updateRole() {
     try {
       $id = intval($this->params['id']);
       $data = $this->body;
@@ -58,16 +58,16 @@ class User extends Controller {
 
       # Check for missing fields
       $missingFields = array_diff(
-        $this->user->authorized_fields_to_update, array_keys($data));
+        $this->role->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
         throw new HttpException(
           "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
-      $this->user->update($data, intval($id));
+      $this->role->update($data, intval($id));
 
-      # Let's return the updated user
-      return $this->user->get($id);
+      # Let's return the updated role
+      return $this->role->get($id);
     } catch (HttpException $e) {
       throw $e;
     }
@@ -75,9 +75,9 @@ class User extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/user/:id")]
-  public function deleteUser() {
-    return $this->user->delete(intval($this->params['id']));
+  #[Route("DELETE", "/role/:id")]
+  public function deleteRole() {
+    return $this->role->delete(intval($this->params['id']));
   }
 }
 

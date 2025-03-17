@@ -5,32 +5,33 @@ namespace App\Models;
 use \PDO;
 use stdClass;
 
-class ReturnModel extends SqlConnect {
-  private $table = "returns";
-  public $authorized_fields_to_update = ['product_id', 'user_id', 'reason_id', 'status_id'];
+class MenuChoiceModel extends SqlConnect {
+  private $table = "menu_choice";
+  public $authorized_fields_to_update = ['menu_id', 'order_id', 'starter_id', 'main_course_id', 'dessert_id', 'boisson_id'];
 
+  /*========================= ADD ===========================================*/
+  
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (product_id, user_id, reason_id)
-      VALUES (:product_id, :user_id, :reason_id)
+      INSERT INTO $this->table (menu_id, order_id, starter_id, main_course_id, dessert_id, boisson_id)
+      VALUES (:menu_id, :order_id, :starter_id, :main_course_id, :dessert_id, :boisson_id)
     ";
 
     $req = $this->db->prepare($query);
     $req->execute($data);
   }
 
-  public function delete(int $id) {
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
-    return new stdClass();
-  }
+  /*========================= GET BY ID =====================================*/
 
   public function get(int $id) {
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : 
+      new stdClass();
   }
+
+  /*========================= GET ALL =======================================*/
 
   public function getAll(?int $limit = null) {
     $query = "SELECT * FROM {$this->table}";
@@ -51,12 +52,18 @@ class ReturnModel extends SqlConnect {
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /*========================= GET LAST ======================================*/
+
   public function getLast() {
-    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare(
+      "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : 
+      new stdClass();
   }
+
+/*========================= UPDATE ==========================================*/
 
   public function update(array $data, int $id) {
     $request = "UPDATE $this->table SET ";
@@ -77,5 +84,13 @@ class ReturnModel extends SqlConnect {
     $req->execute($params);
     
     return $this->get($id);
+  }
+
+  /*========================= DELETE ========================================*/
+
+  public function delete(int $id) {
+    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
+    $req->execute(["id" => $id]);
+    return new stdClass();
   }
 }

@@ -10,7 +10,10 @@ class DbTestController extends Controller {
     public function index() {
         error_log('Execution de DbTestController::index()');
 
-        // Paramètres de connexion : ici, le host est le nom de service "db" défini dans votre docker-compose.yml
+        /* Paramètres de connexion : 
+        ici, le host est le nom de service "db" 
+        défini dans votre docker-compose.yml */
+        
         $host = 'db';
         $db   = getenv('MYSQL_DATABASE');
         $user = getenv('MYSQL_USER');

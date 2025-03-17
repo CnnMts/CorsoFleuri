@@ -15,12 +15,14 @@ class RoleMiddleware {
         if (!isset($request['user'])) {
             $headers = getallheaders();
             if (!isset($headers['Authorization'])) {
-                return $this->unauthorizedResponse("Authorization header not found");
+                return $this->unauthorizedResponse(
+                    "Authorization header not found");
             }
     
             $authHeader = $headers['Authorization'];
             if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-                return $this->unauthorizedResponse("Invalid Authorization header format");
+                return $this->unauthorizedResponse(
+                    "Invalid Authorization header format");
             }
     
             $jwt = $matches[1];

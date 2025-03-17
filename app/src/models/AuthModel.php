@@ -11,6 +11,9 @@ class AuthModel extends SqlConnect {
   private string $table  = "users";
   private int $tokenValidity = 3600;
   
+  /*========================= REGISTER ======================================*/
+
+
   public function register(array $data) {
     $query = "SELECT email FROM $this->table WHERE email = :email";
     $req = $this->db->prepare($query);
@@ -38,7 +41,8 @@ class AuthModel extends SqlConnect {
     }
     
     if (!preg_match('/[A-Z]/', $data["password_hash"])) {
-        throw new Exception('Password must include at least one uppercase letter.');
+        throw new Exception('
+        Password must include at least one uppercase letter.');
     }
     
     if (!preg_match('/[0-9]/', $data["password_hash"])) {
@@ -58,10 +62,12 @@ class AuthModel extends SqlConnect {
 
 
     // Create the user
-    $queryAdd = "INSERT INTO $this->table (firstname, lastname, state, city, street, street_number, 
-                                            postal_code, email, phone_number, password_hash, role_id) 
-                                            VALUES (:firstname, :lastname, :state, :city, :street, :street_number, 
-                                            :postal_code, :email, :phone_number, :password_hash, :role_id)";
+    $queryAdd = "INSERT INTO $this->table (
+      firstname, lastname, state, city, street, street_number, 
+      postal_code, email, phone_number, password_hash, role_id) 
+      VALUES (:firstname, :lastname, :state, :city, :street, :street_number, 
+      :postal_code, :email, :phone_number, :password_hash, :role_id)";
+
     $req2 = $this->db->prepare($queryAdd);
     $req2->execute([
       "firstname" => $data['firstname'],
@@ -85,8 +91,11 @@ class AuthModel extends SqlConnect {
     return ['token' => $token];
   }
 
+  /*========================= LOGIN =========================================*/
+
   public function login($email, $password) {
-    $query = "SELECT users.*, roles.role_name FROM $this->table JOIN roles ON users.role_id = roles.id WHERE users.email = :email";
+    $query = "SELECT users.*, roles.role_name FROM $this->table 
+      JOIN roles ON users.role_id = roles.id WHERE users.email = :email";
     $req = $this->db->prepare($query);
     $req->execute(['email' => $email]);
 
@@ -101,6 +110,8 @@ class AuthModel extends SqlConnect {
 
     throw new \Exception("Invalid credentials.");
   }
+
+  /*========================= JWT  ==========================================*/
 
   private function generateJWT(string $userId, string $role) {
     $payload = [

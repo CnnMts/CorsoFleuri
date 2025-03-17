@@ -4,27 +4,44 @@ namespace App\Models;
 
 use \PDO;
 use stdClass;
+use \Exception;
+use App\Utils\{HttpException};
 
-class OrderModel extends SqlConnect {
-  private $table = "orders";
-  public $authorized_fields_to_update = [
-    'status_id', 'discount_id', 'payment_method_id'];
+class PaymentMethodModel extends SqlConnect {
+  private $table = "payment_method";
+  public $authorized_fields_to_update = ['name'];
 
   /*========================= ADD ===========================================*/
 
   public function add(array $data) {
+    $query = "SELECT name FROM $this->table WHERE name = :name";
+    $req = $this->db->prepare($query);
+    $req->execute(["name" => $data["name"]]);
+    
+    if ($req->rowCount() > 0) {
+      throw new HttpException("Payment Method already exists!", 400);
+    }
+
     $query = "
-      INSERT INTO $this->table (status_id, discount_id, payment_method_id)
-      VALUES (:status_id, :discount_id, :payment_method_id)
+      INSERT INTO $this->table (name)
+      VALUES (:name)
     ";
 
     $req = $this->db->prepare($query);
     $req->execute($data);
   }
 
-  /*========================= GET ===========================================*/
+  /*========================= GET BY ID =====================================*/
 
   public function get(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("Payment Method doesn't exists !", 400);
+    }
+
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
@@ -38,17 +55,21 @@ class OrderModel extends SqlConnect {
     $query = "SELECT * FROM {$this->table}";
     
     if ($limit !== null) {
-      $query .= " LIMIT :limit";
-      $params = [':limit' => (int)$limit];
+        $query .= " LIMIT :limit";
+        $params = [':limit' => (int)$limit];
     } else {
-      $params = [];
+        $params = [];
     }
     
     $req = $this->db->prepare($query);
     foreach ($params as $key => $value) {
-      $req->bindValue($key, $value, PDO::PARAM_INT);
+        $req->bindValue($key, $value, PDO::PARAM_INT);
     }
     $req->execute();
+
+    if ($req->rowCount() == 0) {
+      throw new HttpException("No Payment Methods !", 400);
+    }
     
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -56,12 +77,10 @@ class OrderModel extends SqlConnect {
   /*========================= GET LAST ======================================*/
 
   public function getLast() {
-    $req = $this->db->prepare(
-      "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? 
-      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
 
   /*========================= UPDATE ========================================*/
@@ -72,10 +91,10 @@ class OrderModel extends SqlConnect {
     $fields = [];
 
     foreach ($data as $key => $value) {
-      if (in_array($key, $this->authorized_fields_to_update)) {
-        $fields[] = "$key = :$key";
-        $params[":$key"] = $value;
-      }
+        if (in_array($key, $this->authorized_fields_to_update)) {
+            $fields[] = "$key = :$key";
+            $params[":$key"] = $value;
+        }
     }
 
     $params[':id'] = $id;
@@ -86,10 +105,17 @@ class OrderModel extends SqlConnect {
     
     return $this->get($id);
   }
-
   /*========================= DELETE ========================================*/
 
   public function delete(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("Payment Method doesn't exists !", 400);
+    }
+
     $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
     return new stdClass();
