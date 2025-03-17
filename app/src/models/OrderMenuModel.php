@@ -5,17 +5,17 @@ namespace App\Models;
 use \PDO;
 use stdClass;
 
-class OrderItemModel extends SqlConnect {
-  private $table = "order_item";
+class OrderMenuModel extends SqlConnect {
+  private $table = "order_menu";
   public $authorized_fields_to_update = [
-    'order_id', 'type', 'item_id', 'quantity'];
+    'order_id', 'menu_id', 'quantity'];
 
   /*========================= ADD ===========================================*/
 
   public function add(array $data) {
     $query = "
-    INSERT INTO $this->table (order_id, type, item_id, quantity)
-    VALUES (:order_id, :type, :item_id, :quantity)
+    INSERT INTO $this->table (order_id, type, menu_id, quantity)
+    VALUES (:order_id, :type, :menu_id, :quantity)
   ";
 
     $req = $this->db->prepare($query);
