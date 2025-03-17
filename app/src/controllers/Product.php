@@ -38,10 +38,11 @@ class Product extends Controller {
 
   #[Route("GET", "/product")]
   public function getProducts() {
-      $limit = isset($this->params['limit']) ? 
-        intval($this->params['limit']) : null;
-      return $this->product->getAll($limit);
-  }
+    $products = $this->product->getAll($limit);
+    header('Content-Type: application/json');
+    echo json_encode($products);
+}
+
 
   /*========================= PATCH =========================================*/
 
