@@ -32,7 +32,8 @@ class Router {
                 foreach ($attributes as $attribute) {
                     $instance = $attribute->newInstance();
                     // Register route with method, path, controller, and authentication requirement
-                    $this->register($instance->method, $instance->path, $controller, $method->getName(), $instance->middlewares);
+                    $this->register($instance->method, $instance->path, 
+                    $controller, $method->getName(), $instance->middlewares);
                 }
             }
         }
@@ -47,8 +48,10 @@ class Router {
      * @param string $controllerMethod Method name in the controller
      * @param bool $authRequired Whether authentication is required for this route
      */
-    public function register(string $method, string $route, string $controller, string $controllerMethod, array $middlewares) {
-        $this->routes[$method][$route] = [$controller, $controllerMethod, $middlewares];
+    public function register(string $method, string $route, 
+    string $controller, string $controllerMethod, array $middlewares) {
+        $this->routes[$method][$route] = [$controller, $controllerMethod, 
+        $middlewares];
     }
 
     /**
@@ -76,7 +79,8 @@ class Router {
                         $middleware = new $middlewareClass();
                     }
 
-                    if (method_exists($middleware, 'handle') && !$middleware->handle($request)) {
+                    if (method_exists($middleware, 'handle') && !
+                        $middleware->handle($request)) {
                         exit;
                     }
                 }
@@ -89,7 +93,8 @@ class Router {
                 if (method_exists($controllerInstance, $method)) {
                     try {
                         // Call the method on the controller instance with the parameters
-                        $response = call_user_func_array([$controllerInstance, $method], array_values($params));
+                        $response = call_user_func_array([
+                        $controllerInstance, $method], array_values($params));
                     } catch (\Exception $e) {
                         http_response_code(500);
                         $response = ["error" => $e->getMessage()];
@@ -148,7 +153,8 @@ class Router {
             return false;
         }
         foreach ($routeParts as $index => $routePart) {
-            if ($routePart !== $urlParts[$index] && strpos($routePart, ':') !== 0) {
+            if ($routePart !== $urlParts[$index] && 
+            strpos($routePart, ':') !== 0) {
                 return false;
             }
         }

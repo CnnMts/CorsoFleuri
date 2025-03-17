@@ -18,6 +18,8 @@ class Product extends Controller {
     parent::__construct($param);
   }
 
+  /*========================= POST ==========================================*/
+
   #[Route("POST", "/product")]
   public function createProduct() {
     $this->product->add($this->body);
@@ -25,21 +27,23 @@ class Product extends Controller {
     return $this->product->getLast();
   }
 
-  #[Route("DELETE", "/product/:id")]
-  public function deleteProduct() {
-    return $this->product->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/product/:id")] 
   public function getProduct() {
     return $this->product->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/product")]
   public function getProducts() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->product->getAll($limit);
   }
+
+  /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/product/:id")]
   public function updateProduct() {
@@ -53,9 +57,11 @@ class Product extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->product->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->product->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->product->update($data, intval($id));
@@ -65,6 +71,13 @@ class Product extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/product/:id")]
+  public function deleteProduct() {
+    return $this->product->delete(intval($this->params['id']));
   }
 }
 

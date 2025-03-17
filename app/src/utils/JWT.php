@@ -12,7 +12,8 @@ class JWT {
   public static function generate($payload) {
     // Base 64
       // Header
-    $header = self::base64UrlEncode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+    $header = self::base64UrlEncode(json_encode([
+      'alg' => 'HS256', 'typ' => 'JWT']));
     // Payload
     $payload = self::base64UrlEncode(json_encode($payload));
     
@@ -39,7 +40,8 @@ class JWT {
     $payload = json_decode(self::base64UrlDecode($payloadEncoded), true);
 
     $signatureProvided = self::base64UrlDecode($signatureProvided);
-    $signatureExpected = hash_hmac('sha256', "$headerEncoded.$payloadEncoded", self::$secret, true);
+    $signatureExpected = hash_hmac('sha256', 
+      "$headerEncoded.$payloadEncoded", self::$secret, true);
 
     // Verify the signature
     if (!hash_equals($signatureExpected, $signatureProvided)) {

@@ -19,7 +19,8 @@ class SqlConnect {
     $this->password = getenv('MYSQL_PASSWORD');
     $this->port = getenv('MYSQL_PORT');
 
-    $dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbname;
+    $dsn = 'mysql:host='.$this->host.';port='
+    .$this->port.';dbname='.$this->dbname;
     $this->db = new PDO(
       $dsn,
       $this->user,
@@ -29,6 +30,8 @@ class SqlConnect {
     $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $this->db->setAttribute(PDO::ATTR_PERSISTENT, false);
   }
+
+  /*========================= DATA TRANSFORM ================================*/
 
   public function transformDataInDot($data) {
     $dataFormated = [];

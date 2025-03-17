@@ -17,6 +17,8 @@ class Controller {
     $this->header();
   }
 
+ /*========================= GET CALLER CLASS NAME ==========================*/
+
   protected function getCallerClassName() {
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 
@@ -29,6 +31,8 @@ class Controller {
 
     return 'Unknown';
   }
+
+   /*========================= HEADER =======================================*/
 
   protected function header() {
     header('Access-Control-Allow-Origin: *');

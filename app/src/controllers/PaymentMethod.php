@@ -18,6 +18,8 @@ class PaymentMethod extends Controller {
     parent::__construct($param);
   }
 
+  /*========================= POST ==========================================*/
+
   #[Route("POST", "/paymentMethod")]
   public function createPaymentMethod() {
     $this->paymentMethod->add($this->body);
@@ -25,21 +27,23 @@ class PaymentMethod extends Controller {
     return $this->paymentMethod->getLast();
   }
 
-  #[Route("DELETE", "/paymentMethod/:id")]
-  public function deletePaymentMethod() {
-    return $this->paymentMethod->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID  ====================================*/
 
   #[Route("GET", "/paymentMethod/:id")] 
   public function getPaymentMethod() {
     return $this->paymentMethod->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/paymentMethod")]
   public function getPaymentMethods() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->paymentMethod->getAll($limit);
   }
+
+  /*========================= PATH ==========================================*/
 
   #[Route("PATCH", "/paymentMethod/:id")]
   public function updatePaymentMethod() {
@@ -53,9 +57,11 @@ class PaymentMethod extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->paymentMethod->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->paymentMethod->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->paymentMethod->update($data, intval($id));
@@ -65,6 +71,13 @@ class PaymentMethod extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/paymentMethod/:id")]
+  public function deletePaymentMethod() {
+    return $this->paymentMethod->delete(intval($this->params['id']));
   }
 }
 

@@ -9,10 +9,14 @@ use App\Utils\{HttpException};
 
 class UserModel extends SqlConnect {
   private $table = "user";
-  public $authorized_fields_to_update = ['role_id', 'username', 'identification_code'];
+  public $authorized_fields_to_update = [
+    'role_id', 'username', 'identification_code'];
+
+  /*========================= ADD ===========================================*/
 
   public function add(array $data) {
-    $query = "SELECT identification_code FROM $this->table WHERE identification_code = :identification_code";
+    $query = "SELECT identification_code FROM $this->table 
+      WHERE identification_code = :identification_code";
     $req = $this->db->prepare($query);
     $req->execute(["identification_code" => $data["identification_code"]]);
     
@@ -21,7 +25,8 @@ class UserModel extends SqlConnect {
     }
    
     if (!preg_match('/^[0-9]*$/m', $data["identification_code"])) {
-        throw new Exception('Identification code must only be composed of numbers.');
+        throw new Exception(
+          'Identification code must only be composed of numbers.');
     }
 
     // if ($data['role_id'] == null 
@@ -38,19 +43,7 @@ class UserModel extends SqlConnect {
     $req->execute($data);
   }
 
-  public function delete(int $id) {
-    $query = "SELECT * FROM $this->table WHERE id = :id";
-    $req = $this->db->prepare($query);
-    $req->execute(["id" => $id]);
-    
-    if ($req->rowCount() == 0) {
-      throw new HttpException("User doesn't exists !", 400);
-    }
-
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
-    return new stdClass();
-  }
+  /*========================= GET BY ID =====================================*/
 
   public function get(int $id) {
     $query = "SELECT * FROM $this->table WHERE id = :id";
@@ -64,8 +57,11 @@ class UserModel extends SqlConnect {
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= GET ALL =======================================*/
 
   public function getAll(?int $limit = null) {
     $query = "SELECT * FROM {$this->table}";
@@ -90,16 +86,23 @@ class UserModel extends SqlConnect {
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /*========================= GET LAST ======================================*/
+
   public function getLast() {
-    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare(
+        "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= UPDATE ========================================*/
 
   public function update(array $data, int $id) {
     if (!preg_match('/^[0-9]*$/m', $data["identification_code"])) {
-      throw new Exception('Identification code must only be composed of numbers.');
+      throw new Exception(
+        'Identification code must only be composed of numbers.');
     }
 
     $request = "UPDATE $this->table SET ";
@@ -120,5 +123,21 @@ class UserModel extends SqlConnect {
     $req->execute($params);
     
     return $this->get($id);
+  }
+  
+  /*========================= DELETE ========================================*/
+
+  public function delete(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("User doesn't exists !", 400);
+    }
+
+    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
+    $req->execute(["id" => $id]);
+    return new stdClass();
   }
 }

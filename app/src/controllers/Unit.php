@@ -18,6 +18,8 @@ class Unit extends Controller {
     parent::__construct($param);
   }
 
+  /*========================= POST ==========================================*/
+
   #[Route("POST", "/unit")]
   public function createUnit() {
     $this->unit->add($this->body);
@@ -25,21 +27,23 @@ class Unit extends Controller {
     return $this->unit->getLast();
   }
 
-  #[Route("DELETE", "/unit/:id")]
-  public function deleteUnit() {
-    return $this->unit->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/unit/:id")] 
   public function getUnit() {
     return $this->unit->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/unit")]
   public function getUnits() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->unit->getAll($limit);
   }
+
+  /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/unit/:id")]
   public function updateUnit() {
@@ -53,9 +57,11 @@ class Unit extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->unit->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->unit->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->unit->update($data, intval($id));
@@ -65,6 +71,13 @@ class Unit extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/unit/:id")]
+  public function deleteUnit() {
+    return $this->unit->delete(intval($this->params['id']));
   }
 }
 
