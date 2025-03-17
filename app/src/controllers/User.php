@@ -18,6 +18,8 @@ class User extends Controller {
     parent::__construct($param);
   }
 
+  /*========================= POST ==========================================*/
+
   #[Route("POST", "/user")]
   public function createUser() {
     $this->user->add($this->body);
@@ -25,21 +27,23 @@ class User extends Controller {
     return $this->user->getLast();
   }
 
-  #[Route("DELETE", "/user/:id")]
-  public function deleteUser() {
-    return $this->user->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/user/:id")] 
   public function getUser() {
     return $this->user->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/user")]
   public function getUsers() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->user->getAll($limit);
   }
+
+  /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/user/:id")]
   public function updateUser() {
@@ -53,9 +57,11 @@ class User extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->user->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->user->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->user->update($data, intval($id));
@@ -65,6 +71,13 @@ class User extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/user/:id")]
+  public function deleteUser() {
+    return $this->user->delete(intval($this->params['id']));
   }
 }
 

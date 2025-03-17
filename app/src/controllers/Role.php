@@ -18,6 +18,8 @@ class Role extends Controller {
     parent::__construct($param);
   }
 
+    /*========================= POST ========================================*/
+
   #[Route("POST", "/role")]
   public function createRole() {
     $this->role->add($this->body);
@@ -25,21 +27,23 @@ class Role extends Controller {
     return $this->role->getLast();
   }
 
-  #[Route("DELETE", "/role/:id")]
-  public function deleteRole() {
-    return $this->role->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/role/:id")] 
   public function getRole() {
     return $this->role->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/role")]
   public function getRoles() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+        intval($this->params['limit']) : null;
       return $this->role->getAll($limit);
   }
+
+  /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/role/:id")]
   public function updateRole() {
@@ -53,9 +57,11 @@ class Role extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->role->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->role->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->role->update($data, intval($id));
@@ -65,6 +71,13 @@ class Role extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/role/:id")]
+  public function deleteRole() {
+    return $this->role->delete(intval($this->params['id']));
   }
 }
 

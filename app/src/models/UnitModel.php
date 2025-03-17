@@ -11,6 +11,8 @@ class UnitModel extends SqlConnect {
   private $table = "unit";
   public $authorized_fields_to_update = ['name'];
 
+  /*========================= ADD ===========================================*/
+
   public function add(array $data) {
     $query = "SELECT name FROM $this->table WHERE name = :name";
     $req = $this->db->prepare($query);
@@ -29,19 +31,7 @@ class UnitModel extends SqlConnect {
     $req->execute($data);
   }
 
-  public function delete(int $id) {
-    $query = "SELECT * FROM $this->table WHERE id = :id";
-    $req = $this->db->prepare($query);
-    $req->execute(["id" => $id]);
-    
-    if ($req->rowCount() == 0) {
-      throw new HttpException("Unit doesn't exists !", 400);
-    }
-
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
-    return new stdClass();
-  }
+  /*========================= GET BY ID =====================================*/
 
   public function get(int $id) {
     $query = "SELECT * FROM $this->table WHERE id = :id";
@@ -55,8 +45,11 @@ class UnitModel extends SqlConnect {
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+    $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= GET ALL =======================================*/
 
   public function getAll(?int $limit = null) {
     $query = "SELECT * FROM {$this->table}";
@@ -81,12 +74,18 @@ class UnitModel extends SqlConnect {
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /*========================= GET LAST ======================================*/
+
   public function getLast() {
-    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare(
+      "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+    $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= UPDATE ========================================*/
 
   public function update(array $data, int $id) {
     $request = "UPDATE $this->table SET ";
@@ -107,5 +106,21 @@ class UnitModel extends SqlConnect {
     $req->execute($params);
     
     return $this->get($id);
+  }
+
+  /*========================= DELETE ========================================*/
+
+  public function delete(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("Unit doesn't exists !", 400);
+    }
+
+    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
+    $req->execute(["id" => $id]);
+    return new stdClass();
   }
 }

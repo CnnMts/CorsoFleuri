@@ -31,14 +31,14 @@ class Menu extends Controller {
 
   #[Route("GET", "/menu/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)] 
-  public function getCategory() {
+  public function getMenu() {
     return $this->menu->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
   #[Route("GET", "/menu", /*middlewares: [AuthMiddleware::class]*/)]
-  public function getCategories() {
+  public function getMenus() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
       return $this->menu->getAll($limit);
@@ -48,7 +48,7 @@ class Menu extends Controller {
 
   #[Route("PATCH", "/menu/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
-  public function updateorder() {
+  public function updateMenu() {
     try {
       $id = intval($this->params['id']);
       $data = $this->body;
@@ -75,11 +75,11 @@ class Menu extends Controller {
     }
   }
 
-  /*========================= DELETED =======================================*/
+  /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/menu/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
-  public function deleteCategory() {
+  public function deleteMenu() {
     return $this->menu->delete(intval($this->params['id']));
   }
 }

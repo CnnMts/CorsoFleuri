@@ -17,6 +17,8 @@ class OrderItem extends Controller {
     parent::__construct($param);
   }
 
+  /*========================= POST ==========================================*/
+
   #[Route("POST", "/orderItem")]
   public function createOrderItem() {
     $this->orderItem->add($this->body);
@@ -24,21 +26,23 @@ class OrderItem extends Controller {
     return $this->orderItem->getLast();
   }
 
-  #[Route("DELETE", "/orderItem/:id")]
-  public function deleteOrderItem() {
-    return $this->orderItem->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/orderItem/:id")] 
   public function getOrderItem() {
     return $this->orderItem->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =====================================*/
+
   #[Route("GET", "/orderItem")]
   public function getOrderItems() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
+      $limit = isset($this->params['limit']) ? 
+      intval($this->params['limit']) : null;
       return $this->orderItem->getAll($limit);
   }
+
+  /*========================= GET BY ID =====================================*/
 
   #[Route("PATCH", "/orderItem/:id")]
   public function updateOrderItem() {
@@ -52,9 +56,11 @@ class OrderItem extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->orderItem->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->orderItem->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->orderItem->update($data, intval($id));
@@ -64,6 +70,13 @@ class OrderItem extends Controller {
     } catch (HttpException $e) {
       throw $e;
     }
+  }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/orderItem/:id")]
+  public function deleteOrderItem() {
+    return $this->orderItem->delete(intval($this->params['id']));
   }
 }
 

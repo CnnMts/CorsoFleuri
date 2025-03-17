@@ -14,6 +14,7 @@ class Auth extends Controller {
     parent::__construct($params);
   }
 
+ /*========================= REGISTER =======================================*/
 
   #[Route("POST", "/auth/register")]
   public function register() {
@@ -28,6 +29,8 @@ class Auth extends Controller {
           throw new HttpException($e->getMessage(), 400);
       }
   }
+
+ /*========================= LOGIN ==========================================*/
 
   #[Route("POST", "/auth/login")]
   public function login() {

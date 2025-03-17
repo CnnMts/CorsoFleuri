@@ -7,7 +7,10 @@ use stdClass;
 
 class OrderModel extends SqlConnect {
   private $table = "orders";
-  public $authorized_fields_to_update = ['status_id', 'discount_id', 'payment_method_id'];
+  public $authorized_fields_to_update = [
+    'status_id', 'discount_id', 'payment_method_id'];
+
+  /*========================= ADD ===========================================*/
 
   public function add(array $data) {
     $query = "
@@ -19,18 +22,17 @@ class OrderModel extends SqlConnect {
     $req->execute($data);
   }
 
-  public function delete(int $id) {
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
-    return new stdClass();
-  }
+  /*========================= GET ===========================================*/
 
   public function get(int $id) {
     $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= GET ALL =======================================*/
 
   public function getAll(?int $limit = null) {
     $query = "SELECT * FROM {$this->table}";
@@ -51,12 +53,18 @@ class OrderModel extends SqlConnect {
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /*========================= GET LAST ======================================*/
+
   public function getLast() {
-    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare(
+      "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= UPDATE ========================================*/
 
   public function update(array $data, int $id) {
     $request = "UPDATE $this->table SET ";
@@ -77,5 +85,13 @@ class OrderModel extends SqlConnect {
     $req->execute($params);
     
     return $this->get($id);
+  }
+
+  /*========================= DELETE ========================================*/
+
+  public function delete(int $id) {
+    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
+    $req->execute(["id" => $id]);
+    return new stdClass();
   }
 }

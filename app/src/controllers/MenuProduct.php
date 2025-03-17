@@ -31,14 +31,14 @@ class MenuProduct extends Controller {
 
   #[Route("GET", "/menuProduct/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)] 
-  public function getCategory() {
+  public function getMenuProduct() {
     return $this->menuProduct->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
   #[Route("GET", "/menuProduct", /*middlewares: [AuthMiddleware::class]*/)]
-  public function getCategories() {
+  public function getMenusProduct() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
       return $this->menuProduct->getAll($limit);
@@ -48,7 +48,7 @@ class MenuProduct extends Controller {
 
   #[Route("PATCH", "/menuProduct/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
-  public function updateorder() {
+  public function updateMenuProduct() {
     try {
       $id = intval($this->params['id']);
       $data = $this->body;
@@ -75,11 +75,11 @@ class MenuProduct extends Controller {
     }
   }
 
-  /*========================= DELETED =======================================*/
+  /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/menuProduct/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
-  public function deleteCategory() {
+  public function deleteMenuProduct() {
     return $this->menuProduct->delete(intval($this->params['id']));
   }
 }

@@ -75,7 +75,7 @@ class Category extends Controller {
     }
   }
 
-  /*========================= DELETED =======================================*/
+  /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/category/:id", 
   /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
