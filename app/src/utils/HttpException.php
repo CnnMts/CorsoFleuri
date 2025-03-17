@@ -14,7 +14,8 @@ class HttpException extends Exception {
 
     protected $httpCode;
 
-    public function __construct($message, $httpCode, $code = 0, Exception $previous = null) {
+    public function __construct($message, $httpCode, $code = 0, 
+        Exception $previous = null) {
         $this->httpCode = $httpCode;
         parent::__construct($message, $code, $previous);
     }

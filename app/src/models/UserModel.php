@@ -8,68 +8,42 @@ use \Exception;
 use App\Utils\{HttpException};
 
 class UserModel extends SqlConnect {
-  private $table = "users";
-  public $authorized_fields_to_update = ['firstname', 'lastname', 'state', 'city', 'street', 'street_number', 'postal_code', 'email', 'phone_number', 'password_hash'];
+  private $table = "user";
+  public $authorized_fields_to_update = [
+    'role_id', 'username', 'identification_code'];
+
+  /*========================= ADD ===========================================*/
 
   public function add(array $data) {
-    $query = "SELECT email FROM $this->table WHERE email = :email";
+    $query = "SELECT identification_code FROM $this->table 
+      WHERE identification_code = :identification_code";
     $req = $this->db->prepare($query);
-    $req->execute(["email" => $data["email"]]);
+    $req->execute(["identification_code" => $data["identification_code"]]);
     
     if ($req->rowCount() > 0) {
       throw new HttpException("User already exists!", 400);
     }
-
-    if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) { //To filter validate email on register
-      throw new Exception('Invalid email format.');
+   
+    if (!preg_match('/^[0-9]*$/m', $data["identification_code"])) {
+        throw new Exception(
+          'Identification code must only be composed of numbers.');
     }
 
-    //To filter secure password on register
-    if (strlen($data["password_hash"]) < 8) {
-      throw new Exception('Password must be at least 8 characters long.');
-    }
-    
-    if (!preg_match('/[A-Z]/', $data["password_hash"])) {
-        throw new Exception('Password must include at least one uppercase letter.');
-    }
-    
-    if (!preg_match('/[0-9]/', $data["password_hash"])) {
-        throw new Exception('Password must include at least one number.');
-    }
-
-    if ($data['firstname'] == null 
-    || $data['lastname'] == null
-    || $data['state'] == null
-    || $data['city'] == null
-    || $data['street'] == null
-    || $data['street_number'] == null
-    || $data['postal_code'] == null
-    || $data['phone_number'] == null) {
-      throw new Exception('Missing fields.');
-    }
+    // if ($data['role_id'] == null 
+    // || $data['username'] == null) {
+    //   throw new Exception('Missing fields.');
+    // }
 
     $query = "
-      INSERT INTO $this->table (firstname, lastname, state, city, street, street_number, postal_code, email, phone_number, password_hash)
-      VALUES (:firstname, :lastname, :state, :city, :street, :street_number, :postal_code, :email, :phone_number, :password_hash)
+      INSERT INTO $this->table (role_id, username, identification_code)
+      VALUES (:role_id, :username, :identification_code)
     ";
 
     $req = $this->db->prepare($query);
     $req->execute($data);
   }
 
-  public function delete(int $id) {
-    $query = "SELECT * FROM $this->table WHERE id = :id";
-    $req = $this->db->prepare($query);
-    $req->execute(["id" => $id]);
-    
-    if ($req->rowCount() == 0) {
-      throw new HttpException("User doesn't exists !", 400);
-    }
-
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
-    return new stdClass();
-  }
+  /*========================= GET BY ID =====================================*/
 
   public function get(int $id) {
     $query = "SELECT * FROM $this->table WHERE id = :id";
@@ -80,11 +54,14 @@ class UserModel extends SqlConnect {
       throw new HttpException("User doesn't exists !", 400);
     }
 
-    $req = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+    $req = $this->db->prepare("SELECT * FROM $this->table WHERE id = :id");
     $req->execute(["id" => $id]);
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
+
+  /*========================= GET ALL =======================================*/
 
   public function getAll(?int $limit = null) {
     $query = "SELECT * FROM {$this->table}";
@@ -109,29 +86,23 @@ class UserModel extends SqlConnect {
     return $req->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /*========================= GET LAST ======================================*/
+
   public function getLast() {
-    $req = $this->db->prepare("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
+    $req = $this->db->prepare(
+        "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1");
     $req->execute();
 
-    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+    return $req->rowCount() > 0 ? 
+      $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
   }
 
-  public function update(array $data, int $id) {
-    if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) { //To filter validate email on register
-      throw new Exception('Invalid email format.');
-    }
+  /*========================= UPDATE ========================================*/
 
-    //To filter secure password on register
-    if (strlen($data["password_hash"]) < 8) {
-      throw new Exception('Password must be at least 8 characters long.');
-    }
-    
-    if (!preg_match('/[A-Z]/', $data["password_hash"])) {
-        throw new Exception('Password must include at least one uppercase letter.');
-    }
-    
-    if (!preg_match('/[0-9]/', $data["password_hash"])) {
-        throw new Exception('Password must include at least one number.');
+  public function update(array $data, int $id) {
+    if (!preg_match('/^[0-9]*$/m', $data["identification_code"])) {
+      throw new Exception(
+        'Identification code must only be composed of numbers.');
     }
 
     $request = "UPDATE $this->table SET ";
@@ -152,5 +123,21 @@ class UserModel extends SqlConnect {
     $req->execute($params);
     
     return $this->get($id);
+  }
+  
+  /*========================= DELETE ========================================*/
+
+  public function delete(int $id) {
+    $query = "SELECT * FROM $this->table WHERE id = :id";
+    $req = $this->db->prepare($query);
+    $req->execute(["id" => $id]);
+    
+    if ($req->rowCount() == 0) {
+      throw new HttpException("User doesn't exists !", 400);
+    }
+
+    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
+    $req->execute(["id" => $id]);
+    return new stdClass();
   }
 }

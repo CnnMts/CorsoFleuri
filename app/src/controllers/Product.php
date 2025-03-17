@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\ProductModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+// use App\Middlewares\AuthMiddleware;
+// use App\Middlewares\RoleMiddleware;
 
 class Product extends Controller {
   protected object $product;
@@ -18,30 +18,35 @@ class Product extends Controller {
     parent::__construct($param);
   }
 
-  #[Route("POST", "/products", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function toto() {
+  /*========================= POST ==========================================*/
+
+  #[Route("POST", "/product")]
+  public function createProduct() {
     $this->product->add($this->body);
 
     return $this->product->getLast();
   }
 
-  #[Route("DELETE", "/products/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
-  public function deleteProduct() {
-    return $this->product->delete(intval($this->params['id']));
-  }
+  /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/product/:id")] 
   public function getProduct() {
     return $this->product->get(intval($this->params['id']));
   }
 
+  /*========================= GET ALL =======================================*/
+
   #[Route("GET", "/product")]
   public function getProducts() {
-      $limit = isset($this->params['limit']) ? intval($this->params['limit']) : null;
-      return $this->product->getAll($limit);
-  }
+    $products = $this->product->getAll($limit);
+    header('Content-Type: application/json');
+    echo json_encode($products);
+}
 
-  #[Route("PATCH", "/products/:id", middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']])]
+
+  /*========================= PATCH =========================================*/
+
+  #[Route("PATCH", "/product/:id")]
   public function updateProduct() {
     try {
       $id = intval($this->params['id']);
@@ -53,9 +58,11 @@ class Product extends Controller {
       }
 
       # Check for missing fields
-      $missingFields = array_diff($this->product->authorized_fields_to_update, array_keys($data));
+      $missingFields = array_diff(
+        $this->product->authorized_fields_to_update, array_keys($data));
       if (!empty($missingFields)) {
-        throw new HttpException("Missing fields: " . implode(", ", $missingFields), 400);
+        throw new HttpException(
+          "Missing fields: " . implode(", ", $missingFields), 400);
       }
 
       $this->product->update($data, intval($id));
@@ -66,4 +73,13 @@ class Product extends Controller {
       throw $e;
     }
   }
+
+  /*========================= DELETE ========================================*/
+
+  #[Route("DELETE", "/product/:id")]
+  public function deleteProduct() {
+    return $this->product->delete(intval($this->params['id']));
+  }
 }
+
+//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]
