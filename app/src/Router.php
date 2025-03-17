@@ -58,6 +58,15 @@ class Router {
      * Execute the route matching the current request.
      */
     public function run() {
+            // Ajout des headers CORS
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Methods: *");
+            header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        
+            $response = null;
+            $request = $_REQUEST; // Initialize $request with the global $_REQUEST
+            ob_start(); // Start output buffering to capture any output
+        
         $response = null;
         $request = $_REQUEST; // Initialize $request with the global $_REQUEST
         ob_start(); // Start output buffering to capture any output
