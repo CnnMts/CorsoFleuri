@@ -20,8 +20,8 @@ class Auth extends Controller {
   public function register() {
       try {
           $data = $this->body;
-          if (empty($data['email']) || empty($data['password_hash'])) {
-              throw new HttpException("Missing email or password.", 400);
+          if (empty($data['username']) || empty($data['identification_code'])) {
+              throw new HttpException("Missing username or identification code.", 400);
           }
           $user = $this->auth->register($data);
           return $user;
@@ -36,10 +36,11 @@ class Auth extends Controller {
   public function login() {
       try {
           $data = $this->body;
-          if (empty($data['email']) || empty($data['password_hash'])) {
-              throw new HttpException("Missing email or password.", 400);
+          if (empty($data['username']) || empty($data['identification_code'])) {
+              throw new HttpException(
+                "Missing username or identification_code.", 400);
           }
-          $token = $this->auth->login($data['email'], $data['password_hash']);
+          $token = $this->auth->login($data['username'], $data['identification_code']);
           return $token;
       } catch (\Exception $e) {
           throw new HttpException($e->getMessage(), 401);
