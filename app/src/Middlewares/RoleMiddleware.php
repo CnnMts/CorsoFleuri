@@ -12,7 +12,7 @@ class RoleMiddleware {
     }
 
     public function handle(&$request) {
-        if (!isset($request['user'])) {
+        if (!isset($request['username'])) {
             $headers = getallheaders();
             if (!isset($headers['Authorization'])) {
                 return $this->unauthorizedResponse(
@@ -31,12 +31,12 @@ class RoleMiddleware {
                 return $this->unauthorizedResponse("Invalid token");
             }
     
-            $request['user'] = $payload;
+            $request['username'] = $payload;
         }
-
-        $userRole = $request['user']['role'] ?? null;
-    
-        if ($userRole !== $this->requiredRole) {
+        $userRole = $request['username']['role'] ?? null;
+        var_dump($userRole);
+        var_dump($this->requiredRole);
+        if ($userRole !== (int) $this->requiredRole) {
             return $this->forbiddenResponse("Insufficient permissions");
         }
     
