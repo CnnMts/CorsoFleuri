@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\OrderStatusModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\OrderStatusMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
+
 
 class OrderStatus extends Controller {
   protected object $orderStatus;
@@ -20,7 +20,9 @@ class OrderStatus extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/orderStatus")]
+  #[Route("POST", "/orderStatus",
+  middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function createOrderStatus() {
     $this->orderStatus->add($this->body);
 
@@ -29,14 +31,16 @@ class OrderStatus extends Controller {
 
   /*========================= GET BY ID  ====================================*/
 
-  #[Route("GET", "/orderStatus/:id")] 
+  #[Route("GET", "/orderStatus/:id",
+    middlewares: [AuthMiddleware::class])]
   public function getOrderStatus() {
     return $this->orderStatus->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/orderStatus")]
+  #[Route("GET", "/orderStatus",
+    middlewares: [AuthMiddleware::class])]
   public function getOrderStatuss() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -45,7 +49,9 @@ class OrderStatus extends Controller {
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/orderStatus/:id")]
+  #[Route("PATCH", "/orderStatus/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updateOrderStatus() {
     try {
       $id = intval($this->params['id']);
@@ -75,10 +81,10 @@ class OrderStatus extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/orderStatus/:id")]
+  #[Route("DELETE", "/orderStatus/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteOrderStatus() {
     return $this->orderStatus->delete(intval($this->params['id']));
   }
 }
-
-//, middlewares: [AuthMiddleware::class, [OrderStatusMiddleware::class, 'admin']] to add to all routes

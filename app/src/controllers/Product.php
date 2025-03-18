@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\ProductModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
+
 
 class Product extends Controller {
   protected object $product;
@@ -20,7 +20,9 @@ class Product extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/product")]
+  #[Route("POST", "/product",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function createProduct() {
     $this->product->add($this->body);
 
@@ -45,7 +47,9 @@ class Product extends Controller {
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/product/:id")]
+  #[Route("PATCH", "/product/:id",
+  middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updateProduct() {
     try {
       $id = intval($this->params['id']);
@@ -75,10 +79,10 @@ class Product extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/product/:id")]
+  #[Route("DELETE", "/product/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteProduct() {
     return $this->product->delete(intval($this->params['id']));
   }
 }
-
-//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]

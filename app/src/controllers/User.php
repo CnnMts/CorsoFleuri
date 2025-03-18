@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\UserModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
+
 
 class User extends Controller {
   protected object $user;
@@ -20,7 +20,9 @@ class User extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/user")]
+  #[Route("POST", "/user",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function createUser() {
     $this->user->add($this->body);
 
@@ -29,14 +31,18 @@ class User extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/user/:id")] 
+  #[Route("GET", "/user/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function getUser() {
     return $this->user->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/user")]
+  #[Route("GET", "/user",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function getUsers() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -45,7 +51,9 @@ class User extends Controller {
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/user/:id")]
+  #[Route("PATCH", "/user/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updateUser() {
     try {
       $id = intval($this->params['id']);
@@ -75,10 +83,11 @@ class User extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/user/:id")]
+  #[Route("DELETE", "/user/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteUser() {
     return $this->user->delete(intval($this->params['id']));
   }
 }
 
-//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']] to add to all routes

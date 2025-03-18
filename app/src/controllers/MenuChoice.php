@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\MenuChoiceModel;
 use App\Utils\{Route,HttpException};
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware,Roles};
 
 class MenuChoice extends Controller {
   protected object $menuChoice;
@@ -19,8 +18,7 @@ class MenuChoice extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/menuChoice",
-  /* middlewares: [AuthMiddleware::class, [RoleMiddleware::class]]*/)]
+  #[Route("POST", "/menuChoice")]
   public function add() {
     $this->menuChoice->add($this->body);
 
@@ -30,14 +28,15 @@ class MenuChoice extends Controller {
   /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/menuChoice/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)] 
+    middlewares: [AuthMiddleware::class])] 
   public function getMenuChoice() {
     return $this->menuChoice->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/menuChoice", /*middlewares: [AuthMiddleware::class]*/)]
+  #[Route("GET", "/menuChoice",     
+    middlewares: [AuthMiddleware::class])]
   public function getMenusProduct() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -47,7 +46,8 @@ class MenuChoice extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/menuChoice/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updateMenuChoice() {
     try {
       $id = intval($this->params['id']);
@@ -78,7 +78,8 @@ class MenuChoice extends Controller {
   /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/menuChoice/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteMenuChoice() {
     return $this->menuChoice->delete(intval($this->params['id']));
   }
