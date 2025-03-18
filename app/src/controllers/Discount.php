@@ -6,8 +6,7 @@ use App\Controllers\Controller;
 use App\Models\DiscountModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\DiscountMiddleware;
+use App\Middlewares\{AuthMiddleware,Roles,RoleMiddleware};
 
 class Discount extends Controller {
   protected object $discount;
@@ -20,7 +19,10 @@ class Discount extends Controller {
 
     /*========================= POST ========================================*/
 
-  #[Route("POST", "/discount")]
+  #[Route("POST", "/discount", 
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+  
   public function createDiscount() {
     $this->discount->add($this->body);
 
@@ -29,14 +31,17 @@ class Discount extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/discount/:id")] 
+  #[Route("GET", "/discount/:id", 
+    middlewares: [AuthMiddleware::class])]
+  
   public function getDiscount() {
     return $this->discount->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/discount")]
+  #[Route("GET", "/discount",
+  middlewares: [AuthMiddleware::class])]
   public function getDiscounts() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -45,7 +50,10 @@ class Discount extends Controller {
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/discount/:id")]
+  #[Route("PATCH", "/discount/:id",
+  middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+
   public function updateDiscount() {
     try {
       $id = intval($this->params['id']);
@@ -75,10 +83,10 @@ class Discount extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/discount/:id")]
+  #[Route("DELETE", "/discount/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteDiscount() {
     return $this->discount->delete(intval($this->params['id']));
   }
 }
-
-//, middlewares: [AuthMiddleware::class, [DiscountMiddleware::class, 'admin']] to add to all routes
