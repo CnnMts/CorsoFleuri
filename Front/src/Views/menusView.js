@@ -1,4 +1,4 @@
-const menusView = ({ id, name, price}) => {
+const menusView = ({ id, name, price }) => {
   return `
     <div class="containerMenus">
       <div class="imgMenu">
@@ -8,7 +8,7 @@ const menusView = ({ id, name, price}) => {
         </div>
       </div>
       <div class="buttonAdd">
-        <button type="button" class="addMenuButton">Ajouter</button>
+        <button type="button" class="addMenuButton" data-name="${name}">Ajouter</button>
       </div>
     </div>
   `;
