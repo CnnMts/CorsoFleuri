@@ -10,8 +10,8 @@ class CashRegisterController {
 
   async initialize() {
     try {
-      const menuId = 1; // Remplacez par l'ID du menu que vous souhaitez récupérer
-      const menuDetails = await MenuModel.getMenuDetails(menuId);
+      // Récupérer les détails de tous les menus
+      const allMenus = await MenuModel.getAllMenus();
 
       const htmlResponse = `
         <!DOCTYPE html>
@@ -23,7 +23,7 @@ class CashRegisterController {
             <link rel="stylesheet" href="./Styles/cash_register.css">
           </head>
           <body>
-            ${cashRegisterView(menuDetails)}
+            ${cashRegisterView(allMenus)}
           </body>
         </html>
       `;
