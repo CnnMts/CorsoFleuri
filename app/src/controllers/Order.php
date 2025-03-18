@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\OrderModel;
 use App\Utils\{Route,HttpException};
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware};
 
 class Order extends Controller {
   protected object $order;
@@ -28,14 +27,18 @@ class Order extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/orders/:id")] 
+  #[Route("GET", "/orders/:id",
+    middlewares: [AuthMiddleware::class])]
+  
   public function getOrder() {
     return $this->order->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/orders")]
+  #[Route("GET", "/orders",
+    middlewares: [AuthMiddleware::class])]
+
   public function getOrders() {
       $limit = isset($this->params['limit']) ?
        intval($this->params['limit']) : null;
@@ -44,7 +47,9 @@ class Order extends Controller {
 
   /*========================= PATCH =========================================*/
 
-  #[Route("PATCH", "/orders/:id")]
+  #[Route("PATCH", "/orders/:id", 
+    middlewares: [AuthMiddleware::class])]
+
   public function updateOrder() {
     try {
       $id = intval($this->params['id']);
@@ -74,10 +79,11 @@ class Order extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/orders/:id")]
+  #[Route("DELETE", "/orders/:id",
+    middlewares: [AuthMiddleware::class])]
+
   public function deleteOrder() {
     return $this->order->delete(intval($this->params['id']));
   }
 }
 
-//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]
