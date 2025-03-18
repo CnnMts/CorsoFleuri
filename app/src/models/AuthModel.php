@@ -40,7 +40,7 @@ class AuthModel extends SqlConnect {
 
     //To filter secure password on register
     if (strlen($data["identification_code"]) <= 5) {
-      throw new Exception('Password must be at least 5 characters long.');
+      throw new Exception('Password must be at least 6 characters long.');
     }
     
     // if (!preg_match('/[A-Z]/', $data["identification_code"])) {
