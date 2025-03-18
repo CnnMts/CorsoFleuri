@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\AuthModel;
 use App\Utils\{Route, HttpException};
+use App\Middlewares\{AuthMiddleware,Roles,RoleMiddleware};
 
 class Auth extends Controller {
   protected object $auth;
@@ -16,7 +17,9 @@ class Auth extends Controller {
 
  /*========================= REGISTER =======================================*/
 
-  #[Route("POST", "/auth/register")]
+  #[Route("POST", "/auth/register",
+  middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function register() {
       try {
           $data = $this->body;
