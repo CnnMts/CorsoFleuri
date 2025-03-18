@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use App\Models\CategoryModel;
 use App\Utils\{Route,HttpException};
 use App\Middlewares\AuthMiddleware;
+use App\Middlewares\Roles;
 use App\Middlewares\RoleMiddleware;
 
 class Category extends Controller {
@@ -20,7 +21,7 @@ class Category extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/category",
-  /* middlewares: [AuthMiddleware::class, [RoleMiddleware::class]]*/)]
+  middlewares: [AuthMiddleware::class, [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function add() {
     $this->category->add($this->body);
 
