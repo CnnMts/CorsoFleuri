@@ -1,16 +1,18 @@
-
-const Router = class Router {
-  constructor(routes = []) {
-    this.path = window.location.pathname;
+class Router {
+  constructor(routes = [], req, res) {
+    this.req = req;
+    this.res = res;
+    this.path = req.url;
     this.routes = routes;
-    this.params = !window.location.search ? {} : Object.fromEntries(
-      window.location.search
-        .split('?')[1]
-        .split('&')
-        .map((param) => param.split('='))
-    );
+    this.params = this.parseQueryParams(req.url);
+  }
 
-    this.run();
+  parseQueryParams(url) {
+    const queryString = url.split('?')[1];
+    if (!queryString) return {};
+    return Object.fromEntries(
+      queryString.split('&').map((param) => param.split('='))
+    );
   }
 
   startController() {
@@ -19,15 +21,17 @@ const Router = class Router {
 
       if (route.url === this.path) {
         const Controller = route.controller;
-        new Controller(this.params);
+        new Controller(this.req, this.res, this.params);
         return;
       }
     }
-
+    this.res.writeHead(404, { 'Content-Type': 'text/plain' });
+    this.res.end('Page non trouvée');
   }
 
   run() {
     this.startController();
   }
-};
+}
+
 export default Router;
