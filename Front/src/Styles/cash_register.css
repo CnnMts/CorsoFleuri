@@ -1,0 +1,182 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.containerTop {
+  border: solid purple;
+  display: flex;
+  flex-direction: row;
+  height: 12vw;
+}
+
+.order {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vw;
+  width: 26vw;
+}
+
+.payment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26vw;
+  font-size: 2vw;
+}
+
+.gestion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26vw;
+  font-size: 2vw;
+}
+
+.containerMiddle {
+  width: 97vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid yellow;
+}
+
+.listProductOfMenu {
+  border: solid teal;
+  width: 45vw;
+  height: 37vw;
+}
+
+.containerRight {
+  border: solid green;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1vw;
+  height: 100%;
+  width: 54vw;
+}
+
+.container {
+  height: 50vw;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border: solid blue;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22vw;
+  height: 12vw;
+}
+
+.containerLeft {
+  display: flex;
+  flex-direction: column;
+  width: 38.6vw;
+}
+
+.menu-button {
+  height: 16.6vw;
+  font-size: 3.6vw;
+}
+
+.drink-button {
+  height: 16.6vw;
+  font-size: 3.6vw;
+}
+
+.dessert-button {
+  height: 16.6vw;
+  font-size: 3.6vw;
+}
+
+.containerTicket {
+  border: solid blue;
+  height: 45vw;
+
+}
+
+.listMenu {
+  border: solid lawngreen;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.listorder {
+  border: solid palevioletred;
+  font-size: 2vw;
+  width: 15vw;
+  margin-left: 1.5vw;
+}
+
+.nameMenu {
+  border: solid maroon;
+  display: flex;
+  align-items: center;
+  font-size: 1.5vw;
+  height: 3vw;
+}
+
+.leftContainerListMenu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+  width: 5vw;
+  border: solid aqua;
+}
+
+.delete-menu-list {
+  width: 2vw;
+  height: 2vw;
+}
+
+.OrderPriceContainer {
+  border: solid aqua;
+  display: flex;
+  align-items: center;
+  height: 6.6vw;
+  gap: 10vw;
+}
+
+.titleOrder {
+  border: solid gold;
+  font-size: 1vw;
+  margin-left: 1vw;
+  width: 9.5vw;
+}
+
+.containerPaymentButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6.6vw;
+  border: solid rebeccapurple;
+
+}
+
+.payment-button {
+  width: 27vw;
+  height: 6vw;
+  font-size: 3vw;
+}
+
+
+.gestion:hover {
+  background-color: darkkhaki;
+}
+
+.order:hover {
+  background-color: darkkhaki;
+}
+
+.payment:hover {
+  background-color: darkkhaki;
+}
