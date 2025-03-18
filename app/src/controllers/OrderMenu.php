@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\OrderMenuModel;
 use App\Utils\{Route,HttpException};
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
 
 class OrderMenu extends Controller {
   protected object $orderMenu;
@@ -28,14 +27,17 @@ class OrderMenu extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/orderMenu/:id")] 
+  #[Route("GET", "/orderMenu/:id",
+    middlewares: [AuthMiddleware::class])]
+  
   public function getOrderMenu() {
     return $this->orderMenu->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =====================================*/
 
-  #[Route("GET", "/orderMenu")]
+  #[Route("GET", "/orderMenu",
+  middlewares: [AuthMiddleware::class])]
   public function getOrderMenus() {
       $limit = isset($this->params['limit']) ? 
       intval($this->params['limit']) : null;
@@ -44,7 +46,8 @@ class OrderMenu extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("PATCH", "/orderMenu/:id")]
+  #[Route("PATCH", "/orderMenu/:id",
+    middlewares: [AuthMiddleware::class])]
   public function updateOrderMenu() {
     try {
       $id = intval($this->params['id']);
@@ -74,10 +77,10 @@ class OrderMenu extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/orderMenu/:id")]
+  #[Route("DELETE", "/orderMenu/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteOrderMenu() {
     return $this->orderMenu->delete(intval($this->params['id']));
   }
 }
-
-//, middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]

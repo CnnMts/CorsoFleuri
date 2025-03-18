@@ -1,15 +1,22 @@
 <?php
 
 namespace App\Utils;
+use \Exception;
 
 class JWT {
   private static $secret;
+  
 
     public static function initialize() {  
-        self::$secret = getenv('JWT_SECRET'); //To secure secret
+      self::$secret = getenv('JWT_SECRET') ?: null;
+
+      if (empty(self::$secret)) {
+          throw new Exception("JWT secret key is missing or invalid.");
+      }
     }
 
   public static function generate($payload) {
+    self::$secret = getenv('JWT_SECRET') ?: null;
     // Base 64
       // Header
     $header = self::base64UrlEncode(json_encode([
@@ -40,6 +47,7 @@ class JWT {
     $payload = json_decode(self::base64UrlDecode($payloadEncoded), true);
 
     $signatureProvided = self::base64UrlDecode($signatureProvided);
+    
     $signatureExpected = hash_hmac('sha256', 
       "$headerEncoded.$payloadEncoded", self::$secret, true);
 

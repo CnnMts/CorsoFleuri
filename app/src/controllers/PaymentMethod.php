@@ -6,8 +6,8 @@ use App\Controllers\Controller;
 use App\Models\PaymentMethodModel;
 use App\Utils\Route;
 use App\Utils\HttpException;
-// use App\Middlewares\AuthMiddleware;
-// use App\Middlewares\PaymentMethodMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
+
 
 class PaymentMethod extends Controller {
   protected object $paymentMethod;
@@ -20,7 +20,9 @@ class PaymentMethod extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/paymentMethod")]
+  #[Route("POST", "/paymentMethod",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function createPaymentMethod() {
     $this->paymentMethod->add($this->body);
 
@@ -29,14 +31,16 @@ class PaymentMethod extends Controller {
 
   /*========================= GET BY ID  ====================================*/
 
-  #[Route("GET", "/paymentMethod/:id")] 
+  #[Route("GET", "/paymentMethod/:id",
+    middlewares: [AuthMiddleware::class])]
   public function getPaymentMethod() {
     return $this->paymentMethod->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/paymentMethod")]
+  #[Route("GET", "/paymentMethod",
+  middlewares: [AuthMiddleware::class])]
   public function getPaymentMethods() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -45,7 +49,9 @@ class PaymentMethod extends Controller {
 
   /*========================= PATH ==========================================*/
 
-  #[Route("PATCH", "/paymentMethod/:id")]
+  #[Route("PATCH", "/paymentMethod/:id",
+    middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updatePaymentMethod() {
     try {
       $id = intval($this->params['id']);
@@ -75,10 +81,10 @@ class PaymentMethod extends Controller {
 
   /*========================= DELETE ========================================*/
 
-  #[Route("DELETE", "/paymentMethod/:id")]
+  #[Route("DELETE", "/paymentMethod/:id",
+  middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deletePaymentMethod() {
     return $this->paymentMethod->delete(intval($this->params['id']));
   }
 }
-
-//, middlewares: [AuthMiddleware::class, [PaymentMethodMiddleware::class, 'admin']] to add to all routes

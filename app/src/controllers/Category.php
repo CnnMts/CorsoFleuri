@@ -5,8 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use App\Models\CategoryModel;
 use App\Utils\{Route,HttpException};
-use App\Middlewares\AuthMiddleware;
-use App\Middlewares\RoleMiddleware;
+use App\Middlewares\{AuthMiddleware,RoleMiddleware, Roles};
 
 class Category extends Controller {
   protected object $category;
@@ -20,7 +19,8 @@ class Category extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/category",
-  /* middlewares: [AuthMiddleware::class, [RoleMiddleware::class]]*/)]
+  middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function add() {
     $this->category->add($this->body);
 
@@ -29,15 +29,14 @@ class Category extends Controller {
 
   /*========================= GET BY ID =====================================*/
 
-  #[Route("GET", "/category/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)] 
+  #[Route("GET", "/category/:id")] 
   public function getCategory() {
     return $this->category->get(intval($this->params['id']));
   }
 
   /*========================= GET ALL =======================================*/
 
-  #[Route("GET", "/category", /*middlewares: [AuthMiddleware::class]*/)]
+  #[Route("GET", "/category")]
   public function getCategories() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;
@@ -47,7 +46,8 @@ class Category extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/category/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
+  middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function updateorder() {
     try {
       $id = intval($this->params['id']);
@@ -78,7 +78,8 @@ class Category extends Controller {
   /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/category/:id", 
-  /*middlewares: [AuthMiddleware::class, [RoleMiddleware::class, 'admin']]*/)]
+  middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
   public function deleteCategory() {
     return $this->category->delete(intval($this->params['id']));
   }
