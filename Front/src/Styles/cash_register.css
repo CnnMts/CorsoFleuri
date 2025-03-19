@@ -45,6 +45,10 @@
 
 .listProductOfMenu {
   border: solid teal;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2vw;
   width: 45vw;
   height: 37vw;
 }
@@ -166,6 +170,42 @@
   width: 27vw;
   height: 6vw;
   font-size: 3vw;
+}
+
+.containerMenus{
+  border: solid rebeccapurple;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 17vw;
+  width: 13vw;
+}
+
+.buttonAdd{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgMenu{
+  border: solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 13vw;
+  width: 13vw;
+}
+
+.addMenuButton{
+  width: 100%;
+  height: 3vw;
+}
+
+.priceOnImgMenu{
+  border: solid blue;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 
