@@ -1,113 +1,101 @@
 import MenuModel from "../Models/menuModel.js";
 import cashRegisterView from "../Views/cashRegisterView.js";
 
-class CashRegisterController {
-  constructor(req, res) {
+
+const CashRegisterController = class CashRegisterController {
+  constructor({ req, res }) {
+    this.el = document.querySelector("#app"); // Conteneur principal pour le rendu
     this.req = req;
     this.res = res;
+    this.menus = [];
+
     this.run();
   }
 
   async run() {
     try {
       const allMenus = await MenuModel.getAllMenus();
-      this.render(allMenus);
+      console.log("Menus récupérés :", allMenus); // Log pour vérifier les données
+  
+      this.menus = this.formatMenus(allMenus);
+      this.render();
+      console.log("HTML généré :", this.render()); // Log pour vérifier le rendu HTML
+  
+      this.initEventListeners();
     } catch (error) {
       this.handleError(error);
     }
   }
+  
 
-  render(allMenus) {
-    const htmlResponse = this.generateHTMLResponse(allMenus);
-    this.res.writeHead(200, { "Content-Type": "text/html" });
-    this.res.end(htmlResponse);
+  formatMenus(menus) {
+    return menus.map((menu) => ({
+      id: menu.id,
+      name: menu.name,
+      description: menu.description,
+      price: menu.price,
+    }));
   }
 
-  generateHTMLResponse(allMenus) {
-    return `
-      <!DOCTYPE html>
-      <html lang="fr">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Cash Register</title>
-          <link rel="stylesheet" href="./Styles/cash_register.css">
-        </head>
-        <body>
-          ${cashRegisterView(allMenus)}
-          <script>
-            document.addEventListener('DOMContentLoaded', () => {
-              ${this.addEventListeners()}
-            });
-  
-            ${this.showModalScript()}
-          </script>
-        </body>
-      </html>
+  render() {
+    // Injection de la vue principale
+    this.el.innerHTML = `
+      <div class="container-fluid">
+        <header>
+          ${cashRegisterView(this.menus)}
+        </header>
+      </div>
     `;
   }
-  
-  showModalScript() {
-    return `
-      function showModal(name) {
-        let listProductOfMenu = document.querySelector('.listProductOfMenu');
-        if (!listProductOfMenu) {
-          listProductOfMenu = document.createElement('div');
-          listProductOfMenu.classList.add('listProductOfMenu');
-          document.body.appendChild(listProductOfMenu);
-        }
-  
-        const existingModal = listProductOfMenu.querySelector('.modal');
-        if (existingModal) {
-          listProductOfMenu.removeChild(existingModal);
-        }
-  
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
-        modal.innerHTML = \`
-          <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>\${name}</h2>
-            <p>Vous avez ajouté le menu : \${name}</p>
-          </div>
-        \`;
-  
-        listProductOfMenu.appendChild(modal);
-  
-        modal.querySelector('.close-button').addEventListener('click', () => {
-          const modalToRemove = listProductOfMenu.querySelector('.modal');
-          if (modalToRemove) {
-            listProductOfMenu.removeChild(modalToRemove);
-          }
-        });
-      }
-    `;
+
+  initEventListeners() {
+    this.onClickAddButton();
   }
-  
 
-  addEventListeners() {
-    return `
-      document.querySelectorAll('.addMenuButton').forEach(button => {
-        button.addEventListener('click', () => {
-          const menuName = button.getAttribute('data-name');
-          if (!menuName) {
-            console.error("Nom du menu manquant ou invalide !");
-            return;
-          }
+  onClickAddButton() {
+    // Gérer les clics sur les boutons d'ajout
+    const buttons = document.querySelectorAll(".addMenuButton");
+    buttons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
 
-          console.log('Bouton cliqué pour le menu :', menuName);
-          showModal(menuName);
-        });
+        const menuName = button.getAttribute("data-name");
+        if (!menuName) {
+          console.error("Nom du menu manquant ou invalide !");
+          return;
+        }
+
+        console.log(`Menu ajouté : ${menuName}`);
+        this.showModal(menuName);
       });
-    `;
+    });
   }
 
+  showModal(name) {
+    // Afficher une modal avec les détails du menu
+    const modalContainer = document.createElement("div");
+    modalContainer.classList.add("modal-container");
+    modalContainer.innerHTML = `
+      <div class="modal">
+        <h2>Menu ajouté : ${name}</h2>
+        <button class="close-modal">Fermer</button>
+      </div>
+    `;
+
+    document.body.appendChild(modalContainer);
+
+    modalContainer.querySelector(".close-modal").addEventListener("click", () => {
+      modalContainer.remove();
+    });
+  }
 
   handleError(error) {
-    console.error('Erreur dans le contrôleur :', error);
-    this.res.writeHead(500, { "Content-Type": "text/plain" });
-    this.res.end('Erreur serveur : Impossible de récupérer les données.');
+    console.error("Erreur dans le contrôleur :", error);
+    if (this.res) {
+      this.res.writeHead(500, { "Content-Type": "text/plain" });
+      this.res.end("Erreur serveur : Impossible de récupérer les données.");
+    }
   }
-}
+};
 
 export default CashRegisterController;
