@@ -33,7 +33,6 @@ services:
     command: npm start
     ports:
       - "8085:3000"
-
   db:
     image: mysql:5.7
     container_name: db
