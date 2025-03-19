@@ -28,7 +28,7 @@ services:
       dockerfile: Dockerfile
     container_name: node-front
     volumes:
-      - ./Front/src/:/usr/src/app
+      - ./:/usr/src/app
     working_dir: /usr/src/app
     command: npm start
     ports:
