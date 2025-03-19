@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: php-fpm
     volumes:
-      - ./app:/var/www/app
+      - ./Back/app:/var/www/app
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -15,7 +15,7 @@ services:
     image: nginx:latest
     container_name: nginx
     volumes:
-      - ./app:/var/www/app
+      - ./Back/app:/var/www/app
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "8083:80"
@@ -24,11 +24,11 @@ services:
 
   node-front:
     build:
-      context: ./front/src
+      context: ./Front/src
       dockerfile: Dockerfile
     container_name: node-front
     volumes:
-      - ./front/src/:/usr/src/app
+      - ./Front/src/:/usr/src/app
     working_dir: /usr/src/app
     command: npm start
     ports:
