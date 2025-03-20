@@ -9,5 +9,5 @@ COPY . .
 FROM node:20
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app ./
-EXPOSE 3000
+EXPOSE 8085
 CMD [ "npm", "start" ]
