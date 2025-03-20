@@ -59,7 +59,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true, // Gestion des routes pour les SPA
     host: '0.0.0.0',
-    port: 3000,
+    port: 8085,
     open: true,
     hot: true, // Hot Module Replacement
     client: {

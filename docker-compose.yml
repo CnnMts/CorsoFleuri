@@ -32,7 +32,7 @@ services:
     working_dir: /usr/src/app
     command: npm start
     ports:
-      - "8085:3000"
+      - "8085:8085"
 
   db:
     image: mysql:5.7
