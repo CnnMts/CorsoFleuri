@@ -1,54 +1,78 @@
 const path = require('path');
+const webpack = require('webpack'); 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin'); // Pour minimiser le JS en production
 
 module.exports = {
-  entry: './Front/src/index.js', // Updated entry path
-  // entry: './src/index.ts',
+  // Point d'entrée principal
+  entry: './Front/src/index.js',
   output: {
     filename: 'src/[name].[fullhash].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    clean: true // Supprime les anciens fichiers lors de la construction
   },
+  
   module: {
     rules: [
       {
+        
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ['@babel/preset-env', '@babel/preset-typescript'], // Ajout du preset TypeScript
             plugins: ['@babel/plugin-transform-object-rest-spread']
           }
         }
       },
       {
         test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },      
+      {
+        test: /\.ts$/,
+        use: 'ts-loader'
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
         use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader",
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            },
+          },
         ],
       },
-      { test: /\.ts$/, use: 'ts-loader' }
-    ],
+    ]
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    fullySpecified: false,
+    extensions: ['.js', '.ts', '.json'], // Résolution automatique des extensions
   },
   devServer: {
-    historyApiFallback: true,
-    host: '127.0.0.1',
-    port: 9090,
+    historyApiFallback: true, // Gestion des routes pour les SPA
+    host: '0.0.0.0',
+    port: 3000,
     open: true,
-    hot: true,
+    hot: true, // Hot Module Replacement
     client: {
-      logging: 'info',
+      logging: 'verbose', // Niveau de détail des logs
       overlay: true,
       progress: true,
       webSocketTransport: 'ws'
     },
     webSocketServer: 'ws'
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()] // Minimise le JavaScript en production
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -59,7 +83,15 @@ module.exports = {
     new ESLintPlugin({
       extensions: ['js', 'ts'],
       exclude: 'node_modules',
-      files: './src/'
+      files: './Front/src/',
+      emitWarning: true,
+      failOnWarning: false,
+      fix: true, // Active la correction automatique
+      cache: false 
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser',
     })
   ]
 };
