@@ -4,7 +4,6 @@
 }
 
 .containerTop {
-  border: solid purple;
   display: flex;
   flex-direction: row;
   height: 12vw;
@@ -40,11 +39,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: solid yellow;
 }
 
 .listProductOfMenu {
-  border: solid teal;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -55,13 +52,13 @@
 }
 
 .containerRight {
-  border: solid green;
+  border: solid;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1vw;
-  height: 100%;
-  width: 54vw;
+  height: 80vh;
+  width: 30vw;
 }
 
 .container {
@@ -69,7 +66,6 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  border: solid blue;
 }
 
 .logo {
@@ -101,32 +97,49 @@
   font-size: 3.6vw;
 }
 
-.containerTicket {
-  border: solid blue;
-  height: 45vw;
-
+.ticket-container{
+  height: 30vw;
+  width: 20vw;
 }
 
+.containerTicket {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.ticket {
+  border: solid ;
+  margin-bottom: 3vh; 
+  margin-top: 2vh;
+}
+
+#tiltle-container-ticket{
+  border: solid;
+}
+
+
 .listMenu {
-  border: solid lawngreen;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 .listorder {
-  border: solid palevioletred;
   font-size: 2vw;
   width: 15vw;
   margin-left: 1.5vw;
 }
 
 .nameMenu {
-  border: solid maroon;
+  border: solid;
   display: flex;
   align-items: center;
   font-size: 1.5vw;
   height: 3vw;
+}
+
+.bottom-navTicket{
+  border: solid;
 }
 
 .leftContainerListMenu {
@@ -135,7 +148,6 @@
   align-items: flex-end;
   flex-direction: column;
   width: 5vw;
-  border: solid aqua;
 }
 
 .delete-menu-list {
@@ -144,7 +156,6 @@
 }
 
 .OrderPriceContainer {
-  border: solid aqua;
   display: flex;
   align-items: center;
   height: 6.6vw;
@@ -163,8 +174,11 @@
   justify-content: center;
   align-items: center;
   height: 6.6vw;
-  border: solid rebeccapurple;
 
+}
+
+.totalPrice{
+  border: solid;
 }
 
 .payment-button {
@@ -174,7 +188,6 @@
 }
 
 .containerMenus{
-  border: solid rebeccapurple;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -189,7 +202,6 @@
 }
 
 .imgMenu{
-  border: solid red;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -203,7 +215,6 @@
 }
 
 .priceOnImgMenu{
-  border: solid blue;
   display: flex;
   justify-content: flex-end;
   align-items: center;

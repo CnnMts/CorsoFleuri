@@ -1,7 +1,6 @@
 import MenuModel from '../Models/menuModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
-
 import '../Styles/cashRegister.css';
 
 class CashRegisterController {
@@ -10,7 +9,7 @@ class CashRegisterController {
     this.req = req;
     this.res = res;
     this.menus = [];
-    this.ticket = {};
+    this.ticket = []; // Liste des commandes (tickets)
     this.run();
   }
 
@@ -19,7 +18,7 @@ class CashRegisterController {
       const allMenus = await MenuModel.getAllMenus();
       this.menus = this.formatMenus(allMenus);
       this.render();
-      this.initEventListeners();
+      this.initEventListeners(); // Initier les écouteurs d'événements
     } catch (error) {
       this.handleError(error);
     }
@@ -30,7 +29,7 @@ class CashRegisterController {
       id: menu.id,
       name: menu.name,
       description: menu.description,
-      price: menu.price,
+      price: parseFloat(menu.price) || 0,
       products: this.sortProductsByCategory(menu.products)
     }));
   }
@@ -56,24 +55,20 @@ class CashRegisterController {
   }
 
   render() {
-    this.el.innerHTML = `
-      ${cashRegisterView(this.menus)}
-    `;
+    this.el.innerHTML = cashRegisterView({ menus: this.menus, ticket: this.ticket });
   }
 
   initEventListeners() {
-    this.onClickAddButton();
+    this.initAddMenuButtonListener();
   }
 
-  onClickAddButton() {
+  initAddMenuButtonListener() {
     const buttons = document.querySelectorAll('.addMenuButton');
     buttons.forEach((button) => {
       button.addEventListener('click', (event) => {
         event.preventDefault();
-
         const menuName = button.getAttribute('data-name');
         if (!menuName) return;
-
         this.showModal(menuName);
       });
     });
@@ -81,7 +76,6 @@ class CashRegisterController {
 
   showModal(menuName) {
     const selectedMenu = this.menus.find((menu) => menu.name === menuName);
-
     if (!selectedMenu) return;
 
     const modalContainer = document.createElement('div');
@@ -94,7 +88,6 @@ class CashRegisterController {
         <button class="close-modal">Fermer</button>
       </div>
     `;
-
     document.body.appendChild(modalContainer);
 
     modalContainer.querySelector('.close-modal').addEventListener('click', () => {
@@ -108,62 +101,75 @@ class CashRegisterController {
 
   renderProductSelection(products) {
     return Object.keys(products)
-      .map(
-        (category) => `
-      <div class="category">
-        <h3>${category}</h3>
-        <ul>
-          ${products[category]
+      .map((category) => `
+        <div class="category">
+          <h3>${category}</h3>
+          <ul>
+            ${products[category]
     .map(
       (product) => `
-            <li>
-              <label>
-                <input type="radio" name="${category}" value="${product.name}"> ${product.name}
-              </label>
-            </li>
-          `
+                <li>
+                  <label>
+                    <input type="radio" name="${category}" value="${product.id}">
+                    ${product.name}
+                  </label>
+                </li>
+              `
     )
     .join('')}
-        </ul>
-      </div>
-    `
-      )
+          </ul>
+        </div>
+      `)
       .join('');
   }
 
   sendTicketToView(selectedMenu, modalContainer) {
-    const selectedItems = document.querySelectorAll('input[type="radio"]:checked');
+    const selectedItems = modalContainer.querySelectorAll('input[type="radio"]:checked');
+    const selectedProducts = Array.from(selectedItems).map((input) => input.value);
 
-    this.ticket = {
-      name: selectedMenu.name,
-      price: selectedMenu.price,
-      products: Array.from(selectedItems).map((input) => ({
-        category: input.name,
-        name: input.value
-      }))
-    };
-
-    if (!this.ticket.products || this.ticket.products.length === 0) {
-      console.error('Aucun élément sélectionné pour le ticket.');
+    if (selectedProducts.length === 0) {
       alert('Veuillez sélectionner au moins un élément pour le ticket.');
       return;
     }
 
-    const ticketContainer = document.querySelector('.containerTicket');
-    if (ticketContainer) {
-      ticketContainer.innerHTML += ticketView(this.ticket); // Mise à jour de la vue ici
+    const productNames = selectedProducts.map((id) => Object.keys(selectedMenu.products)
+      .reduce((foundName, category) => {
+        const product = selectedMenu.products[category].find((prod) => String(prod.id) === id);
+        return product ? product.name : foundName;
+      }, null)).filter((name) => name !== null);
+
+    const newTicket = {
+      name: selectedMenu.name,
+      price: selectedMenu.price,
+      products: productNames
+    };
+
+    const ticketsContainer = document.getElementById('tickets-container');
+    if (ticketsContainer) {
+      ticketsContainer.insertAdjacentHTML('beforeend', ticketView(newTicket));
+    } else {
+      console.error('Conteneur tickets non trouvé');
     }
 
-    console.log('Ticket mis à jour :', this.ticket);
+    this.ticket.push(newTicket);
+    this.updateTotalPrice();
     modalContainer.remove();
+  }
+
+  calculateTotalPrice() {
+    return this.ticket.reduce((total, ticket) => total + (ticket.price || 0), 0);
+  }
+
+  updateTotalPrice() {
+    const totalPrice = this.calculateTotalPrice();
+    const totalPriceElement = document.getElementById('global-total');
+    if (totalPriceElement) {
+      totalPriceElement.textContent = totalPrice.toFixed(2);
+    }
   }
 
   handleError(error) {
     console.error('Erreur dans le contrôleur :', error);
-    if (this.res) {
-      this.res.writeHead(500, { 'Content-Type': 'text/plain' });
-      this.res.end('Erreur serveur.');
-    }
   }
 }
 
