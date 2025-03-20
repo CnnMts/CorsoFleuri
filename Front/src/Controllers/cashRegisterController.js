@@ -18,7 +18,7 @@ class CashRegisterController {
       const allMenus = await MenuModel.getAllMenus();
       this.menus = this.formatMenus(allMenus);
       this.render();
-      this.initEventListeners(); // Initier les écouteurs d'événements
+      this.initEventListeners();
     } catch (error) {
       this.handleError(error);
     }
@@ -124,40 +124,82 @@ class CashRegisterController {
   }
 
   sendTicketToView(selectedMenu, modalContainer) {
-    const selectedItems = modalContainer.querySelectorAll('input[type="radio"]:checked');
-    const selectedProducts = Array.from(selectedItems).map((input) => input.value);
-
+    const selectedProducts = this.getSelectedProducts(modalContainer);
     if (selectedProducts.length === 0) {
       alert('Veuillez sélectionner au moins un élément pour le ticket.');
       return;
     }
 
-    const productNames = selectedProducts.map((id) => Object.keys(selectedMenu.products)
+    const productNames = this.mapSelectedProductsToNames(selectedMenu, selectedProducts);
+    const existingTicket = this.findExistingTicket(selectedMenu, productNames);
+
+    if (existingTicket) {
+      this.updateExistingTicket(existingTicket);
+    } else {
+      this.createNewTicket(selectedMenu, productNames);
+    }
+
+    this.updateTotalPrice();
+    modalContainer.remove();
+  }
+
+  getSelectedProducts(modalContainer) {
+    const selectedItems = modalContainer.querySelectorAll('input[type="radio"]:checked');
+    return Array.from(selectedItems).map((input) => input.value);
+  }
+
+  mapSelectedProductsToNames(selectedMenu, selectedProducts) {
+    return selectedProducts.map((id) => Object.keys(selectedMenu.products)
       .reduce((foundName, category) => {
         const product = selectedMenu.products[category].find((prod) => String(prod.id) === id);
         return product ? product.name : foundName;
       }, null)).filter((name) => name !== null);
+  }
 
+  findExistingTicket(selectedMenu, productNames) {
+    return this.ticket.find(
+      (ticket) => ticket.name === selectedMenu.name
+        && ticket.products.length === productNames.length
+        && ticket.products.sort().toString() === productNames.sort().toString()
+    );
+  }
+
+  updateExistingTicket(existingTicket) {
+    existingTicket.quantity = (existingTicket.quantity || 1) + 1;
+
+    console.log(`Quantité mise à jour pour le ticket '${existingTicket.name}': ${existingTicket.quantity}`);
+
+    const ticketElement = document.querySelector(`.ticket[data-name="${existingTicket.name}"]`);
+    if (ticketElement) {
+      ticketElement.outerHTML = ticketView(existingTicket);
+    } else {
+      console.error("Impossible de trouver l'élément HTML correspondant au ticket pour mise à jour.");
+    }
+  }
+
+  createNewTicket(selectedMenu, productNames) {
     const newTicket = {
       name: selectedMenu.name,
       price: selectedMenu.price,
-      products: productNames
+      products: productNames,
+      quantity: 1
     };
+
+    this.ticket.push(newTicket);
+
+    console.log(`Nouveau ticket '${newTicket.name}' ajouté avec quantité : ${newTicket.quantity}`);
 
     const ticketsContainer = document.getElementById('tickets-container');
     if (ticketsContainer) {
       ticketsContainer.insertAdjacentHTML('beforeend', ticketView(newTicket));
     } else {
-      console.error('Conteneur tickets non trouvé');
+      console.error('Conteneur des tickets non trouvé.');
     }
-
-    this.ticket.push(newTicket);
-    this.updateTotalPrice();
-    modalContainer.remove();
   }
 
   calculateTotalPrice() {
-    return this.ticket.reduce((total, ticket) => total + (ticket.price || 0), 0);
+    return this.ticket.reduce((total, ticket) => total
+    + (ticket.price * (ticket.quantity || 1)), 0);
   }
 
   updateTotalPrice() {
