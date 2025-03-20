@@ -24,11 +24,11 @@ services:
 
   node-front:
     build:
-      context: ./front/src
+      context: ./Front/src
       dockerfile: Dockerfile
     container_name: node-front
     volumes:
-      - ./front/src/:/usr/src/app
+      - ./Front/src/:/usr/src/app
     working_dir: /usr/src/app
     command: npm start
     ports:
