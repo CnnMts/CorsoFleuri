@@ -1,35 +1,46 @@
-const ticketView = ({ name, price, products }) => {
-  const productList = products.map((product) => `<li>${product.name}</li>`).join('');
+const ticketView = (ticketData) => {
+  if (!ticketData || !ticketData.products) {
+    return `
+      <div class="containerRight">
+        <p>Aucun élément sélectionné dans le ticket.</p>
+      </div>
+    `;
+  }
+
+  const categoriesOrder = ['Plat', 'Entrée', 'Dessert', 'Boisson'];
+  const orderedProducts = categoriesOrder
+    .map((category) => ({
+      category,
+      items: ticketData.products.filter((product) => product.category === category)
+    }))
+    .filter((group) => group.items.length > 0);
+
+  const productList = orderedProducts
+    .map((group) => `
+      <div class="category">
+        <h3>${group.category}</h3>
+        <ul>
+          ${group.items.map((item) => `<li>${item.name}</li>`).join('')}
+        </ul>
+      </div>
+    `)
+    .join('');
 
   return `
     <div class="containerRight">
       <div class="containerTicket">
         <div class="nameMenu">
-          <h2>${name}</h2>
+          <h2>${ticketData.name}</h2>
         </div>
         <div class="listMenu">
           <div class="listorder">
-            <ul>${productList}</ul>
-          </div>
-          <div class="leftContainerListMenu">
-            <div class="priceContainer">
-              <h2 id='price'>${price} €</h2>
-            </div>
-            <div class="quantity">
-              <h2 id='quantity'>x1</h2>
-            </div>
-            <div class="deletebuttonContainerListMenu">
-              <button class="delete-menu-list" type="button">🗑️</button>
-            </div>
+            ${productList}
           </div>
         </div>
       </div>
       <div class="OrderPriceContent">
-        <div class="titleOrder">
-          <h2>COMMANDE</h2>
-        </div>
         <div class="totalPrice">
-          <h2>XX.XX€</h2>
+          <h2>Total : ${ticketData.price} €</h2>
         </div>
       </div>
       <div class="containerPaymentButton">

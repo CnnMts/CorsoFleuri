@@ -211,11 +211,11 @@
 
 .modal {
   position: absolute;
-  top: -20px;
-  left: -50px; /* Move the modal 5px to the left */
+  top: 0;
+  left: 0; /* Move the modal 5px to the left */
   right: 0;
-  width: calc(100% + 50px); /* Adjust the width to compensate for the left offset */
-  height: calc(100% + 20px);
+  width: 100% ; /* Adjust the width to compensate for the left offset */
+  height: 100%;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -228,16 +228,76 @@
   align-items: center;
 }
 
-.modal-content {
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
-  border: solid salmon;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.containerMenus.inactive {
-  pointer-events: none; 
-  opacity: 0.5;
+.modal {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
+
+.modal h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #333;
+}
+
+.category {
+  width: 100%;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.category h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.category ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.category ul li {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #444;
+}
+
+.close-modal {
+  background-color: #ff5252;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.close-modal:hover {
+  background-color: #e04747;
+}
+
 
 
 .close-button {
@@ -245,8 +305,6 @@
   font-size: 1.5rem;
   align-self: flex-end;
 }
-
-
 
 .gestion:hover {
   background-color: darkkhaki;
