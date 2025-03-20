@@ -7,14 +7,16 @@ module.exports = {
     "airbnb-base",
     "airbnb-typescript/base",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    'plugin:import/errors',
+    'plugin:import/warnings'
   ],
   overrides: [
     {
       env: {
         node: true
       },
-      files: [".eslintrc.{js,cjs}"],
+      files: [".eslintrc.{js,cjs}", "*.js"],
       parserOptions: {
         sourceType: "script"
       }
@@ -34,6 +36,22 @@ module.exports = {
     "global-require": 0,
     "eslint linebreak-style": [0, "error", "windows"],
     "@typescript-eslint/comma-dangle": 0,
-    "no-new": 0
+    "no-new": 0,
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "always",
+        "ts": "never"
+      }
+    ],
+    "consistent-return": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/naming-convention": "off"
   }
+
+
 };
+

@@ -1,5 +1,5 @@
 const ticketView = ({ name, price, products }) => {
-  const productList = products.map(product => `<li>${product.name}</li>`).join('');
+  const productList = products.map((product) => `<li>${product.name}</li>`).join('');
 
   return `
     <div class="containerRight">

@@ -24,8 +24,8 @@ services:
 
   node-front:
     build:
-      context: ./Front/src
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Front/src/Dockerfile # si vous utilisez l'Option 1
     container_name: node-front
     volumes:
       - ./:/usr/src/app
@@ -33,6 +33,7 @@ services:
     command: npm start
     ports:
       - "8085:3000"
+
   db:
     image: mysql:5.7
     container_name: db
