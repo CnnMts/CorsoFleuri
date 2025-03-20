@@ -1,5 +1,4 @@
-const menusView = ({ id, name, price }) => {
-  return `
+const menusView = ({ id, name, price }) => `
     <div class="containerMenus">
       <div class="imgMenu">
         <img src="./Assets/testMenu${id}.png" alt="${name}" />
@@ -12,6 +11,5 @@ const menusView = ({ id, name, price }) => {
       </div>
     </div>
   `;
-};
 
 export default menusView;
