@@ -16,8 +16,9 @@
   "include": [
     "src/**/*",
     "global.d.ts",
-    "Front/src/**/*.js"
-, "webpack.config.js"  ],
+    "Front/src/**/*.js", 
+    "webpack.config.js"  
+  ],
   "exclude": [
     "node_modules",
     "dist"
