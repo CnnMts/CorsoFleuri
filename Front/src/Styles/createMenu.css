@@ -118,4 +118,49 @@ html, body {
   #save-menu {
     font-size: 4vw;
   }
+  .modal {
+    display: none; /* Affiché uniquement lorsqu'il est activé */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .modal .appetizer-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .modal .appetizer-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #validate-appetizers {
+    background-color: #007BFF;
+    color: #fff;
+  }
+  
+  #close-modal {
+    background-color: #ccc;
+  }
+  
 }

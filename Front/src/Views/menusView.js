@@ -1,14 +1,6 @@
-const getMenuImage = (id) => {
-  try {
-    return `/Assets/testMenu${id}.png`;
-  } catch {
-    console.log(`Image manquante pour l'id ${id}, utilisation d'une image par défaut.`);
-    return '/Assets/defaultMenu.png';
-  }
-};
-
 const menusView = ({ id, name, price }) => {
-  const imgSrc = getMenuImage(id);
+  const imgSrc = `../Assets/testMenu${id}.png`;
+
   return `
     <div class="containerMenus">
       <div class="imgMenu">

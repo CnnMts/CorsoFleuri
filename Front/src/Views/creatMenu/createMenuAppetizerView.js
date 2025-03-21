@@ -1,9 +1,8 @@
-const createMenuAppetizerView = ({ appetizers }) => `
-  <div class="form-group">
-    <label for="appetizer">Entrée</label>
-    <select id="appetizer" name="appetizer">
-      ${appetizers.map((product) => `<option value="${product.id}">${product.name}</option>`).join('')}
-    </select>
+const createMenuAppetizerView = () => `
+  <div class="form-group" id="appetizer-group">
+    <label>Entrées</label>
+    <div class="appetizer-items"></div>
+    <button type="button" id="add-appetizer" class="add-button">Ajouter une entrée</button>
   </div>
 `;
 
