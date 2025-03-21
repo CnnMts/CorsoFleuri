@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2016", // Version ES pour le code JavaScript généré
+    "module": "commonjs", // Module utilisé pour l'import/export
+    "rootDir": "./src", // Répertoire racine des fichiers source
+    "outDir": "./dist", // Répertoire de sortie des fichiers compilés
+    "esModuleInterop": true, // Support des modules ES
+    "forceConsistentCasingInFileNames": true, // Vérification de la casse des noms de fichiers
+    "strict": true, // Active toutes les vérifications strictes
+    "noImplicitAny": true, // Empêche l'utilisation de `any` implicite
+    "skipLibCheck": true, // Ignore les vérifications des fichiers .d.ts
+    "strictNullChecks": true, // Vérifie les valeurs null ou undefined
+    "strictFunctionTypes": true, // Vérifie les types des fonctions
+    "strictPropertyInitialization": true // Vérifie l'initialisation des propriétés
+  },
+  "include": [
+    "src/**/*",
+    "global.d.ts",
+    "Front/src/**/*.js"
+, "webpack.config.js"  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
