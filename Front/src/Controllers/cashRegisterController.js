@@ -9,7 +9,7 @@ class CashRegisterController {
     this.req = req;
     this.res = res;
     this.menus = [];
-    this.ticket = []; // Liste des commandes (tickets)
+    this.ticket = [];
     this.run();
   }
 
