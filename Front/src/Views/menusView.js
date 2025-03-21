@@ -2,7 +2,7 @@ const getMenuImage = (id) => {
   try {
     return `/Assets/testMenu${id}.png`;
   } catch {
-    console.warn(`Image manquante pour l'id ${id}, utilisation d'une image par défaut.`);
+    console.log(`Image manquante pour l'id ${id}, utilisation d'une image par défaut.`);
     return '/Assets/defaultMenu.png';
   }
 };
