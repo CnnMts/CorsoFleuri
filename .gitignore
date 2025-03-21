@@ -3,3 +3,4 @@
 /Back/app/vendor/
 /Front/node_modules/
 node_modules
+/Front/env-webpack-vanilla-php.tar
