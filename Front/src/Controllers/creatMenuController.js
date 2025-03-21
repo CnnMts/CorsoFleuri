@@ -16,36 +16,32 @@ class CreateMenuController {
 
   async init() {
     this.products = await ProductModel.fetchProducts();
-    console.log('Produits récupérés :', this.products);
     this.render();
     this.initEventListeners();
   }
 
   render() {
-    const appetizers = this.products.filter((p) => p.category_id === 1);
-    const mainCourses = this.products.filter((p) => p.category_id === 2);
+    const apps = this.products.filter((p) => p.category_id === 1);
+    const mains = this.products.filter((p) => p.category_id === 2);
     const desserts = this.products.filter((p) => p.category_id === 3);
     const drinks = this.products.filter((p) => p.category_id === 4);
-
     this.el.innerHTML = createMenuView({
-      appetizers,
-      mainCourses,
+      appetizers: apps,
+      mainCourses: mains,
       desserts,
       drinks
     });
-
     this.renderModals({
-      appetizers, mainCourses, desserts, drinks
+      apps, mains, desserts, drinks
     });
   }
 
   renderModals({
-    appetizers, mainCourses, desserts, drinks
+    apps, mains, desserts, drinks
   }) {
-    // Render modals for each category
     document.body.insertAdjacentHTML(
       'beforeend',
-      createAppetizerModalView({ appetizers })
+      createAppetizerModalView({ appetizers: apps })
     );
     document.body.insertAdjacentHTML(
       'beforeend',
@@ -57,135 +53,142 @@ class CreateMenuController {
     );
     document.body.insertAdjacentHTML(
       'beforeend',
-      createMainCourseModalView({ mainCourses })
+      createMainCourseModalView({ mainCourses: mains })
     );
   }
 
   initEventListeners() {
-    // Form submission
     const form = document.getElementById('create-menu-form');
-    if (form) {
-      form.addEventListener('submit', this.handleSubmit.bind(this));
-    } else {
-      console.error("Le formulaire de création de menu n'a pas été trouvé.");
-    }
+    if (form) form.addEventListener('submit', (e) => this.handleSubmit(e));
+    this.bindModal(
+      'add-appetizer',
+      'appetizer-modal',
+      'validate-appetizers',
+      'appetizer-group',
+      'appetizers'
+    );
+    this.bindModal(
+      'add-dessert',
+      'dessert-modal',
+      'validate-desserts',
+      'dessert-group',
+      'desserts'
+    );
+    this.bindModal(
+      'add-drink',
+      'drink-modal',
+      'validate-drinks',
+      'drink-group',
+      'drinks'
+    );
+    this.bindModal(
+      'add-main-course',
+      'main-course-modal',
+      'validate-main-courses',
+      'main-course-group',
+      'mainCourses'
+    );
+  }
 
-    // Appetizer modal
-    const addAppetizerButton = document.getElementById('add-appetizer');
-    if (addAppetizerButton) {
-      addAppetizerButton.addEventListener('click', () => this.openModal('appetizer-modal'));
+  bindModal(addBtnId, modalId, validBtnId, groupId, inputName) {
+    const aBtn = document.getElementById(addBtnId);
+    if (aBtn) aBtn.addEventListener('click', () => this.openModal(modalId));
+    const vBtn = document.getElementById(validBtnId);
+    if (vBtn) {
+      vBtn.addEventListener('click', () => this.validateSelection(groupId, modalId, inputName));
     }
-    document
-      .getElementById('validate-appetizers')
-      ?.addEventListener('click', () => this.validateSelection('appetizer-group', 'appetizer-modal', 'appetizers'));
-
-    // Dessert modal
-    const addDessertButton = document.getElementById('add-dessert');
-    if (addDessertButton) {
-      addDessertButton.addEventListener('click', () => this.openModal('dessert-modal'));
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      const cBtn = modal.querySelector('.close-button');
+      if (cBtn) cBtn.addEventListener('click', () => this.closeModal(modalId));
     }
-    document
-      .getElementById('validate-desserts')
-      ?.addEventListener('click', () => this.validateSelection('dessert-group', 'dessert-modal', 'desserts'));
-
-    // Drink modal
-    const addDrinkButton = document.getElementById('add-drink');
-    if (addDrinkButton) {
-      addDrinkButton.addEventListener('click', () => this.openModal('drink-modal'));
-    }
-    document
-      .getElementById('validate-drinks')
-      ?.addEventListener('click', () => this.validateSelection('drink-group', 'drink-modal', 'drinks'));
-
-    // Main Course modal
-    const addMainCourseButton = document.getElementById('add-main-course');
-    if (addMainCourseButton) {
-      addMainCourseButton.addEventListener('click', () => this.openModal('main-course-modal'));
-    }
-    document
-      .getElementById('validate-main-courses')
-      ?.addEventListener('click', () => this.validateSelection('main-course-group', 'main-course-modal', 'mainCourses'));
   }
 
   openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = 'block';
-    }
+    const m = document.getElementById(modalId);
+    if (m) m.style.display = 'block';
   }
 
   closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = 'none';
-    }
+    const m = document.getElementById(modalId);
+    if (m) m.style.display = 'none';
   }
 
   validateSelection(groupId, modalId, inputName) {
-    const checkboxes = document.querySelectorAll(`#${modalId} input[type="checkbox"]:checked`);
-    const group = document.querySelector(`#${groupId} .${groupId}-items`);
-
-    checkboxes.forEach((checkbox) => {
-      const productId = checkbox.value;
-      const productName = checkbox.nextElementSibling.textContent;
-
-      const newItem = document.createElement('div');
-      newItem.classList.add(`${groupId}-item`);
-      newItem.innerHTML = `
-        <span>${productName}</span>
-        <input type="hidden" name="${inputName}" value="${productId}" />
-      `;
-      group.appendChild(newItem);
+    const checks = document.querySelectorAll(
+      `#${modalId} input[type="checkbox"]:checked`
+    );
+    let group = document.querySelector(
+      `#${groupId} .${groupId}-items`
+    );
+    if (!group) {
+      const parent = document.getElementById(groupId);
+      group = document.createElement('div');
+      group.className = `${groupId}-items`;
+      parent.appendChild(group);
+    }
+    let newHTML = '';
+    checks.forEach((chk) => {
+      const pid = chk.value;
+      const pname = chk.nextElementSibling.textContent;
+      newHTML += `<div class="${groupId}-item">
+        <span>${pname}</span>
+        <input type="hidden" name="${inputName}" value="${pid}" />
+      </div>`;
     });
-
+    group.innerHTML = newHTML;
+    const parent = document.getElementById(groupId);
+    const addBtn = parent.querySelector('button.add-button');
+    if (addBtn) addBtn.remove();
+    if (!parent.querySelector('button.edit-button')) {
+      const editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.textContent = 'Modifier';
+      editBtn.className = 'edit-button';
+      editBtn.addEventListener('click', () => {
+        this.openModal(modalId);
+      });
+      parent.appendChild(editBtn);
+    }
     this.closeModal(modalId);
   }
 
-  async handleSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-
+  async handleSubmit(e) {
+    e.preventDefault();
+    const fd = new FormData(e.target);
     const menuData = {
-      name: formData.get('menuName'),
-      price: formData.get('price'),
-      appetizers: formData.getAll('appetizers'),
-      mainCourses: formData.getAll('mainCourses'),
-      desserts: formData.getAll('desserts'),
-      drinks: formData.getAll('drinks')
+      name: fd.get('menuName'),
+      price: fd.get('price'),
+      appetizers: fd.getAll('appetizers'),
+      mainCourses: fd.getAll('mainCourses'),
+      desserts: fd.getAll('desserts'),
+      drinks: fd.getAll('drinks')
     };
-
-    console.log('Données du menu :', menuData);
-
-    const menuResponse = await this.createMenuOnServer({
+    const mRes = await this.createMenuOnServer({
       name: menuData.name,
       price: menuData.price
     });
-
-    let menuId;
-    if (menuResponse && menuResponse.id) {
-      menuId = menuResponse.id;
-    } else {
-      alert('Erreur lors de la création du menu : ID non récupéré.');
+    let mid;
+    if (mRes && mRes.id) mid = mRes.id;
+    else {
+      alert('Erreur: ID non récupéré.');
       return;
     }
-
-    const productAssociations = [
+    const associations = [
       ...menuData.appetizers.map((id) => ({ product_id: id, quantity: 1 })),
       ...menuData.mainCourses.map((id) => ({ product_id: id, quantity: 1 })),
       ...menuData.desserts.map((id) => ({ product_id: id, quantity: 1 })),
       ...menuData.drinks.map((id) => ({ product_id: id, quantity: 1 }))
     ];
-
-    const assocResponse = await this.createMenuProductOnServer({
-      menu_id: menuId,
-      products: productAssociations
+    const assocRes = await this.createMenuProductOnServer({
+      menu_id: mid,
+      products: associations
     });
-
-    if (assocResponse && assocResponse.message) {
-      alert(assocResponse.message);
-      event.target.reset();
+    if (assocRes && assocRes.message) {
+      alert(assocRes.message);
+      e.target.reset();
     } else {
-      alert("Erreur lors de l'association des produits au menu.");
+      alert("Erreur dans l'association.");
     }
   }
 
@@ -196,22 +199,20 @@ class CreateMenuController {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-
       if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(`Erreur ${res.status}: ${errorText}`);
+        const err = await res.text();
+        throw new Error(`Erreur ${res.status}: ${err}`);
       }
-
       return await res.json();
-    } catch (error) {
-      console.error('Erreur lors de l’appel à l’API (menu) :', error);
+    } catch (err) {
+      console.error('Erreur API (menu):', err);
       return null;
     }
   }
 
   async createMenuProductOnServer(data) {
     try {
-      const promises = data.products.map((assoc) => fetch('http://localhost:8083/menuProduct', {
+      const proms = data.products.map((assoc) => fetch('http://localhost:8083/menuProduct', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -220,16 +221,16 @@ class CreateMenuController {
           quantity: assoc.quantity
         })
       }).then((res) => {
-        if (!res.ok) {
-          throw new Error(`Erreur ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Erreur ${res.status}`);
         return res.json();
       }));
-
-      const results = await Promise.all(promises);
-      return { message: 'Produits associés au menu avec succès.', details: results };
-    } catch (error) {
-      console.error('Erreur lors de l’appel à l’API (menuProduct) :', error);
+      const results = await Promise.all(proms);
+      return {
+        message: 'Produits associés avec succès.',
+        details: results
+      };
+    } catch (err) {
+      console.error('Erreur API (menuProduct):', err);
       return null;
     }
   }
