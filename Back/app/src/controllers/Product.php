@@ -21,8 +21,8 @@ class Product extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/product",
-    middlewares: [AuthMiddleware::class, 
-    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+    /*middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function createProduct() {
     $this->product->add($this->body);
 

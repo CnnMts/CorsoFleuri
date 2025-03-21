@@ -1,27 +1,29 @@
 import navTopView from './navTopView.js';
 import menusView from './menusView.js';
-import ticketView from './ticketView.js';
+import navTicketView from './navTicketView.js';
 
-const CashRegister = ({ menus }) => `
-    ${navTopView()}
-    <div class="container">
-      <div class="containerMiddle">
-        <div class="listProductOfMenu">
-          ${menus.map((menu) => menusView(menu)).join('')}
-        </div>
+const CashRegister = ({ menus, ticket }) => `
+  ${navTopView()}
+  <div class="container">
+    <div class="containerMiddle">
+      <div class="listProductOfMenu">
+        ${menus.map((menu) => menusView(menu)).join('')}
       </div>
-      ${ticketView({ name: 'Ticket', price: 0, products: [] })}
     </div>
-  `;
+    <div id="ticket-container">
+      ${navTicketView(ticket)}
+    </div>
+  </div>
+`;
 
-export default (menuDetails) => {
-  if (!menuDetails || menuDetails.length === 0) {
+export default ({ menus, ticket = { name: 'Ticket', price: 0, products: [] } }) => {
+  if (!menus || menus.length === 0) {
     return '<div>Aucune donnée disponible</div>';
   }
 
   return `
     <div class="Cash_register">
-      ${CashRegister({ menus: menuDetails })}
+      ${CashRegister({ menus, ticket })}
     </div>
   `;
 };
