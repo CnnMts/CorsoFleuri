@@ -18,9 +18,9 @@ class MenuProduct extends Controller {
 
   /*========================= POST ==========================================*/
 
-  #[Route("POST", "/menuProduct",
+  #[Route("POST", "/menuProduct"/*,
   middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function add() {
     $this->menuProduct->add($this->body);
 

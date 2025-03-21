@@ -48,8 +48,8 @@ class CreateProductController {
 
     const result = await this.createProductOnServer(productData);
 
-    if (result && result.message) {
-      alert(result.message);
+    if (result/*&& result.message*/) {
+      // alert(result.message);
       event.target.reset();
     } else {
       alert('Erreur lors de la création du produit.');

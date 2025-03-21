@@ -11,7 +11,7 @@ class MenuController {
 
   init() {
     this.render();
-    this.initEventListeners();
+    // this.initEventListeners();
   }
 
   render() {

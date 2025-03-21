@@ -11,7 +11,7 @@ class ProductGestionController {
 
   init() {
     this.render();
-    this.initEventListeners();
+    // this.initEventListeners();
   }
 
   render() {
