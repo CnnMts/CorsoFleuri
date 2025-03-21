@@ -1,4 +1,4 @@
 .env
 node_modules/
+echo "path/to/env-webpack-vanilla-php.tar" >> .gitignore
 env-webpack-vanilla-php.tar
-
