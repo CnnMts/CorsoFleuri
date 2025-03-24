@@ -1,9 +1,8 @@
-const createMenuMainCourseView = ({ mainCourses }) => `
-  <div class="form-group">
-    <label for="main-course">Plat</label>
-    <select id="main-course" name="mainCourse">
-      ${mainCourses.map((product) => `<option value="${product.id}">${product.name}</option>`).join('')}
-    </select>
+const createMenuMainCourseView = () => `
+  <div class="form-group" id="main-course-group">
+    <label>Plats principaux</label>
+    <div class="main-course-group-items"></div> <!-- Cet élément doit exister -->
+    <button type="button" id="add-main-course" class="add-button">Ajouter un plat principal</button>
   </div>
 `;
 

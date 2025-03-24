@@ -1,4 +1,48 @@
 {
+  "name": "env-webpack-vanilla",
+  "version": "1.0.0",
+  "description": "env webpack vanilla node20",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx webpack-dev-server --mode development",
+    "dist": "npx webpack --mode production --progress=profile",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/xzen769/env-webpack-vanilla.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://gitlab.com/xzen769/env-webpack-vanilla/-/blob/main/README.md",
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-transform-object-rest-spread": "^7.22.15",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@svgr/webpack": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "babel-loader": "^9.2.1",
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^6.11.0",
+    "eslint": "^8.50.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-webpack-plugin": "^4.0.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "sass": "^1.80.5",
+    "sass-loader": "^16.0.2",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.3.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.27.0",
     "@typescript-eslint/parser": "^8.27.0",

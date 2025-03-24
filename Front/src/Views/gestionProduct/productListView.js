@@ -1,29 +1,13 @@
-const productListView = () => `
+const productListView = (products) => `
   <section class="product-list">
-    <div class="product-item">
-      <span class="product-name">Salade</span>
-      <span class="product-status">Actif</span>
-      <button class="edit-product">✏️</button>
-      <button class="delete-product">🗑️</button>
-    </div>
-    <div class="product-item">
-      <span class="product-name">Taboulet</span>
-      <span class="product-status">Actif</span>
-      <button class="edit-product">✏️</button>
-      <button class="delete-product">🗑️</button>
-    </div>
-    <div class="product-item">
-      <span class="product-name">Kebab</span>
-      <span class="product-status">Inactif</span>
-      <button class="edit-product">✏️</button>
-      <button class="delete-product">🗑️</button>
-    </div>
-    <div class="product-item">
-      <span class="product-name">Saucisses</span>
-      <span class="product-status">Actif</span>
-      <button class="edit-product">✏️</button>
-      <button class="delete-product">🗑️</button>
-    </div>
+    ${products.map((product) => `
+      <div class="product-item" data-id="${product.id}">
+        <span class="product-name">${product.name}</span>
+        <span class="product-status">${product.display === 1 ? 'Actif' : 'Inactif'}</span>
+        <button class="edit-product">✏️</button>
+        <button class="delete-product">🗑️</button>
+      </div>
+    `).join('')}
   </section>
 `;
 

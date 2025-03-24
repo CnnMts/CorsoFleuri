@@ -7,7 +7,7 @@ use stdClass;
 
 class MenuModel extends SqlConnect {
   private $table = "menu";
-  public $authorized_fields_to_update = ['name', 'price'];
+  public $authorized_fields_to_update = ['name', 'price', 'display'];
 
   /*========================= ADD ===========================================*/
   
@@ -88,9 +88,15 @@ class MenuModel extends SqlConnect {
 
   /*========================= DELETE ========================================*/
 
-  public function delete(int $id) {
-    $req = $this->db->prepare("DELETE FROM $this->table WHERE id = :id");
-    $req->execute(["id" => $id]);
+  public function delete(int $menuId) {
+    $deleteProductsQuery = "DELETE FROM menu_product WHERE menu_id = :menuId";
+    $stmt1 = $this->db->prepare($deleteProductsQuery);
+    $stmt1->execute(["menuId" => $menuId]);
+
+    $deleteMenuQuery = "DELETE FROM menu WHERE id = :menuId";
+    $stmt2 = $this->db->prepare($deleteMenuQuery);
+    $stmt2->execute(["menuId" => $menuId]);
+
     return new stdClass();
-  }
+}
 }

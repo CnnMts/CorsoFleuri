@@ -48,8 +48,8 @@ class Product extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/product/:id",
-  middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+  /*middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function updateProduct() {
     try {
       $id = intval($this->params['id']);
@@ -80,8 +80,8 @@ class Product extends Controller {
   /*========================= DELETE ========================================*/
 
   #[Route("DELETE", "/product/:id",
-    middlewares: [AuthMiddleware::class, 
-    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+    /*middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function deleteProduct() {
     return $this->product->delete(intval($this->params['id']));
   }
