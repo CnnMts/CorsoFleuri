@@ -48,8 +48,8 @@ class Product extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/product/:id",
-  middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+  /*middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function updateProduct() {
     try {
       $id = intval($this->params['id']);

@@ -60,7 +60,11 @@ main {
 }
 
 .product-list {
-  margin-bottom: 4vh;
+  max-height: 500px; /* Définit une hauteur maximale pour le conteneur */
+  overflow-y: auto;  /* Ajoute une barre de défilement verticale si nécessaire */
+  border: 1px solid #ccc; /* Optionnel : ajoute une bordure pour mieux délimiter le conteneur */
+  padding: 10px; /* Optionnel : ajoute de l'espace autour des contenus */
+  background-color: #f9f9f9; /* Optionnel : couleur de fond */
 }
 .product-item {
   display: flex;
@@ -107,3 +111,5 @@ main {
   .product-item { font-size: 4vw; }
   #create-product-button { font-size: 4vw; }
 }
+
+

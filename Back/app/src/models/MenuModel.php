@@ -7,7 +7,7 @@ use stdClass;
 
 class MenuModel extends SqlConnect {
   private $table = "menu";
-  public $authorized_fields_to_update = ['name', 'price'];
+  public $authorized_fields_to_update = ['name', 'price', 'display'];
 
   /*========================= ADD ===========================================*/
   

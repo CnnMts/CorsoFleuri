@@ -3,12 +3,12 @@ import productSidebarView from './productSidebarView.js';
 import productListView from './productListView.js';
 import createProductButtonView from './createProductButtonView.js';
 
-const mainProductView = () => `
+const mainProductView = (products = []) => `
   ${navTopView()}
   <div class="page-content">
     ${productSidebarView()}
     <main>
-      ${productListView()}
+      ${productListView(products)}
       ${createProductButtonView()}
     </main>
   </div>

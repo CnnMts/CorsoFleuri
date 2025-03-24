@@ -46,8 +46,8 @@ class Menu extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/menu/:id", 
-    middlewares: [AuthMiddleware::class, 
-    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+    /*middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function updateMenu() {
     try {
       $id = intval($this->params['id']);
@@ -67,7 +67,6 @@ class Menu extends Controller {
       }
 
       $this->menu->update($data, intval($id));
-
       # Let's return the updated order
       return $this->menu->get($id);
     } catch (HttpException $e) {
