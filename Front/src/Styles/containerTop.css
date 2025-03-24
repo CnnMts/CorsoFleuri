@@ -1,0 +1,20 @@
+.containerTop {
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: auto auto;
+}
+
+.containerTop .logo {
+    height: 100%;
+    width: auto;
+}
+
+.containerTop .logo img {
+    height: 100%;
+}
+
+.containerTop button {
+    height: 100%;
+    width: 10px;
+}

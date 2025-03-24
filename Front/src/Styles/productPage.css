@@ -7,25 +7,6 @@ html, body {
   background-color: #f9f9f9;
 }
 
-.containerTop {
-  background-color: #007bff;
-  padding: 1vh 2vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.containerTop .logo h2 {
-  color: #fff;
-  margin: 0;
-}
-.containerTop button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.2vw;
-  cursor: pointer;
-}
-
 .page-content {
   display: flex;
   width: 100vw;
