@@ -10,19 +10,17 @@ class ProductGestionController {
     this.init();
   }
 
-  // Initialisation du contrôleur
   async init() {
     try {
-      this.products = await this.fetchProducts(); // Récupérer les produits
+      this.products = await this.fetchProducts();
       console.log('Produits récupérés :', this.products);
-      this.render(); // Afficher les produits
-      this.bindEventListeners(); // Ajouter les écouteurs
+      this.render();
+      this.bindEventListeners();
     } catch (error) {
       console.error('Erreur lors de l\'initialisation :', error);
     }
   }
 
-  // Récupération des produits depuis l'API
   async fetchProducts() {
     try {
       const res = await fetch('http://localhost:8083/product');
@@ -34,7 +32,6 @@ class ProductGestionController {
     }
   }
 
-  // Affichage des produits
   render() {
     console.log('Produits passés à la vue :', this.products);
     this.el.innerHTML = mainProductView(this.products || []);
@@ -175,7 +172,7 @@ class ProductGestionController {
       }
 
       alert('Produit supprimé avec succès.');
-      this.init(); // Recharge la liste des produits
+      this.init();
     } catch (err) {
       console.error('Erreur générale lors de la suppression :', err);
       alert('Une erreur est survenue lors de la suppression du produit.');

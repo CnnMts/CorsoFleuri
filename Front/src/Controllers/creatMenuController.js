@@ -122,7 +122,7 @@ class CreateMenuController {
   closeModal(modalId) {
     const m = document.getElementById(modalId);
     if (m) {
-      console.log(`Closing modal: ${modalId}`); // Debug log
+      console.log(`Closing modal: ${modalId}`);
       m.style.display = 'none';
     } else {
       console.error(`Modal with ID ${modalId} not found.`);
