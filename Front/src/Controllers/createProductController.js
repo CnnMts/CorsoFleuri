@@ -39,17 +39,16 @@ class CreateProductController {
       purchase_price: parseFloat(formData.get('purchasePrice')) || 0,
       unit_id: Number(formData.get('unit_id')) || 0,
       stock: Number(formData.get('stock')) || 0,
+      stock_alert: Number(formData.get('stock_alert') || 0),
       sales_nbr: Number(formData.get('sales_nbr')) || 0,
       display: Number(formData.get('display')) || 0,
       picture_url: formData.get('picture_url') || ''
     };
 
-    console.log('Données du produit :', productData);
-
     const result = await this.createProductOnServer(productData);
 
-    if (result && result.message) {
-      alert(result.message);
+    if (result) {
+      alert('Produit créé avec succès');
       event.target.reset();
     } else {
       alert('Erreur lors de la création du produit.');
@@ -66,19 +65,15 @@ class CreateProductController {
         body: JSON.stringify(data)
       });
 
-      console.log('Status de la réponse (product):', res.status);
-
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Erreur renvoyée par l'API:", errorText);
+        console.error("Erreur renvoyée par l'API:", data);
         throw new Error(`Erreur ${res.status}: ${errorText}`);
       }
 
       const result = await res.json();
-      console.log('Réponse API pour product:', result);
       return result;
     } catch (error) {
-      console.error("Erreur lors de l'appel à l'API pour créer le produit :", error);
       return null;
     }
   }

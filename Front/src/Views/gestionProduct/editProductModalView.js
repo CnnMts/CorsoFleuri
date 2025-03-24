@@ -28,6 +28,9 @@ const editProductModalView = (product) => `
       <label>Stock</label>
       <input type="number" id="product-stock" value="${product.stock || '0'}" />
 
+        <label>Stock Alert</label>
+      <input type="number" id="product-stock-alert" value="${product.stock_alert || '0'}" />
+
       <label>Nombre de ventes</label>
       <input type="number" id="product-sales-nbr" value="${product.sales_nbr || '0'}" />
 

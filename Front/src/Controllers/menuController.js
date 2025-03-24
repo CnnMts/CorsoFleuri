@@ -11,9 +11,13 @@ class MenuController {
   }
 
   async init() {
-    this.menus = await this.fetchMenus();
-    this.render();
-    this.bindEditButtons();
+    try {
+      this.menus = await this.fetchMenus();
+      this.render();
+      this.bindEventListeners();
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation :', error);
+    }
   }
 
   async fetchMenus() {
@@ -22,18 +26,23 @@ class MenuController {
       if (!res.ok) throw new Error(await res.text());
       return await res.json();
     } catch (err) {
-      console.error(err);
+      console.error('Erreur lors de la récupération des menus :', err);
       return [];
     }
   }
 
   render() {
-    this.el.innerHTML = mainView(this.menus);
+    this.el.innerHTML = mainView(this.menus || []);
+  }
+
+  bindEventListeners() {
+    this.bindEditButtons();
+    this.bindDeleteButtons();
   }
 
   bindEditButtons() {
-    const btns = this.el.querySelectorAll('.edit-button');
-    btns.forEach((btn) => {
+    const editBtns = this.el.querySelectorAll('.edit-button');
+    editBtns.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const { id } = e.target.closest('.menu-item').dataset;
         if (id) this.showEditModal(id);
@@ -41,15 +50,26 @@ class MenuController {
     });
   }
 
+  bindDeleteButtons() {
+    const deleteBtns = this.el.querySelectorAll('.delete-button');
+    deleteBtns.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const { id } = e.target.closest('.menu-item').dataset;
+        if (id) this.deleteMenu(id);
+      });
+    });
+  }
+
   async showEditModal(id) {
-    const res = await fetch(`http://localhost:8083/menu/${id}`);
-    if (!res.ok) throw new Error(await res.text());
-    const menu = await res.json();
-    document.body.insertAdjacentHTML(
-      'beforeend',
-      editMenuModalView(menu)
-    );
-    this.bindEditModal();
+    try {
+      const res = await fetch(`http://localhost:8083/menu/${id}`);
+      if (!res.ok) throw new Error(await res.text());
+      const menu = await res.json();
+      document.body.insertAdjacentHTML('beforeend', editMenuModalView(menu));
+      this.bindEditModal();
+    } catch (err) {
+      console.error('Erreur lors du chargement du menu :', err);
+    }
   }
 
   bindEditModal() {
@@ -58,24 +78,25 @@ class MenuController {
 
     modal.querySelector('.close-button').addEventListener('click', () => modal.remove());
 
-    const mToggle = modal.querySelector('#menu-toggle');
-    const mStatus = modal.querySelector('#menu-status');
-    mToggle.addEventListener('change', () => {
-      mStatus.textContent = mToggle.checked ? 'Activé' : 'Désactivé';
+    const toggle = modal.querySelector('#menu-toggle');
+    const statusText = modal.querySelector('#menu-status');
+    toggle.addEventListener('change', () => {
+      statusText.textContent = toggle.checked ? 'Activé' : 'Désactivé';
     });
 
-    modal.querySelector('#save-edit')
-      .addEventListener('click', () => this.saveEdit(modal));
+    modal.querySelector('#save-edit').addEventListener('click', () => this.saveEdit(modal));
   }
 
   async saveEdit(modal) {
-    const menuDisp = modal.querySelector('#menu-toggle').checked ? 1 : 0;
     const menuId = modal.getAttribute('data-id');
-    const menuName = modal.querySelector('#menu-name').value.trim();
-    const menuPrice = parseFloat(modal.querySelector('#menu-price').value);
+    const menuData = {
+      name: modal.querySelector('#menu-name').value.trim(),
+      price: parseFloat(modal.querySelector('#menu-price').value),
+      display: modal.querySelector('#menu-toggle').checked ? 1 : 0
+    };
 
-    if (!menuName || Number.isNaN(menuPrice)) {
-      alert('Le nom du menu ou le prix est invalide.');
+    if (!menuData.name || Number.isNaN(menuData.price)) {
+      alert('Le nom ou le prix du menu est invalide.');
       return;
     }
 
@@ -83,11 +104,13 @@ class MenuController {
       const res = await fetch(`http://localhost:8083/menu/${menuId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: menuName, price: menuPrice, display: menuDisp })
+        body: JSON.stringify(menuData)
       });
+
       if (!res.ok) {
-        console.error('Erreur lors de la mise à jour du menu :', await res.text());
-        throw new Error('Erreur lors de la mise à jour du menu');
+        const error = await res.text();
+        console.error('Erreur lors de la mise à jour du menu :', error);
+        throw new Error('Erreur lors de la mise à jour du menu.');
       }
 
       alert('Menu mis à jour.');
@@ -95,8 +118,57 @@ class MenuController {
       this.init();
     } catch (err) {
       console.error('Erreur générale lors de la mise à jour :', err);
-      alert('Erreur lors de la mise à jour.');
+      alert('Une erreur est survenue lors de la mise à jour.');
     }
+  }
+
+  async deleteMenu(id) {
+    const isConfirmed = await this.showConfirmationDialog('Êtes-vous sûr de vouloir supprimer ce menu et tous les produits associés ?');
+    if (!isConfirmed) return;
+
+    try {
+      const res = await fetch(`http://localhost:8083/menu/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error('Erreur lors de la suppression :', error);
+        alert(error.error || 'Une erreur est survenue lors de la suppression.');
+        return;
+      }
+
+      alert('Menu et ses produits associés ont été supprimés avec succès.');
+      this.init();
+    } catch (err) {
+      console.error('Erreur générale lors de la suppression :', err);
+      alert('Une erreur est survenue lors de la suppression.');
+    }
+  }
+
+  async showConfirmationDialog(message) {
+    return new Promise((resolve) => {
+      const dialog = document.createElement('div');
+      dialog.classList.add('confirmation-dialog');
+      dialog.innerHTML = `
+        <div class="dialog-content">
+          <p>${message}</p>
+          <button id="confirm-yes">Oui</button>
+          <button id="confirm-no">Non</button>
+        </div>
+      `;
+      document.body.appendChild(dialog);
+
+      dialog.querySelector('#confirm-yes').addEventListener('click', () => {
+        document.body.removeChild(dialog);
+        resolve(true);
+      });
+
+      dialog.querySelector('#confirm-no').addEventListener('click', () => {
+        document.body.removeChild(dialog);
+        resolve(false);
+      });
+    });
   }
 }
 

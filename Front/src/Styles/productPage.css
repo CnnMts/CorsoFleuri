@@ -102,6 +102,67 @@ main {
 #create-product-button:hover {
   background-color: #747574;
 }
+.confirmation-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  max-width: 90vw;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.dialog-content p {
+  font-size: 1.2vw;
+  margin-bottom: 20px;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.dialog-content button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 1.2vw;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dialog-content button#confirm-yes {
+  background-color: #28a745;
+  color: white;
+}
+
+.dialog-content button#confirm-yes:hover {
+  background-color: #218838;
+}
+
+.dialog-content button#confirm-no {
+  background-color: #dc3545;
+  color: white;
+}
+
+.dialog-content button#confirm-no:hover {
+  background-color: #c82333;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
 
 @media (max-width: 480px) {
   .containerTop { padding: 2vw; }

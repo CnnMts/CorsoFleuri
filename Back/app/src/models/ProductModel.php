@@ -9,19 +9,22 @@ class ProductModel extends SqlConnect {
   private $table = "product";
   public $authorized_fields_to_update = [
     'name', 'category_id', 'is_hot', 'sale_price', 'purchase_price', 
-    'unit_id', 'stock', 'sales_nbr', 'display', 'picture_url'];
+    'unit_id', 'stock','stock_alert', 'sales_nbr', 'display', 'picture_url'];
 
   /*========================= ADD ===========================================*/
 
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (name, category_id, is_hot, sale_price, 
-      purchase_price, unit_id, stock, sales_nbr, display, picture_url)
-      VALUES (:name, :category_id, :is_hot, :sale_price, :purchase_price, 
-      :unit_id, :stock, :sales_nbr, :display, :picture_url)
-    ";
-
-    $req = $this->db->prepare($query);
+    INSERT INTO $this->table (name, category_id, is_hot, sale_price, 
+        purchase_price, unit_id, stock, stock_alert,
+         sales_nbr, display, picture_url)
+    VALUES (:name, :category_id, :is_hot, :sale_price, 
+        :purchase_price, :unit_id, :stock, :stock_alert, 
+         :sales_nbr, :display, :picture_url)
+  ";
+  
+ 
+     $req = $this->db->prepare($query);
     $req->execute($data);
   }
 
