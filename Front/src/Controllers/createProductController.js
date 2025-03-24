@@ -1,4 +1,5 @@
 import createProductView from '../Views/creatProduct/createProductView.js';
+import { loadState } from '../Models/appStateModel.js';
 import '../Styles/createProduct.css';
 
 class CreateProductController {
@@ -10,6 +11,13 @@ class CreateProductController {
   }
 
   init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      exit;
+    }
     this.render();
     this.initEventListeners();
   }

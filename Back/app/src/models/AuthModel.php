@@ -10,7 +10,7 @@ use \Exception;
 
 class AuthModel extends SqlConnect {
   private string $table  = "user";
-  private int $tokenValidity = 3600*24;
+  private int $tokenValidity = 3600*72;
   private string $tableRole = "role";
   
   /*========================= REGISTER ======================================*/
@@ -91,10 +91,36 @@ class AuthModel extends SqlConnect {
     if ($user) {
         if (password_verify($password, $user['identification_code'])) {
           $token = $this->generateJWT($user['id'], $user['role_id']);
-            return ['token' => $token];
+
+          setcookie('token', $token, [
+            'expires'  => time() + 3600*72,
+            'path'     => '/',
+            'secure'   => false,     // true en production, si vous utilisez HTTPS
+            'httponly' => true,
+            'samesite' => 'Strict'
+          ]);
+
+          return ['token' => $token, 'username' => $username, 'role_id' => $user['role_id']];
         }
         throw new HttpException("Mauvais code d'identification", 401);
     }
+  }
+
+  /*========================= LOGOUT =========================================*/
+
+  public function logout() {
+    // Pour effacer le cookie, on définit une expiration passée
+    // Note : Adaptez les options selon votre configuration (secure, samesite, etc.)
+    setcookie('token', '', [
+      'expires'  => time() - 3600*72,
+      'path'     => '/',
+      // Utilisez secure => true en production (HTTPS)
+      'secure'   => false, // en développement, généralement false
+      'httponly' => true,
+      'samesite' => 'Strict'
+    ]);
+
+    return true;  // Optionnel : pour indiquer que l'opération a réussi
   }
 
   /*========================= JWT  ==========================================*/

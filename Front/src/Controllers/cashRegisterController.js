@@ -1,4 +1,5 @@
 import MenuModel from '../Models/menuModel.js';
+import { loadState } from '../Models/appStateModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
 import '../Styles/cashRegister.css';
@@ -14,6 +15,13 @@ class CashRegisterController {
   }
 
   async run() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      exit;
+    }
     try {
       const allMenus = await MenuModel.getAllMenus();
       this.menus = this.formatMenus(allMenus);

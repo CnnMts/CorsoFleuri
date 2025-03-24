@@ -4,6 +4,7 @@ import CreateMenuController from './Controllers/creatMenuController.js';
 import CreateProductController from './Controllers/createProductController.js';
 import MenuController from './Controllers/menuController.js';
 import ProductGestionController from './Controllers/productGestionController.js';
+import LoginController from './Controllers/loginController.js';
 // import './index.scss';
 
 const routes = [
@@ -26,8 +27,11 @@ const routes = [
   {
     url: '/gestionProduct',
     controller: ProductGestionController
+  },
+  {
+    url: '/login',
+    controller: LoginController
   }
-
 ];
 
 new Router(routes);

@@ -1,4 +1,5 @@
 import mainProductView from '../Views/gestionProduct/mainProductView.js';
+import { loadState } from '../Models/appStateModel.js';
 import '../Styles/productPage.css';
 
 class ProductGestionController {
@@ -10,6 +11,13 @@ class ProductGestionController {
   }
 
   init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      exit;
+    }
     this.render();
     // this.initEventListeners();
   }

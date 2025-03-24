@@ -1,4 +1,5 @@
 import mainView from '../Views/gestionMenu/mainView.js';
+import { loadState } from '../Models/appStateModel.js';
 import '../Styles/menuPage.css';
 
 class MenuController {
@@ -10,6 +11,13 @@ class MenuController {
   }
 
   init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      exit;
+    }
     this.render();
     // this.initEventListeners();
   }

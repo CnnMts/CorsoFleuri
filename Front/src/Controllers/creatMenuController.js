@@ -1,5 +1,6 @@
 import createMenuView from '../Views/creatMenu/createMenuView.js';
 import ProductModel from '../Models/productModel.js';
+import { loadState } from '../Models/appStateModel.js';
 import '../Styles/createMenu.css';
 
 class CreateMenuController {
@@ -11,6 +12,13 @@ class CreateMenuController {
   }
 
   async init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      exit;
+    }
     this.products = await ProductModel.fetchProducts();
     console.log('Produits récupérés :', this.products);
     this.render();
