@@ -11,7 +11,7 @@ const createMainCourseModalView = ({ mainCourses }) => `
         `).join('')}
       </ul>
       <button id="validate-main-courses">Valider</button>
-      <button id="close-main-course-modal">Fermer</button>
+        <button class="close-modal">Fermer</button>
     </div>
   </div>
 `;

@@ -11,7 +11,7 @@ const createDrinkModalView = ({ drinks }) => `
         `).join('')}
       </ul>
       <button id="validate-drinks">Valider</button>
-      <button id="close-drink-modal">Fermer</button>
+     <button class="close-modal">Fermer</button>
     </div>
   </div>
 `;

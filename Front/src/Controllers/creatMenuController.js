@@ -55,6 +55,11 @@ class CreateMenuController {
       'beforeend',
       createMainCourseModalView({ mainCourses: mains })
     );
+
+    ['appetizer-modal', 'dessert-modal', 'drink-modal', 'main-course-modal'].forEach((modalId) => {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.style.display = 'none';
+    });
   }
 
   initEventListeners() {
@@ -99,8 +104,13 @@ class CreateMenuController {
     }
     const modal = document.getElementById(modalId);
     if (modal) {
-      const cBtn = modal.querySelector('.close-button');
-      if (cBtn) cBtn.addEventListener('click', () => this.closeModal(modalId));
+      const cBtn = modal.querySelector('.close-modal');
+      if (cBtn) {
+        console.log(`Binding close button for modal: ${modalId}`);
+        cBtn.addEventListener('click', () => this.closeModal(modalId));
+      } else {
+        console.error(`Close button not found for modal: ${modalId}`);
+      }
     }
   }
 
@@ -111,7 +121,12 @@ class CreateMenuController {
 
   closeModal(modalId) {
     const m = document.getElementById(modalId);
-    if (m) m.style.display = 'none';
+    if (m) {
+      console.log(`Closing modal: ${modalId}`); // Debug log
+      m.style.display = 'none';
+    } else {
+      console.error(`Modal with ID ${modalId} not found.`);
+    }
   }
 
   validateSelection(groupId, modalId, inputName) {
