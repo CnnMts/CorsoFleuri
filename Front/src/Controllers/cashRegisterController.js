@@ -16,6 +16,7 @@ class CashRegisterController {
   async run() {
     try {
       const allMenus = await MenuModel.getAllMenus();
+      console.log('Réponse API :', allMenus);
       this.menus = this.formatMenus(allMenus.filter((menu) => menu.display === 1));
       this.render();
       this.initEventListeners();
@@ -30,7 +31,12 @@ class CashRegisterController {
       name: menu.name,
       description: menu.description,
       price: parseFloat(menu.price) || 0,
-      products: this.sortProductsByCategory(menu.products)
+      products: this.sortProductsByCategory(
+        menu.products.map((product) => ({
+          ...product,
+          quantity: product.quantity ?? 1
+        }))
+      )
     }));
   }
 
@@ -78,6 +84,8 @@ class CashRegisterController {
     const selectedMenu = this.menus.find((menu) => menu.name === menuName);
     if (!selectedMenu) return;
 
+    console.log('Produits avec quantité :', selectedMenu.products);
+
     const modalContainer = document.createElement('div');
     modalContainer.classList.add('modal-container');
     modalContainer.innerHTML = `
@@ -106,21 +114,22 @@ class CashRegisterController {
           <h3>${category}</h3>
           <ul>
             ${products[category]
-    .map(
-      (product) => `
+    .map((product) => `
                 <li>
                   <label>
                     <input type="radio" name="${category}" value="${product.id}">
                     ${product.name}
+                    ${
+  product.quantity && product.quantity !== 1
+    ? `<span>Quantité : ${product.quantity}</span>`
+    : ''
+}
                   </label>
                 </li>
-              `
-    )
-    .join('')}
+              `).join('')}
           </ul>
         </div>
-      `)
-      .join('');
+      `).join('');
   }
 
   sendTicketToView(selectedMenu, modalContainer) {

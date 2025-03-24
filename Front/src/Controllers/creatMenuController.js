@@ -145,7 +145,9 @@ class CreateMenuController {
     checks.forEach((chk) => {
       const pid = chk.value;
       const pname = chk.nextElementSibling.textContent;
-      const quantityInput = document.getElementById(`quantity_${inputName.slice(0, -1)}_${pid}`);
+      const base = inputName === 'mainCourses' ? 'main' : inputName.slice(0, -1);
+      const quantityInput = document.getElementById(`quantity_${base}_${pid}`);
+
       const quantity = quantityInput ? parseInt(quantityInput.value, 10) : 1;
 
       if (Number.isNaN(quantity) || quantity <= 0) {
