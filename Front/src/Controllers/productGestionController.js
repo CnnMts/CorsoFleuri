@@ -10,11 +10,6 @@ class ProductGestionController {
     this.init();
   }
 
-<<<<<<< HEAD
-  init() {
-    this.render();
-    // this.initEventListeners();
-=======
   // Initialisation du contrôleur
   async init() {
     try {
@@ -25,7 +20,6 @@ class ProductGestionController {
     } catch (error) {
       console.error('Erreur lors de l\'initialisation :', error);
     }
->>>>>>> matis3
   }
 
   // Récupération des produits depuis l'API

@@ -10,11 +10,6 @@ class MenuController {
     this.init();
   }
 
-<<<<<<< HEAD
-  init() {
-    this.render();
-    // this.initEventListeners();
-=======
   async init() {
     try {
       this.menus = await this.fetchMenus();
@@ -34,7 +29,6 @@ class MenuController {
       console.error('Erreur lors de la récupération des menus :', err);
       return [];
     }
->>>>>>> matis3
   }
 
   render() {
