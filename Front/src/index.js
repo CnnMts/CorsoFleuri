@@ -4,7 +4,7 @@ import CreateMenuController from './Controllers/creatMenuController.js';
 import CreateProductController from './Controllers/createProductController.js';
 import MenuController from './Controllers/menuController.js';
 import ProductGestionController from './Controllers/productGestionController.js';
-// import './index.scss';
+import './Styles/main.css';
 
 const routes = [
   {

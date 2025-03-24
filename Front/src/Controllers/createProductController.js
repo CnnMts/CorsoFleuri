@@ -47,13 +47,8 @@ class CreateProductController {
 
     const result = await this.createProductOnServer(productData);
 
-<<<<<<< HEAD
-    if (result/*&& result.message*/) {
-      // alert(result.message);
-=======
     if (result) {
       alert('Produit créé avec succès');
->>>>>>> matis3
       event.target.reset();
     } else {
       alert('Erreur lors de la création du produit.');
