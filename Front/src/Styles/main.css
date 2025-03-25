@@ -112,10 +112,10 @@ button {
     background-color: #EE6F5C;
 }
 
-.color-white {
-    color: #ffffff;
+.color-bg-white {
+    background-color: #ffffff;
 }
 
-.color-black {
-    color: #000000;
+.color-bg-black {
+    background-color: #000000;
 }
