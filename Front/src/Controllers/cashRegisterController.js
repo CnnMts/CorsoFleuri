@@ -24,7 +24,7 @@ class CashRegisterController {
     }
     try {
       const allMenus = await MenuModel.getAllMenus();
-      this.menus = this.formatMenus(allMenus);
+      this.menus = this.formatMenus(allMenus.filter((menu) => menu.display === 1));
       this.render();
       this.initEventListeners();
     } catch (error) {

@@ -1,9 +1,9 @@
-const createMenuDessertView = ({ desserts }) => `
-  <div class="form-group">
-    <label for="dessert">Dessert</label>
-    <select id="dessert" name="dessert">
-      ${desserts.map((product) => `<option value="${product.id}">${product.name}</option>`).join('')}
-    </select>
+const createMenuDessertView = () => `
+  <div class="form-group" id="dessert-group">
+    <label>Desserts</label>
+    <div class="dessert-items"></div>
+    <div class="dessert-group-items"></div>
+    <button type="button" id="add-dessert" class="add-button">Ajouter un dessert</button>
   </div>
 `;
 
