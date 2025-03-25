@@ -1,6 +1,7 @@
 import MenuModel from '../Models/menuModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
+import testMenu1 from '../Assets/testMenu1.png';
 import '../Styles/cashRegister.css';
 
 class CashRegisterController {
@@ -8,6 +9,7 @@ class CashRegisterController {
     this.el = document.querySelector('#app');
     this.req = req;
     this.res = res;
+    this.testMenu1 = testMenu1;
     this.menus = [];
     this.ticket = [];
     this.run();
@@ -61,7 +63,11 @@ class CashRegisterController {
   }
 
   render() {
-    this.el.innerHTML = cashRegisterView({ menus: this.menus, ticket: this.ticket });
+    this.el.innerHTML = cashRegisterView({
+      menus: this.menus,
+      ticket: this.ticket,
+      photo: this.testMenu1
+    });
   }
 
   initEventListeners() {
