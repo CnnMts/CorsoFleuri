@@ -142,7 +142,10 @@ class ProductGestionController {
     try {
       const res = await fetch(`http://localhost:8083/product/${productId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify({
           name: productName,
           sale_price: productSalePrice,
@@ -184,6 +187,10 @@ class ProductGestionController {
 
     try {
       const res = await fetch(`http://localhost:8083/product/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         method: 'DELETE'
       });
 

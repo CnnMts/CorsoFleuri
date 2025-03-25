@@ -219,7 +219,10 @@ class CreateMenuController {
     try {
       const res = await fetch('http://localhost:8083/menu', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify(data)
       });
       if (!res.ok) {
@@ -237,7 +240,10 @@ class CreateMenuController {
     try {
       const proms = data.products.map((assoc) => fetch('http://localhost:8083/menuProduct', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify({
           menu_id: data.menu_id,
           product_id: assoc.product_id,

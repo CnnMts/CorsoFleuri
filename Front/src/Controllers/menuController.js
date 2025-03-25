@@ -125,7 +125,10 @@ class MenuController {
     try {
       const res = await fetch(`http://localhost:8083/menu/${menuId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify(menuData)
       });
 
@@ -150,6 +153,10 @@ class MenuController {
 
     try {
       const res = await fetch(`http://localhost:8083/menu/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         method: 'DELETE'
       });
 

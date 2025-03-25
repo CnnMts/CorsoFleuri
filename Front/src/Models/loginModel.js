@@ -17,6 +17,7 @@ class LoginModel {
             .then(data => {
               if (data.token) {
                 console.log('Connexion réussie, token reçu:', data.token);
+                localStorage.setItem('token', data.token);
 
                 updateAppState({ 
                     loggedIn: true, 

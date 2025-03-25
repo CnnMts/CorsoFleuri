@@ -92,14 +92,6 @@ class AuthModel extends SqlConnect {
         if (password_verify($password, $user['identification_code'])) {
           $token = $this->generateJWT($user['id'], $user['role_id']);
 
-          setcookie('token', $token, [
-            'expires'  => time() + 3600*72,
-            'path'     => '/',
-            'secure'   => false,     // true en production, si vous utilisez HTTPS
-            'httponly' => true,
-            'samesite' => 'Strict'
-          ]);
-
           return [
             'token' => $token, 
             'username' => $username, 

@@ -68,7 +68,8 @@ class CreateProductController {
       const res = await fetch('http://localhost:8083/product', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
       });
