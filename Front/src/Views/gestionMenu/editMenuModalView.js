@@ -3,6 +3,7 @@ const editMenuModalView = (menu) => `
     <div class="modal-content">
       <button class="close-button" type="button">X</button>
       <h3>Modifier le menu</h3>
+
       <label>Nom du menu</label>
       <input type="text" id="menu-name" value="${menu.name}" />
 
@@ -17,18 +18,22 @@ const editMenuModalView = (menu) => `
       <span id="menu-status">${menu.display === 1 ? 'Activé' : 'Désactivé'}</span>
 
       <div class="products-section">
-        ${(menu.products || []).map((prod) => `
-          <div class="product-toggle" data-id="${prod.id}">
-            <span>${prod.name}</span>
-            <input type="checkbox" id="prod-${prod.id}" ${prod.display === 1 ? 'checked' : ''}/>
-            <label for="prod-${prod.id}" class="prod-slider"></label>
-            <span class="prod-status">${prod.display === 1 ? 'Activé' : 'Désactivé'}</span>
-          </div>
-        `).join('')}
+        <h4>Produits associés</h4>
+        <ul id="product-list">
+          ${(menu.products || []).map((prod) => `
+            <li data-id="${prod.id}">
+              <input type="text" class="product-name" value="${prod.name}" placeholder="Nom du produit" />
+              <input type="number" class="product-quantity" value="${prod.quantity}" min="1" placeholder="Quantité" />
+              <button class="delete-product" type="button">Supprimer</button>
+            </li>
+          `).join('')}
+        </ul>
+        <button id="add-product" class="add-product-button" type="button">Ajouter un produit</button>
       </div>
 
       <button id="save-edit" class="validate-button" type="button">Sauvegarder</button>
     </div>
   </div>
 `;
+
 export default editMenuModalView;

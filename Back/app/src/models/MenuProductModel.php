@@ -93,4 +93,19 @@ class MenuProductModel extends SqlConnect {
     $req->execute(["id" => $id]);
     return new stdClass();
   }
+
+  /*========================== CHECK ========================================*/
+
+  public function check(int $menuId, int $productId) {
+    $query = "SELECT id FROM $this->table WHERE menu_id = :menu_id AND product_id = :product_id";
+    $req = $this->db->prepare($query);
+    $req->execute([
+      ':menu_id' => $menuId,
+      ':product_id' => $productId,
+    ]);
+  
+    return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
+  }
+  
+
 }

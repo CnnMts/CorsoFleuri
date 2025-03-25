@@ -3,6 +3,7 @@ import LogoutModel from '../Models/logoutModel.js';
 import { loadState } from '../Models/appStateModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
+import testMenu1 from '../Assets/testMenu1.png';
 import '../Styles/cashRegister.css';
 
 class CashRegisterController {
@@ -10,6 +11,7 @@ class CashRegisterController {
     this.el = document.querySelector('#app');
     this.req = req;
     this.res = res;
+    this.testMenu1 = testMenu1;
     this.menus = [];
     this.ticket = [];
     this.run();
@@ -25,6 +27,7 @@ class CashRegisterController {
     }
     try {
       const allMenus = await MenuModel.getAllMenus();
+      console.log('Réponse API :', allMenus);
       this.menus = this.formatMenus(allMenus.filter((menu) => menu.display === 1));
       this.render();
       this.initEventListeners();
@@ -47,7 +50,12 @@ class CashRegisterController {
       name: menu.name,
       description: menu.description,
       price: parseFloat(menu.price) || 0,
-      products: this.sortProductsByCategory(menu.products)
+      products: this.sortProductsByCategory(
+        menu.products.map((product) => ({
+          ...product,
+          quantity: product.quantity ?? 1
+        }))
+      )
     }));
   }
 
@@ -72,7 +80,11 @@ class CashRegisterController {
   }
 
   render() {
-    this.el.innerHTML = cashRegisterView({ menus: this.menus, ticket: this.ticket });
+    this.el.innerHTML = cashRegisterView({
+      menus: this.menus,
+      ticket: this.ticket,
+      photo: this.testMenu1
+    });
   }
 
   initEventListeners() {
@@ -94,6 +106,8 @@ class CashRegisterController {
   showModal(menuName) {
     const selectedMenu = this.menus.find((menu) => menu.name === menuName);
     if (!selectedMenu) return;
+
+    console.log('Produits avec quantité :', selectedMenu.products);
 
     const modalContainer = document.createElement('div');
     modalContainer.classList.add('modal-container');
@@ -123,21 +137,22 @@ class CashRegisterController {
           <h3>${category}</h3>
           <ul>
             ${products[category]
-    .map(
-      (product) => `
+    .map((product) => `
                 <li>
                   <label>
                     <input type="radio" name="${category}" value="${product.id}">
                     ${product.name}
+                    ${
+  product.quantity && product.quantity !== 1
+    ? `<span>Quantité : ${product.quantity}</span>`
+    : ''
+}
                   </label>
                 </li>
-              `
-    )
-    .join('')}
+              `).join('')}
           </ul>
         </div>
-      `)
-      .join('');
+      `).join('');
   }
 
   sendTicketToView(selectedMenu, modalContainer) {

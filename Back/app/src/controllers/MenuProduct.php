@@ -83,4 +83,32 @@ class MenuProduct extends Controller {
   public function deleteMenuProduct() {
     return $this->menuProduct->delete(intval($this->params['id']));
   }
+
+  /*======================== CHECK =========================================*/
+
+  #[Route("POST", "/menuProduct/check", 
+  /*middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
+  public function checkMenuProduct() {
+    try {
+      $menuId = intval($this->body['menu_id'] ?? 0);
+      $productId = intval($this->body['product_id'] ?? 0);
+
+      if (!$menuId || !$productId) {
+        throw new HttpException("menu_id et product_id sont requis.", 400);
+      }
+      $result = $this->menuProduct->check($menuId, $productId);
+
+      if (!empty((array) $result)) {
+        return ['id' => $result['id']];
+      } else {
+        throw new HttpException(
+          "Aucune association trouvée pour menu_id=$menuId et product_id=$productId.", 404);
+      }
+    } catch (HttpException $e) {
+      throw $e;
+    } catch (\Exception $e) {
+      throw new HttpException("Erreur interne du serveur.", 500);
+    }
+  }
 }
