@@ -1,6 +1,7 @@
 import navTopView from './navTopView.js';
 import menusView from './menusView.js';
 import navTicketView from './navTicketView.js';
+import logoutButtonView from './logoutButtonView.js';
 
 const CashRegister = ({ menus, ticket }) => `
   ${navTopView()}
@@ -13,6 +14,9 @@ const CashRegister = ({ menus, ticket }) => `
     <div id="ticket-container">
       ${navTicketView(ticket)}
     </div>
+  </div>
+  <div>
+    ${logoutButtonView()}
   </div>
 `;
 

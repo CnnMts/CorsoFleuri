@@ -100,7 +100,11 @@ class AuthModel extends SqlConnect {
             'samesite' => 'Strict'
           ]);
 
-          return ['token' => $token, 'username' => $username, 'role_id' => $user['role_id']];
+          return [
+            'token' => $token, 
+            'username' => $username, 
+            'role_id' => $user['role_id']
+          ];
         }
         throw new HttpException("Mauvais code d'identification", 401);
     }

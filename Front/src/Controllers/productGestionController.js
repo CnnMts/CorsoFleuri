@@ -1,5 +1,6 @@
 import mainProductView from '../Views/gestionProduct/mainProductView.js';
 import { loadState } from '../Models/appStateModel.js';
+import LogoutModel from '../Models/logoutModel.js';
 import editProductModalView from '../Views/gestionProduct/editProductModalView.js';
 import '../Styles/productPage.css';
 
@@ -19,11 +20,17 @@ class ProductGestionController {
       window.location.href = "/login";
       exit;
     }
+    if (state.role_id != 1) {
+      alert('Permissions Insuffisantes');
+      window.location.href = "/test";
+      exit;
+    }
     try {
       this.products = await this.fetchProducts();
       console.log('Produits récupérés :', this.products);
       this.render();
       this.bindEventListeners();
+      this.logout();
     } catch (error) {
       console.error('Erreur lors de l\'initialisation :', error);
     }
@@ -43,6 +50,13 @@ class ProductGestionController {
   render() {
     console.log('Produits passés à la vue :', this.products);
     this.el.innerHTML = mainProductView(this.products || []);
+  }
+
+  logout() {
+    document.querySelector('#logout-button').addEventListener("click", async (event) => {
+      event.preventDefault();
+      LogoutModel.deconnexion();
+    });
   }
 
   bindEventListeners() {

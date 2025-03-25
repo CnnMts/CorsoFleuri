@@ -60,7 +60,7 @@ class Auth extends Controller {
           if ($success) {
             // Optionnel : renvoyer une réponse JSON indiquant la réussite
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Déconnexion réussie']);
+            return ['success' => true, 'message' => 'Déconnexion réussie'];
             // Optionnel : rediriger vers la page login
             // header('Location: /login.php'); // ou /login.html selon votre architecture
           } else {
@@ -70,13 +70,7 @@ class Auth extends Controller {
           // Gérer l'erreur : renvoyer un code d'erreur
           header('HTTP/1.1 500 Internal Server Error');
           header('Content-Type: application/json');
-          echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+          return ['success' => false, 'message' => 'Déconnexion échouée'];
       }
   }
-
-  #[Route("POST", "/auth/log")]
-  public function log() {
-      return 'good';
-  }
-
 }

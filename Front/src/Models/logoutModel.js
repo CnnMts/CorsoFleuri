@@ -1,37 +1,31 @@
 import { updateAppState } from '../Models/appStateModel.js';
 import { getAppState } from '../Models/appStateModel.js';
 
-class LoginModel {
-    static async connexion(name, password) {
-        fetch('http://localhost:8083/auth/login', {
+class LogoutModel {
+    static async deconnexion() {
+        fetch('http://localhost:8083/auth/logout', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: name,
-                identification_code: password 
-            })
+            }
           })
             .then(response => response.json())
             .then(data => {
-              if (data.token) {
-                console.log('Connexion réussie, token reçu:', data.token);
-
+              if (data.success) {
                 updateAppState({ 
-                    loggedIn: true, 
-                    user: data.username, 
-                    role_id: data.role_id 
+                    loggedIn: false, 
+                    user: null,
+                    role_id: null
                 });
 
                 console.log('User : ', getAppState());
 
-                alert('Authentication Successful');
+                alert('Disconnection Successful');
                 // Rediriger ou mettre à jour l'interface de l'application
-                window.location.href = "/test";
+                window.location.href = "/login";
               } else {
-                console.error('Erreur lors de l\'authentification:', data.error);
-                alert('Authentication Failed');
+                console.error('Erreur lors de la déconnexion :', data.error);
+                alert('Disconnection Failed');
               }
             })
             .catch(error => {
@@ -63,4 +57,4 @@ class LoginModel {
     }
   }
   
-export default LoginModel;
+export default LogoutModel;

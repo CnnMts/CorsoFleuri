@@ -1,4 +1,5 @@
 import MenuModel from '../Models/menuModel.js';
+import LogoutModel from '../Models/logoutModel.js';
 import { loadState } from '../Models/appStateModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
@@ -27,9 +28,17 @@ class CashRegisterController {
       this.menus = this.formatMenus(allMenus.filter((menu) => menu.display === 1));
       this.render();
       this.initEventListeners();
+      this.logout();
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  logout() {
+    document.querySelector('#logout-button').addEventListener("click", async (event) => {
+      event.preventDefault();
+      LogoutModel.deconnexion();
+    });
   }
 
   formatMenus(menus) {

@@ -19,10 +19,10 @@ class LoginController {
 
   render() {
     this.el.innerHTML = LoginView();
-    this.getLogin();
+    this.login();
   }
 
-  getLogin() {
+  login() {
     document.querySelector('#login-btn').addEventListener("click", async (event) => {
       event.preventDefault();
       const name = document.getElementById("name").value;
@@ -31,27 +31,27 @@ class LoginController {
     });
   }
 
-  generateHTMLResponse() {
-    return `
-      <!DOCTYPE html>
-      <html lang="fr">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Cash Register</title>
-          <link rel="stylesheet" href="./Styles/cash_register.css">
-        </head>
-        <body>
-          ${LoginView()}
-          <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                ${this.getLogin().toString()}
-            });
-          </script>
-        </body>
-      </html>
-    `;
-  }
+  // generateHTMLResponse() {
+  //   return `
+  //     <!DOCTYPE html>
+  //     <html lang="fr">
+  //       <head>
+  //         <meta charset="UTF-8">
+  //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  //         <title>Cash Register</title>
+  //         <link rel="stylesheet" href="./Styles/cash_register.css">
+  //       </head>
+  //       <body>
+  //         ${LoginView()}
+  //         <script>
+  //           document.addEventListener('DOMContentLoaded', () => {
+  //               ${this.getLogin().toString()}
+  //           });
+  //         </script>
+  //       </body>
+  //     </html>
+  //   `;
+  // }
 
   handleError(error) {
     console.error('Erreur dans le contrôleur :', error);
