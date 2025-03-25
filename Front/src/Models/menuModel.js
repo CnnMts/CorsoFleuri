@@ -9,20 +9,17 @@ class MenuModel {
 
   static async getAllMenus() {
     try {
-      // Récupérer tous les menus
       const menus = await this.fetchData('http://localhost:8083/menu');
       console.log('[MenuModel] Menus récupérés :', menus);
 
-      // Récupérer les produits associés aux menus
       const menuProducts = await this.fetchData('http://localhost:8083/menuProduct');
       console.log('[MenuModel] Produits associés récupérés :', menuProducts);
 
-      // Récupérer les détails de chaque menu avec intégration des quantités
       const fullMenuDetails = await Promise.all(
         menus.map(async (menu) => {
           const productDetails = await Promise.all(
             menuProducts
-              .filter((item) => item.menu_id === menu.id) // Trouver les produits associés à ce menu
+              .filter((item) => item.menu_id === menu.id)
               .map(async (item) => {
                 const product = await this.fetchData(`http://localhost:8083/product/${item.product_id}`);
                 return { ...product, quantity: item.quantity || 1 };
