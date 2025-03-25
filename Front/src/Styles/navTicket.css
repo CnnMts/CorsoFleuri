@@ -1,0 +1,26 @@
+.containerRight {
+    width: 512px;
+    height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 16px;
+}
+
+.containerRight .bottom-navTicket .containerPaymentButton button {
+    width: 100%;
+    height: 96px;
+    margin-bottom: 16px;
+}
+
+.totalPrice {
+    width: 100%;
+    height: 128px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.totalPrice h2 {
+    margin-left: 32px;
+}

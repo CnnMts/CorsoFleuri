@@ -1,3 +1,5 @@
+import '../Styles/ticket.css';
+
 const ticketView = (ticketData) => {
   if (!ticketData || !ticketData.products) {
     return '<p>Aucun élément sélectionné dans le ticket.</p>';
@@ -8,12 +10,12 @@ const ticketView = (ticketData) => {
     .join('');
 
   return `
-    <div class="ticket" data-name="${ticketData.name}">
+    <div class="ticket color-bg-tertiary color-white border-black" data-name="${ticketData.name}">
       <div class="nameMenu">
-        <h2 class="font-barlow font-size-48">${ticketData.name}</h2>
+        <h2 class="font-barlow font-size-32">${ticketData.name}</h2>
       </div>
       <div class="listMenu">
-        <div class="listorder">
+        <div class="listOrder">
           <ul>
             ${productList}
           </ul>

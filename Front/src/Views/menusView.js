@@ -12,7 +12,7 @@ const menusView = ({ id, name, price }) => {
         </div>
       </div>
       <div class="buttonAdd">
-        <button type="button" class="addMenuButton font-barlow font-size-32 border-black" data-name="${name}">Ajouter</button>
+        <button type="button" class="addMenuButton font-barlow font-size-32 border-black color-bg-negative color-white" data-name="${name}">Ajouter</button>
       </div>
     </div>
   `;

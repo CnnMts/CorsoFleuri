@@ -1,6 +1,5 @@
 import mainProductView from '../Views/gestionProduct/mainProductView.js';
 import editProductModalView from '../Views/gestionProduct/editProductModalView.js';
-import '../Styles/productPage.css';
 
 class ProductGestionController {
   constructor({ req, res }) {

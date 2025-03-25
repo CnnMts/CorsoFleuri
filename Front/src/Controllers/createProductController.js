@@ -1,5 +1,4 @@
 import createProductView from '../Views/creatProduct/createProductView.js';
-import '../Styles/createProduct.css';
 
 class CreateProductController {
   constructor({ req, res }) {

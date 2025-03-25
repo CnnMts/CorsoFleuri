@@ -2,6 +2,8 @@ import navTopView from './navTopView.js';
 import menusView from './menusView.js';
 import navTicketView from './navTicketView.js';
 
+import '../Styles/cashRegisterer.css';
+
 const CashRegister = ({ menus, ticket }) => `
   ${navTopView()}
   <div class="container">

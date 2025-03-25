@@ -4,7 +4,6 @@ import createDessertModalView from '../Views/creatMenu/createDessertModalView.js
 import createDrinkModalView from '../Views/creatMenu/createDrinkModalView.js';
 import createMainCourseModalView from '../Views/creatMenu/createMainCourseModalView.js';
 import ProductModel from '../Models/productModel.js';
-import '../Styles/createMenu.css';
 
 class CreateMenuController {
   constructor({ req, res }) {

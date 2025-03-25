@@ -1,6 +1,5 @@
 import mainView from '../Views/gestionMenu/mainView.js';
 import editMenuModalView from '../Views/gestionMenu/editMenuModalView.js';
-import '../Styles/menuPage.css';
 
 class MenuController {
   constructor({ req, res }) {

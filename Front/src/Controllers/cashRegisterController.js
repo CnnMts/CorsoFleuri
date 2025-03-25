@@ -1,7 +1,6 @@
 import MenuModel from '../Models/menuModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
-import '../Styles/cashRegister.css';
 
 class CashRegisterController {
   constructor({ req, res }) {
