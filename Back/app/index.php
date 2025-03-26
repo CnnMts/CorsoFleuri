@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 require 'vendor/autoload.php';
 
 use App\Router;
-use App\Controllers\{User, Auth, Product, Order, OrderMenu, DbTestController, Role, Unit, PaymentMethod, OrderStatus, Menu, MenuProduct, MenuChoice, Category, Discount};
+use App\Controllers\{User, Auth, Product, Order, OrderMenu, DbTestController, Role, Unit, PaymentMethod, OrderStatus, Menu, MenuProduct, MenuChoice, Category, Discount, Stats};
 
 // Ajouter les headers CORS dans le script PHP
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -34,7 +34,8 @@ $controllers = [
     Menu::class,
     MenuProduct::class,
     MenuChoice::class,
-    Discount::class
+    Discount::class,
+    Stats::class
 ];
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

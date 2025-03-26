@@ -1,4 +1,4 @@
-import LoginView from "../Views/loginView.js";
+import LoginView from "../Views/login/loginView.js";
 import LoginModel from "../Models/loginModel.js"
 
 class LoginController {
