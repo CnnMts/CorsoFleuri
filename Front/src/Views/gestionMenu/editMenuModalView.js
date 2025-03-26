@@ -1,6 +1,8 @@
+import '../../Styles/editMenuModale.css';
+
 const editMenuModalView = (menu) => `
   <div id="edit-menu-modal" data-id="${menu.id}" class="modal">
-    <div class="modal-content">
+    <div class="modal-content border-black color-bg-white font-barlow font-size-32">
       <button class="close-button" type="button">X</button>
       <h3>Modifier le menu</h3>
       <label>Nom du menu</label>

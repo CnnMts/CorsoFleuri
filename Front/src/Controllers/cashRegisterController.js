@@ -83,7 +83,7 @@ class CashRegisterController {
     modalContainer.classList.add('modal-container');
     modalContainer.innerHTML = `
       <div class="modal border-black color-bg-white font-barlow">
-        <h2>${selectedMenu.name}</h2>
+        <h2 class="font-size-32">${selectedMenu.name}</h2>
         ${this.renderProductSelection(selectedMenu.products)}
         <button id="confirmTicket" class="confirm-ticket color-bg-warning border-black font-barlow color-white font-size-32">Confirmer le Ticket</button>
         <button class="close-modal color-bg-negative border-black font-barlow color-white font-size-32">Fermer</button>

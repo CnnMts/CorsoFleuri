@@ -3,6 +3,8 @@ import sidebarView from './sidebarView.js';
 import menuListView from './menuListView.js';
 import createMenuButtonView from './createMenuButtonView.js';
 
+import '../../Styles/gestion.css';
+
 const mainView = (menus) => `
   ${navTopView()}
   <div class="page-content">

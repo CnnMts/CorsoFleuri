@@ -1,0 +1,25 @@
+.menu-list {
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menu-list .menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.menu-list .menu-item .left {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    gap: 16px;
+}
+
+.menu-list .menu-item button {
+    padding: 16px;
+}

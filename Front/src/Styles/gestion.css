@@ -1,0 +1,16 @@
+.page-content {
+    display: flex;
+}
+
+.page-content main {
+    flex-grow: 1;
+}
+
+.page-content .create-menu-container {
+    width: 100%;
+}
+
+.page-content .create-menu-container button {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+}
