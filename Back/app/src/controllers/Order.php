@@ -77,6 +77,22 @@ class Order extends Controller {
     }
   }
 
+  /*========================= TOGGLE =========================================*/
+  #[Route("PATCH", "/orders/:id/toggle")]
+  public function toggleStatus() {
+    $orderId = intval($this->params['id']);
+    try {
+        $newStatus = $this->order->toggleOrderStatus($orderId);
+        header('Content-Type: application/json');
+        return['success' => true, 'newStatus' => $newStatus];
+    } catch (Exception $e) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json');
+        return['success' => false, 'message' => $e->getMessage()];
+    }
+  }
+
+
   /*========================= DELETE ========================================*/
 
   #[Route("DELETE", "/orders/:id",

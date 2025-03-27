@@ -27,7 +27,7 @@ class PaymentController {
       this.orders = this.formatOrders(allOrders);
       console.log('Orders après format : ', this.orders);
       this.render();
-      // this.initEventListeners();
+      this.initOrderActionEvents();
       this.logout();
     } catch (error) {
       this.handleError(error);
@@ -195,6 +195,63 @@ class PaymentController {
 
     return groupedArray;
   }
+
+  initOrderActionEvents() {
+    // Pour le bouton de toggling du statut
+    document.querySelectorAll('.toggle-status-btn').forEach(button => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const orderId = button.getAttribute('data-order-id');
+        try {
+          const response = await fetch(`http://localhost:8083/orders/${orderId}/toggle`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // alert(`Le statut de la commande a été mis à jour (nouveau statut: ${data.newStatus})`);
+            window.location.reload();
+          } else {
+            alert(`Erreur : ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour du statut :", error);
+        }
+      });
+    });
+
+    // Pour le bouton de suppression
+    document.querySelectorAll('.delete-order-btn').forEach(button => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const orderId = button.getAttribute('data-order-id');
+        if (confirm("Confirmez-vous la suppression de cette commande ?")) {
+          try {
+            const response = await fetch(`http://localhost:8083/orders/${orderId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+              }
+            });
+            const data = await response.json();
+            if (response.ok) {
+              alert("Commande supprimée");
+              window.location.reload();
+            } else {
+              alert(`Erreur : ${data.message}`);
+            }
+          } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+          }
+        }
+      });
+    });
+  }
+
 
   render() {
     this.el.innerHTML = mainPaymentView({

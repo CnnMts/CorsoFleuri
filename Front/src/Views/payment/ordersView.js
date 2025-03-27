@@ -15,7 +15,9 @@ const ordersView = ({ id, status_id, total_price, menusNames, products }) => {
           </div>
 
           <h2>${parseFloat(total_price).toFixed(2)}€</h2>
-          <h2>${status_id}</h2>
+
+          <button class="toggle-status-btn" data-order-id="${id}">${status_id == 1 ? 'À Payer' : 'Payée'}</button>
+          <button class="delete-order-btn" data-order-id="${id}">Supprimer la commande</button>
         </div>
       </div>
     `;
