@@ -21,7 +21,7 @@ class CreateMenuController {
     if (!state.loggedIn) {
       alert('Not logged in');
       window.location.href = "/login";
-      exit;
+      return;
     }
     this.products = await ProductModel.fetchProducts();
     this.render();
@@ -128,7 +128,7 @@ class CreateMenuController {
 
   openModal(modalId) {
     const m = document.getElementById(modalId);
-    if (m) m.style.display = 'block';
+    if (m) m.style.display = 'flex';
   }
 
   closeModal(modalId) {

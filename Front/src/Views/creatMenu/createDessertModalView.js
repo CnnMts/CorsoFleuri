@@ -1,5 +1,5 @@
 const createDessertModalView = ({ desserts }) => `
-  <div id="dessert-modal" class="modal">
+  <div id="dessert-modal" class="menu-modal">
     <div class="modal-content">
       <h3>Choisissez les desserts</h3>
       <ul class="dessert-list">

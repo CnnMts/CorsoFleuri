@@ -78,8 +78,8 @@ class MenuProduct extends Controller {
   /*========================= DELETE =======================================*/
 
   #[Route("DELETE", "/menuProduct/:id", 
-    middlewares: [AuthMiddleware::class, 
-    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+    /*middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function deleteMenuProduct() {
     return $this->menuProduct->delete(intval($this->params['id']));
   }

@@ -1,7 +1,9 @@
+import '../../Styles/editMenuModale.css';
+
 const editMenuModalView = (menu) => `
   <div id="edit-menu-modal" data-id="${menu.id}" class="modal">
-    <div class="modal-content">
-      <button class="close-button" type="button">X</button>
+    <div class="modal-content border-black color-bg-white font-carlito font-size-32">
+      <button class="close-button font-barlow font-size-32 color-bg-negative border-black color-white" type="button">×</button>
       <h3>Modifier le menu</h3>
 
       <label>Nom du menu</label>
@@ -15,7 +17,6 @@ const editMenuModalView = (menu) => `
         <input type="checkbox" id="menu-toggle" ${menu.display === 1 ? 'checked' : ''}/>
         <label for="menu-toggle" class="slider"></label>
       </div>
-      <span id="menu-status">${menu.display === 1 ? 'Activé' : 'Désactivé'}</span>
 
       <div class="products-section">
         <h4>Produits associés</h4>
@@ -31,7 +32,7 @@ const editMenuModalView = (menu) => `
         <button id="add-product" class="add-product-button" type="button">Ajouter un produit</button>
       </div>
 
-      <button id="save-edit" class="validate-button" type="button">Sauvegarder</button>
+      <button id="save-edit" class="validate-button border-black color-bg-negative color-white font-barlow font-size-32" type="button">Sauvegarder</button>
     </div>
   </div>
 `;

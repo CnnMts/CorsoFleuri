@@ -2,7 +2,6 @@ import mainProductView from '../Views/gestionProduct/mainProductView.js';
 import { loadState } from '../Models/appStateModel.js';
 import LogoutModel from '../Models/logoutModel.js';
 import editProductModalView from '../Views/gestionProduct/editProductModalView.js';
-import '../Styles/productPage.css';
 
 class ProductGestionController {
   constructor({ req, res }) {
@@ -18,12 +17,12 @@ class ProductGestionController {
     if (!state.loggedIn) {
       alert('Not logged in');
       window.location.href = "/login";
-      exit;
+      return;
     }
     if (state.role_id != 1) {
       alert('Permissions Insuffisantes');
       window.location.href = "/test";
-      exit;
+      return;
     }
     try {
       this.products = await this.fetchProducts();

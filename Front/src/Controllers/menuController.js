@@ -3,7 +3,7 @@ import { loadState } from '../Models/appStateModel.js';
 import LogoutModel from '../Models/logoutModel.js';
 import editMenuModalView from '../Views/gestionMenu/editMenuModalView.js';
 import MenuModel from '../Models/menuModel.js';
-import '../Styles/menuPage.css';
+import '../Styles/menus.css';
 
 class MenuController {
   constructor({ req, res }) {
@@ -19,12 +19,12 @@ class MenuController {
     if (!state.loggedIn) {
       alert('Not logged in');
       window.location.href = "/login";
-      exit;
+      return;
     }
     if (state.role_id != 1) {
       alert('Permissions Insuffisantes');
       window.location.href = "/test";
-      exit;
+      return;
     }
     try {
       this.menus = await this.fetchMenus();
