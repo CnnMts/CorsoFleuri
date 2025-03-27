@@ -30,13 +30,8 @@ class Menu extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/menu",   
-<<<<<<< HEAD
-   /* middlewares: [AuthMiddleware::class, 
-    [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
-=======
    middlewares: [AuthMiddleware::class, 
     [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
->>>>>>> origin/Ethan2
   public function add() {
     $this->menu->add($this->body);
 

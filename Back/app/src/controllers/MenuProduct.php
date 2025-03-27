@@ -19,13 +19,8 @@ class MenuProduct extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/menuProduct",
-<<<<<<< HEAD
-  /*middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
-=======
   middlewares: [AuthMiddleware::class, 
   [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
->>>>>>> origin/Ethan2
   public function add() {
     $this->menuProduct->add($this->body);
 
@@ -88,8 +83,6 @@ class MenuProduct extends Controller {
   public function deleteMenuProduct() {
     return $this->menuProduct->delete(intval($this->params['id']));
   }
-<<<<<<< HEAD
-=======
 
   /*======================== CHECK =========================================*/
 
@@ -118,5 +111,4 @@ class MenuProduct extends Controller {
       throw new HttpException("Erreur interne du serveur.", 500);
     }
   }
->>>>>>> origin/Ethan2
 }

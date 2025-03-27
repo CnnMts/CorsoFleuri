@@ -2,6 +2,7 @@ import '../../Styles/login.css';
 
 const Login = () => {
   return `
+    <section class="login">
       <form action="" method="POST" class="login-form font-barlow">
         <div class="form-example">
           <label for="name" class="font-size-32">Enter your name: </label>
@@ -15,6 +16,7 @@ const Login = () => {
           <button id="login-btn" type="button" class="border-black font-barlow font-size-32 color-white color-bg-negative">Login</button>
         </div>
       </form>
+    </section>
   `;
 };
 
