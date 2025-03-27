@@ -206,6 +206,7 @@ class CashRegisterController {
       }, null)
     )).filter((name) => name !== null);
   }
+  
 
   findExistingTicket(selectedMenu, productNames) {
     return this.ticket.find(
@@ -228,19 +229,19 @@ class CashRegisterController {
     }
   }
 
-  createNewTicket(selectedMenu, productNames) {
+  createNewTicket(selectedMenu, productNames, productDetails) {
     const state = loadState();
     console.log(state.user_id);
 
-    const newTicket = {
-      menu_id: selectedMenu.id,
-      user_id: state.user_id,
-      name: selectedMenu.name,
-      price: selectedMenu.price,
-      products: productNames,
-      productsNames: selectedMenu.products,
-      quantity: 1
-    };
+      const newTicket = {
+        menu_id: selectedMenu.id,
+        user_id: state.user_id,
+        name: selectedMenu.name,
+        price: selectedMenu.price,
+        products: productNames,
+        productsDetails: productDetails,
+        quantity: 1
+      };
 
     this.ticket.push(newTicket);
 

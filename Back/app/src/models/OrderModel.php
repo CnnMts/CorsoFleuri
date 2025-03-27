@@ -21,7 +21,29 @@ class OrderModel extends SqlConnect {
   //   $req = $this->db->prepare($query);
   //   $req->execute($data);
   // }
+  // Supposons que $menuData->productsDetails est un tableau d'objets contenant les produits,
+// par exemple :
+// [
+//   { "id":3,  "name":"Taboule",     "category_id":1, ... },
+//   { "id":5,  "name":"Chipolatas",  "category_id":2, ... },
+//   { "id":9,  "name":"Frites",      "category_id":5, ... },
+//   { "id":11, "name":"Tarte",       "category_id":3, ... }
+// ]
+//
+// Vous devez définir le mapping de vos catégories tel que vous l'entendez.
+// Par exemple, supposons :
+//
+// - category_id 1  => starter
+// - category_id 2  => main_course
+// - category_id 3  => dessert
+// - category_id 4  => drink
+//
+// Si dans vos données le produit "Frites" a category_id 5 et n'est pas attendu, vous pouvez l'ignorer,
+// ou bien définir une règle alternative (par exemple, traiter 5 comme "drink" ou "autre").
+// Ici, nous utiliserons uniquement les valeurs 1, 2, 3 et 4.
 
+// La fonction récupère les ID en fonction de category_id
+  
   public function createOrder($orderData) {
     try {
         // Démarrer une transaction
@@ -51,48 +73,41 @@ class OrderModel extends SqlConnect {
           ]);
           $orderMenuId = $this->db->lastInsertId();
 
-          $starter_id = isset($menuData->products->starter) && count($menuData->products->starter) > 0
-                        ? $menuData->products->starter[0]->id
-                        : null;
-          $main_course_id = isset($menuData->products->main_course) && count($menuData->products->main_course) > 0
-                        ? $menuData->products->main_course[0]->id
-                        : null;
-          $dessert_id = isset($menuData->products->dessert) && count($menuData->products->dessert) > 0
-                        ? $menuData->products->dessert[0]->id
-                        : null;
-          $drink_id = isset($menuData->products->drink) && count($menuData->products->drink) > 0
-                        ? $menuData->products->drink[0]->id
-                        : null;
-      
+          $productIds = $this->getProductIdsFromDetails($menuData->productsDetails);
+          // $productIds est alors un tableau associatif avec :
+          // [ 'starter_id' => ..., 'main_course_id' => ..., 'dessert_id' => ..., 'drink_id' => ... ]
+
+          // Puis, lors de l'insertion dans menu_choice :
           $stmt = $this->db->prepare("
-            INSERT INTO menu_choice (
-              menu_id,
-              order_id,
-              order_menu_id, 
-              starter_id, 
-              main_course_id, 
-              dessert_id, 
-              drink_id
-            ) VALUES (
-              :menu_id,
-              :order_id,
-              :order_menu_id, 
-              :starter_id, 
-              :main_course_id, 
-              :dessert_id, 
-              :drink_id
-            )
+              INSERT INTO menu_choice (
+                menu_id,
+                order_id,
+                order_menu_id, 
+                starter_id, 
+                main_course_id, 
+                dessert_id, 
+                drink_id
+              ) VALUES (
+                :menu_id,
+                :order_id,
+                :order_menu_id, 
+                :starter_id, 
+                :main_course_id, 
+                :dessert_id, 
+                :drink_id
+              )
           ");
-      
+
           $stmt->execute([
-            'menu_id' => $menuId,
-            'order_id' => $orderId, // Utilisation de l'order_id généré précédemment
-            'order_menu_id' => $orderMenuId,
-            'starter_id'    => $starter_id,
-            'main_course_id'=> $main_course_id,
-            'dessert_id'    => $dessert_id,
-            'drink_id'      => $drink_id
+            'menu_id'         => $menuId,
+            'order_id'        => $orderId, // Utilisez l'orderId généré précédemment
+            'order_menu_id'   => $orderMenuId,
+            'starter_id'      => $productIds['starter_id'],
+            'main_course_id'  => $productIds['main_course_id'],
+            'dessert_id'      => $productIds['dessert_id'],
+            'drink_id'        => $productIds['drink_id']
           ]);
+
       }
       
 
@@ -106,6 +121,50 @@ class OrderModel extends SqlConnect {
     }
   }
 
+
+  public function getProductIdsFromDetails($productsDetails) {
+    // Initialisation avec des valeurs nulles par défaut.
+    $result = [
+        'starter_id'      => null,
+        'main_course_id'  => null,
+        'dessert_id'      => null,
+        'drink_id'        => null
+    ];
+
+    // Parcourir chaque produit dans le tableau
+    foreach ($productsDetails as $product) {
+        if (!isset($product->category_id) || !isset($product->id)) {
+            continue;
+        }
+        switch ($product->category_id) {
+            case 1:
+                // Starter
+                $result['starter_id'] = $product->id;
+                break;
+            case 2:
+                // Main course
+                $result['main_course_id'] = $product->id;
+                break;
+            case 3:
+                // Dessert
+                $result['dessert_id'] = $product->id;
+                break;
+            case 4:
+                // Drink
+                $result['drink_id'] = $product->id;
+                break;
+            // Si vous souhaitez traiter category_id 5 comme une boisson par exemple, vous pouvez ajouter :
+            // case 5:
+            //     $result['drink_id'] = $product->id;
+            //     break;
+            default:
+                // Vous pouvez ignorer toutes les autres valeurs ou les traiter différemment
+                break;
+        }
+    }
+
+    return $result;
+  }
 
   /*========================= GET ===========================================*/
 
