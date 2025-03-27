@@ -59,7 +59,10 @@ main {
   padding: 2vh 2vw;
   box-sizing: border-box;
 }
-
+.product-button-gestion{
+  height: 16.6vw;
+  font-size: 3.6vw;
+}
 .menu-list {
   margin-bottom: 4vh;
 }

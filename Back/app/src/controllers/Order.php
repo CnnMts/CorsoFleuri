@@ -28,7 +28,7 @@ class Order extends Controller {
   /*========================= GET BY ID =====================================*/
 
   #[Route("GET", "/orders/:id",
-    middlewares: [AuthMiddleware::class])]
+   /* middlewares: [AuthMiddleware::class]*/)]
   
   public function getOrder() {
     return $this->order->get(intval($this->params['id']));
@@ -37,7 +37,7 @@ class Order extends Controller {
   /*========================= GET ALL =======================================*/
 
   #[Route("GET", "/orders",
-    middlewares: [AuthMiddleware::class])]
+    /*middlewares: [AuthMiddleware::class]*/)]
 
   public function getOrders() {
       $limit = isset($this->params['limit']) ?
@@ -48,7 +48,7 @@ class Order extends Controller {
   /*========================= PATCH =========================================*/
 
   #[Route("PATCH", "/orders/:id", 
-    middlewares: [AuthMiddleware::class])]
+   /* middlewares: [AuthMiddleware::class]*/)]
 
   public function updateOrder() {
     try {
@@ -77,6 +77,22 @@ class Order extends Controller {
     }
   }
 
+  /*========================= TOGGLE =========================================*/
+  #[Route("PATCH", "/orders/:id/toggle")]
+  public function toggleStatus() {
+    $orderId = intval($this->params['id']);
+    try {
+        $newStatus = $this->order->toggleOrderStatus($orderId);
+        header('Content-Type: application/json');
+        return['success' => true, 'newStatus' => $newStatus];
+    } catch (Exception $e) {
+        header('HTTP/1.1 500 Internal Server Error');
+        header('Content-Type: application/json');
+        return['success' => false, 'message' => $e->getMessage()];
+    }
+  }
+
+
   /*========================= DELETE ========================================*/
 
   #[Route("DELETE", "/orders/:id",
@@ -86,4 +102,3 @@ class Order extends Controller {
     return $this->order->delete(intval($this->params['id']));
   }
 }
-

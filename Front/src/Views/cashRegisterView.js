@@ -13,7 +13,6 @@ const CashRegister = ({ menus, ticket }) => `
     <div id="ticket-container">
       ${navTicketView(ticket)}
     </div>
-    <button id="testButton">Imprimer</button>
   </div>
 `;
 

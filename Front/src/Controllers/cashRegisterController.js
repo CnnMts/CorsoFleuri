@@ -1,4 +1,3 @@
-import BluetoothPrinter from './BluetoothPrinter.js';
 import MenuModel from '../Models/menuModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
@@ -67,8 +66,7 @@ class CashRegisterController {
     this.el.innerHTML = cashRegisterView({
       menus: this.menus,
       ticket: this.ticket,
-      photo: this.testMenu1,
-      onPrintTicket: this.printAllTickets.bind(this)
+      photo: this.testMenu1
     });
   }
 
@@ -253,34 +251,6 @@ class CashRegisterController {
 
   handleError(error) {
     console.error('Erreur dans le contrôleur :', error);
-  }
-
-  // Fonction pour imprimer tous les tickets à la fois
-  printAllTickets(tickets) {
-    const printer = new BluetoothPrinter();
-
-    printer.connect().then(() => {
-      tickets.forEach((ticket) => {
-        let ticketText = `Ticket : ${ticket.name}\n\nProduits :\n`;
-
-        ticket.products.forEach((product) => {
-          if (ticket.productQuantity[product] && ticket.productQuantity[product] > 1) {
-            ticketText += ` ${ticket.productQuantity[product]} ${product}\n`;
-          } else {
-            ticketText += ` ${product}\n`;
-          }
-        });
-
-        ticketText += `\nQuantité totale : ${ticket.quantity || 1}`;
-        ticketText += `\nTotal : ${(ticket.price * (ticket.quantity || 1)).toFixed(2)} EUR\n`;
-
-        printer.printText(ticketText);
-      });
-
-      console.log("Tous les tickets ont été envoyés à l'imprimante.");
-    }).catch((error) => {
-      console.error('Erreur lors de l\'impression des tickets :', error);
-    });
   }
 }
 

@@ -8,14 +8,14 @@ use stdClass;
 class OrderModel extends SqlConnect {
   private $table = "orders";
   public $authorized_fields_to_update = [
-    'status_id', 'discount_id', 'payment_method_id'];
+    'user_id', 'status_id', 'discount_id', 'payment_method_id'];
 
   /*========================= ADD ===========================================*/
 
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (status_id, discount_id, payment_method_id)
-      VALUES (:status_id, :discount_id, :payment_method_id)
+      INSERT INTO $this->table (user_id, status_id, discount_id, payment_method_id)
+      VALUES (:user_id, :status_id, :discount_id, :payment_method_id)
     ";
 
     $req = $this->db->prepare($query);
@@ -86,6 +86,28 @@ class OrderModel extends SqlConnect {
     
     return $this->get($id);
   }
+
+  /*========================= TOGGLE ========================================*/
+  public function toggleOrderStatus(int $orderId) {
+    // Récupérer le statut actuel
+    $stmt = $this->db->prepare("SELECT status_id FROM `orders` WHERE id = :orderId");
+    $stmt->execute(['orderId' => $orderId]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$row) {
+        throw new Exception("Commande non trouvée");
+    }
+
+    $currentStatus = intval($row['status_id']);
+    // Définir le nouveau statut : s'il est 1 (await_payment), on le passe à 2 (paid), sinon à 1.
+    $newStatus = ($currentStatus === 1) ? 2 : 1;
+
+    $stmt = $this->db->prepare("UPDATE `orders` SET status_id = :newStatus WHERE id = :orderId");
+    $stmt->execute(['newStatus' => $newStatus, 'orderId' => $orderId]);
+
+    return $newStatus;
+  }
+
 
   /*========================= DELETE ========================================*/
 

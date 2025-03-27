@@ -45,12 +45,14 @@ class MenuController {
   }
 
   render() {
+    // On suppose que mainView intègre aussi un bouton Stats avec id "stats-button"
     this.el.innerHTML = mainView(this.menus || []);
   }
 
   bindEventListeners() {
     this.bindEditButtons();
     this.bindDeleteButtons();
+    this.bindStatsButton();
   }
 
   bindEditButtons() {
@@ -70,6 +72,64 @@ class MenuController {
         const { id } = e.target.closest('.menu-item').dataset;
         if (id) this.deleteMenuAndAssociations(id);
       });
+    });
+  }
+
+  bindStatsButton() {
+    // Vous pouvez sélectionner par id ou par classe, selon votre template.
+    // Ici, on utilise querySelector sur la classe si l'id n'existe pas.
+    const statsBtn = document.querySelector('#stats-button') || document.querySelector('.stats-button');
+    console.log('Bouton stats trouvé : ', statsBtn);
+
+    if (!statsBtn) {
+      console.warn('Bouton stats introuvable !');
+      return;
+    }
+
+    statsBtn.addEventListener('click', async (event) => {
+      console.log('Bouton stats cliqué !');
+      event.preventDefault();
+
+      const year = window.prompt("Entrez l'année pour afficher les statistiques (CSV) :");
+      console.log('Année saisie : ', year);
+
+      if (!year) {
+        console.log('Année non spécifiée');
+        alert('Année non spécifiée !');
+        return;
+      }
+
+      try {
+        console.log(`Récupération des statistiques pour l'année ${year}...`);
+        // On récupère la réponse en texte car elle est en CSV
+        const response = await fetch(`http://localhost:8083/stats/${year}`);
+
+        if (!response.ok) {
+          throw new Error(`Erreur lors de la récupération des stats: ${response.statusText}`);
+        }
+
+        const csvText = await response.text();
+        console.log('CSV récupéré :', csvText.substring(0, 100)); // affiche les 100 premiers caractères pour vérification
+
+        // Création d'un objet Blob avec le contenu CSV.
+        const blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+
+        // Créez un lien temporaire et simulez un clic pour déclencher le téléchargement.
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.setAttribute('download', `stats_${year}.csv`);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+
+        // Optionnel : retirer le lien et révoquer l'URL objet après le téléchargement.
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
+
+        console.log('Téléchargement du CSV déclenché.');
+      } catch (error) {
+        console.error('Erreur lors de la récupération des statistiques :', error);
+      }
     });
   }
 
@@ -179,7 +239,6 @@ class MenuController {
             isNew: true
           };
         }
-
         return {
           id: li.getAttribute('data-id'),
           quantity: parseInt(li.querySelector('.product-quantity').value, 10),
@@ -216,7 +275,6 @@ class MenuController {
                 quantity: product.quantity
               })
             });
-
             if (!addRes.ok) {
               throw new Error(await addRes.text());
             }
