@@ -115,7 +115,7 @@ class CreateMenuController {
 
   openModal(modalId) {
     const m = document.getElementById(modalId);
-    if (m) m.style.display = 'block';
+    if (m) m.style.display = 'flex';
   }
 
   closeModal(modalId) {
