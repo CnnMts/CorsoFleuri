@@ -1,5 +1,7 @@
 import logoutButtonView from "../logoutButtonView.js";
 
+import '../../Styles/gestion.css';
+
 const productSidebarView = () => `
   <nav class="containerLeftGestion">
   <button type="button" class="menu-button-gestion border-white color-white color-bg-primary font-barlow font-size-32" onclick="window.location.href='http://localhost:8085/gestion';">
@@ -14,4 +16,4 @@ const productSidebarView = () => `
 </nav>
 `;
 
-export default sidebarView;
+export default productSidebarView;
