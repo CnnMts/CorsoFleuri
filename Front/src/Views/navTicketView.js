@@ -13,7 +13,7 @@ const navTicketView = () => `
               <h2>Total : <span id="global-total">0</span> €</h2>
             </div>
           <div class="containerPaymentButton">
-            <button type="button" class="payment-button">Encaisser</button>
+            <button type="button" id="cash-order-button">Encaisser</button>
           </div> 
       </div>
     </div>

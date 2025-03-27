@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
     loggedIn: false,
     user: null,
+    user_id: null,
     role_id: null
 };
 

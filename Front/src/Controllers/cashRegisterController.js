@@ -1,6 +1,6 @@
 import MenuModel from '../Models/menuModel.js';
 import LogoutModel from '../Models/logoutModel.js';
-import { loadState } from '../Models/appStateModel.js';
+import { getAppState, loadState } from '../Models/appStateModel.js';
 import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
 import testMenu1 from '../Assets/testMenu1.png';
@@ -32,6 +32,7 @@ class CashRegisterController {
       this.render();
       this.initEventListeners();
       this.logout();
+      this.initcashOrderButtonListener();
     } catch (error) {
       this.handleError(error);
     }
@@ -210,10 +211,16 @@ class CashRegisterController {
   }
 
   createNewTicket(selectedMenu, productNames) {
+    const state = loadState();
+    console.log(state.user_id);
+
     const newTicket = {
+      menu_id: selectedMenu.id,
+      user_id: state.user_id,
       name: selectedMenu.name,
       price: selectedMenu.price,
       products: productNames,
+      productsNames: selectedMenu.products,
       quantity: 1
     };
 
@@ -241,6 +248,53 @@ class CashRegisterController {
       totalPriceElement.textContent = totalPrice.toFixed(2);
     }
   }
+
+  async cashOrder() {
+    const payload = {
+      orders: this.ticket  // ou une autre structure qui regroupe tous les éléments de la commande
+      // Ajoutez éventuellement d'autres informations, par ex. total, date, mode de paiement, etc.
+    };
+    console.log("paylaod : ");
+    console.log(payload);
+    console.log("paylaod : ");
+
+    try {
+      const response = await fetch("http://localhost:8083/orders", { // Endpoint de création d'une commande
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      if (response.ok) {
+        alert("Commande enregistrée avec succès");
+        // Optionnel : réinitialisez le ticket ou redirigez l'utilisateur
+        window.location.reload();
+      } else {
+        alert("Erreur lors de l'enregistrement : " + data.error);
+      }
+    } catch (error) {
+      console.error("Erreur réseau lors de la création de la commande :", error);
+      alert("Erreur réseau lors de la création de la commande");
+    }
+  }
+
+  // Vous devez aussi ajouter un écouteur d'événement sur le bouton "Encaisser" :
+  initcashOrderButtonListener() {
+    const encaisserBtn = document.querySelector('#cash-order-button');
+    if (encaisserBtn) {
+      encaisserBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.cashOrder();
+      });
+    }
+  }
+
 
   handleError(error) {
     console.error('Erreur dans le contrôleur :', error);

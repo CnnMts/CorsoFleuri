@@ -94,7 +94,8 @@ class AuthModel extends SqlConnect {
 
           return [
             'token' => $token, 
-            'username' => $username, 
+            'username' => $username,
+            'user_id' => $user['id'], 
             'role_id' => $user['role_id']
           ];
         }

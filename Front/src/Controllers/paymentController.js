@@ -40,6 +40,7 @@ class PaymentController {
       id: order.id,
       status_id: order.status_id,
       total_price: parseFloat(order.total_price) || 0,
+      discount_id: order.discount_id,
       orderMenus: order.orderMenus,
       menus: this.getMenusFromOrderMenus(order.orderMenus),
       menusNames: this.getMenusNamesAndQuantity(this.getMenusFromOrderMenus(order.orderMenus)),
@@ -247,6 +248,35 @@ class PaymentController {
           } catch (error) {
             console.error("Erreur lors de la suppression :", error);
           }
+        }
+      });
+    });
+
+      // Écouteur pour le select de discount
+    document.querySelectorAll('.discount-select').forEach(select => {
+      select.addEventListener('change', async (event) => {
+        const orderId = event.currentTarget.getAttribute('data-discount-order-id');
+        const discount_id = parseInt(event.currentTarget.value, 10);
+        console.log(discount_id);
+        try {
+          const response = await fetch(`http://localhost:8083/orders/${orderId}/update-discount`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify({ discount_id })
+          });
+          const data = await response.json();
+          console.log(data);
+          if (response.ok) {
+            alert(`Remise mise à jour avec succès`);
+            window.location.reload();
+          } else {
+            alert(`Erreur: ${data.error}`);
+          }
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour de la remise :", error);
         }
       });
     });

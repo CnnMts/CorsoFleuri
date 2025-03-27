@@ -21,7 +21,8 @@ class LoginModel {
 
                 updateAppState({ 
                     loggedIn: true, 
-                    user: data.username, 
+                    user: data.username,
+                    user_id: data.user_id,
                     role_id: data.role_id 
                 });
 

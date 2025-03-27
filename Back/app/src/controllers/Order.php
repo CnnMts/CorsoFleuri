@@ -18,12 +18,39 @@ class Order extends Controller {
 
   /*========================= POST ==========================================*/
 
+  // #[Route("POST", "/orders")]
+  // public function createOrder() {
+  //   $this->order->add($this->body);
+
+  //   return $this->order->getLast();
+  // }
+
   #[Route("POST", "/orders")]
   public function createOrder() {
-    $this->order->add($this->body);
+      try {
+          // Lire le payload JSON
+          $rawData = file_get_contents('php://input');
+          error_log("Raw input: " . $rawData);
+          $data = json_decode($rawData);
 
-    return $this->order->getLast();
+          error_log('menu_id : ' . $data->orders[0]->menu_id);
+          
+          // Vérifiez que le tableau orders existe et qu'il contient au moins un élément avec user_id.
+          if (!isset($data->orders) || !is_array($data->orders) || !isset($data->orders[0]->user_id)) {
+            throw new HttpException("Données manquantes", 400);
+          }
+          
+          // Appeler la méthode du modèle pour créer la commande
+          $result = $this->order->createOrder($data);
+          
+          header("Content-Type: application/json");
+          return($result);
+      } catch (Exception $e) {
+          header("HTTP/1.1 500 Internal Server Error");
+          return(['error' => $e->getMessage()]);
+      }
   }
+
 
   /*========================= GET BY ID =====================================*/
 
@@ -78,6 +105,7 @@ class Order extends Controller {
   }
 
   /*========================= TOGGLE =========================================*/
+
   #[Route("PATCH", "/orders/:id/toggle")]
   public function toggleStatus() {
     $orderId = intval($this->params['id']);
@@ -90,6 +118,27 @@ class Order extends Controller {
         header('Content-Type: application/json');
         return['success' => false, 'message' => $e->getMessage()];
     }
+  }
+
+  /*========================= DISCOUNT =======================================*/
+
+  #[Route("PATCH", "/orders/:id/update-discount")]
+  public function updateDiscount() {
+      $orderId = intval($this->params['id']);
+      $data = $this->body; // JSON payload
+      $rawInput = file_get_contents('php://input');
+      $data = json_decode($rawInput);
+      $discount_id = intval($data->discount_id); // Par défaut 1 pour N/A
+      
+      $result = $this->order->updateDiscount($orderId, $discount_id);
+      
+      if ($result) {
+          header('Content-Type: application/json');
+          return['success' => true, 'discount_id' => $discount_id];
+      } else {
+          header("HTTP/1.1 500 Internal Server Error");
+          return['success' => false, 'error' => 'Erreur de mise à jour de la remise'];
+      }
   }
 
 
