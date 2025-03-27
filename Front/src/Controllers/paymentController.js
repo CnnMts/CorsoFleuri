@@ -96,7 +96,7 @@ class PaymentController {
     }
     // Supposons que le tableau "menu.menuChoice" contient un seul objet
     const choicesObj = menu.menuChoice[0];
-    /* eslint-disable no-prototype-builtins */
+     
     // Création d'un nouvel objet pour ne retenir que les clés dont la valeur n'est pas vide
     const validChoices = {};
     for (const key in choicesObj) {
