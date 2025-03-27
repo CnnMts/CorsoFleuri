@@ -7,13 +7,20 @@ const createMainCourseModalView = ({ mainCourses }) => `
           <li>
             <input type="checkbox" id="main_${course.id}" value="${course.id}" />
             <label for="main_${course.id}">${course.name}</label>
+            <input 
+              type="number" 
+              class="quantity-input" 
+              id="quantity_main_${course.id}" 
+              placeholder="Quantité" 
+              min="1" 
+              value="1" 
+            />
           </li>
         `).join('')}
       </ul>
       <button id="validate-main-courses" class="border-black color-bg-warning color-white font-size-32 font-barlow">Valider</button>
-        <button class="close-modal border-black color-bg-negative color-white font-size-32 font-barlow">Fermer</button>
+      <button class="close-modal border-black color-bg-negative color-white font-size-32 font-barlow">Fermer</button>
     </div>
   </div>
 `;
-
 export default createMainCourseModalView;

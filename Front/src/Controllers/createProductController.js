@@ -1,4 +1,5 @@
 import createProductView from '../Views/creatProduct/createProductView.js';
+import { loadState } from '../Models/appStateModel.js';
 
 class CreateProductController {
   constructor({ req, res }) {
@@ -9,6 +10,13 @@ class CreateProductController {
   }
 
   init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      return;
+    }
     this.render();
     this.initEventListeners();
   }
@@ -59,7 +67,8 @@ class CreateProductController {
       const res = await fetch('http://localhost:8083/product', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
       });

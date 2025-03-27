@@ -7,6 +7,14 @@ const createAppetizerModalView = ({ appetizers }) => `
           <li>
             <input type="checkbox" id="appetizer_${app.id}" value="${app.id}" />
             <label for="appetizer_${app.id}">${app.name}</label>
+            <input 
+              type="number" 
+              class="quantity-input" 
+              id="quantity_appetizer_${app.id}" 
+              placeholder="Quantité" 
+              min="1" 
+              value="1" 
+            />
           </li>
         `).join('')}
       </ul>
@@ -15,5 +23,4 @@ const createAppetizerModalView = ({ appetizers }) => `
     </div>
   </div>
 `;
-
 export default createAppetizerModalView;

@@ -7,6 +7,17 @@ use App\Models\MenuModel;
 use App\Utils\{Route,HttpException};
 use App\Middlewares\{AuthMiddleware,RoleMiddleware,Roles};
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+  header("Access-Control-Allow-Origin: http://localhost:8085");
+  header("Access-Control-Allow-Credentials: true");
+  header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS");
+  header("Access-Control-Allow-Headers: Content-Type, Authorization");
+  exit(0); // Terminer la réponse pour la requête preflight
+}
+
+header("Access-Control-Allow-Origin: http://localhost:8085");
+header("Access-Control-Allow-Credentials: true");
+
 class Menu extends Controller {
   protected object $menu;
 
@@ -19,8 +30,13 @@ class Menu extends Controller {
   /*========================= POST ==========================================*/
 
   #[Route("POST", "/menu",   
+<<<<<<< HEAD
    /* middlewares: [AuthMiddleware::class, 
     [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
+=======
+   middlewares: [AuthMiddleware::class, 
+    [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+>>>>>>> origin/Ethan2
   public function add() {
     $this->menu->add($this->body);
 

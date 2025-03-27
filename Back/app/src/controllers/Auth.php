@@ -50,4 +50,27 @@ class Auth extends Controller {
       }
   }
 
+ /*========================= LOGOUT =========================================*/
+
+  #[Route("POST", "/auth/logout")]
+  public function logout() {
+      try {
+          $success = $this->auth->logout();
+          
+          if ($success) {
+            // Optionnel : renvoyer une réponse JSON indiquant la réussite
+            header('Content-Type: application/json');
+            return ['success' => true, 'message' => 'Déconnexion réussie'];
+            // Optionnel : rediriger vers la page login
+            // header('Location: /login.php'); // ou /login.html selon votre architecture
+          } else {
+            throw new Exception("Erreur lors de la déconnexion.");
+          }
+      } catch (\Exception $e) {
+          // Gérer l'erreur : renvoyer un code d'erreur
+          header('HTTP/1.1 500 Internal Server Error');
+          header('Content-Type: application/json');
+          return ['success' => false, 'message' => 'Déconnexion échouée'];
+      }
+  }
 }
