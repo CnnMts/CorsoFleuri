@@ -74,14 +74,14 @@ class CashRegisterController {
 
   initEventListeners() {
     this.initAddMenuButtonListener();
-    this.initPrintButtonListener(); // On lie l'événement d'impression de tous les tickets
+    this.initPrintButtonListener();
   }
 
   initPrintButtonListener() {
     const printButton = document.querySelector('#printAllButton');
     if (printButton) {
       printButton.addEventListener('click', () => {
-        this.printAllTickets(this.ticket); // Appel de la fonction pour imprimer tous les tickets
+        this.printAllTickets(this.ticket);
       });
     }
   }
@@ -272,7 +272,7 @@ class CashRegisterController {
         });
 
         ticketText += `\nQuantité totale : ${ticket.quantity || 1}`;
-        ticketText += `\nTotal : ${(ticket.price * (ticket.quantity || 1)).toFixed(2)}€\n`;
+        ticketText += `\nTotal : ${(ticket.price * (ticket.quantity || 1)).toFixed(2)} EUR\n`;
 
         printer.printText(ticketText);
       });
