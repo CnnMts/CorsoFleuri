@@ -49,9 +49,13 @@ module.exports = {
     "no-await-in-loop": "off",
     "no-plusplus": "off",
     "no-param-reassign": "off",
-    "@typescript-eslint/naming-convention": "off"
+    "@typescript-eslint/naming-convention": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "ForOfStatement",
+        "message": "For...of loops are allowed."
+      }
+    ]
   }
-
-
 };
-

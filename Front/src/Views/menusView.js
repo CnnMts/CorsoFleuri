@@ -1,5 +1,5 @@
 const menusView = ({ id, name, price }) => {
-  const imgSrc = `../Assets/testMenu${id}.png`;
+  const imgSrc = `/Assets/testMenu${id}.png`;
 
   return `
     <div class="containerMenus">

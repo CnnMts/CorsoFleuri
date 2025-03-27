@@ -16,13 +16,12 @@ module.exports = {
   module: {
     rules: [
       {
-        
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-typescript'], // Ajout du preset TypeScript
+            presets: ['@babel/preset-env', '@babel/preset-typescript'],
             plugins: ['@babel/plugin-transform-object-rest-spread']
           }
         }
@@ -34,7 +33,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
-      },  
+      },
       {
         test: /\.ts$/,
         use: 'ts-loader'
@@ -45,13 +44,25 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
+              name: 'Assets/[name].[ext]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'Assets/[name].[ext]',
             },
           },
         ],
       },
     ]
   },
+  
   resolve: {
     fullySpecified: false,
     extensions: ['.js', '.ts', '.json'], // Résolution automatique des extensions
