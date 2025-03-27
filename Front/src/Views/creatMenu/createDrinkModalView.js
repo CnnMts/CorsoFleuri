@@ -1,5 +1,5 @@
 const createDrinkModalView = ({ drinks }) => `
-  <div id="drink-modal" class="modal">
+  <div id="drink-modal" class="menu-modal">
     <div class="modal-content">
       <h3>Choisissez les boissons</h3>
       <ul class="drink-list">

@@ -1,5 +1,5 @@
 const createAppetizerModalView = ({ appetizers }) => `
-  <div id="appetizer-modal" class="modal" style="display: flex;">
+  <div id="appetizer-modal" class="menu-modal" style="display: flex;">
     <div class="modal-content">
       <h3>Choisissez les entrées</h3>
       <ul class="appetizer-list">

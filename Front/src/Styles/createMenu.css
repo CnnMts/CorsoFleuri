@@ -1,4 +1,32 @@
-.modal {
+.menu-creation {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#exit-button {
+    position: absolute;
+    top: 0px;
+    left: 0;
+}
+
+.menu-creation form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-creation form .edit-button {
+    background-color: #EB1553;
+    color: #FFFFFF;
+    font-size: 16px;
+    border: 4px solid black;
+}
+
+.menu-modal {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -9,4 +37,8 @@
     justify-content: center;
     background-color: #AAAAAA55;
     backdrop-filter: blur(4px);
+}
+
+.menu-modal .modal-content {
+    padding: 16px;
 }

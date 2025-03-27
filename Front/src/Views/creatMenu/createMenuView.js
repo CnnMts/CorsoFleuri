@@ -6,7 +6,7 @@ import '../../Styles/createMenu.css';
 
 const createMenuView = (data) => `
   ${exitButtonView()}
-  <div class="menu-creation font-barlow">
+  <div class="menu-creation font-carlito">
     ${createMenuHeaderView()}
     ${createMenuFormView(data)}
   </div>

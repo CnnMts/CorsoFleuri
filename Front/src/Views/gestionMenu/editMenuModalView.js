@@ -2,8 +2,8 @@ import '../../Styles/editMenuModale.css';
 
 const editMenuModalView = (menu) => `
   <div id="edit-menu-modal" data-id="${menu.id}" class="modal">
-    <div class="modal-content border-black color-bg-white font-barlow font-size-32">
-      <button class="close-button font-size-32 color-bg-negative border-black color-white" type="button">×</button>
+    <div class="modal-content border-black color-bg-white font-carlito font-size-32">
+      <button class="close-button font-barlow font-size-32 color-bg-negative border-black color-white" type="button">×</button>
       <h3>Modifier le menu</h3>
       <div>
         <label>Nom du menu</label>
