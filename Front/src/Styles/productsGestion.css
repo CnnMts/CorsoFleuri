@@ -1,0 +1,25 @@
+.product-list {
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.product-list .product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.product-list .product-item .left {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    gap: 16px;
+}
+
+.product-list .product-item button {
+    padding: 16px;
+}

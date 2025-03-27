@@ -12,5 +12,16 @@
 
 .page-content .create-menu-container button {
     width: calc(100% - 32px);
+    height: 64px;
+    margin: 0 16px;
+}
+
+.page-content .create-product-container {
+    width: 100%;
+}
+
+.page-content .create-product-container button {
+    width: calc(100% - 32px);
+    height: 64px;
     margin: 0 16px;
 }

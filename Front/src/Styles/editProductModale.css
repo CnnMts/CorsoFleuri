@@ -1,4 +1,4 @@
-#edit-menu-modal {
+#edit-product-modal {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -11,7 +11,7 @@
     backdrop-filter: blur(4px);
 }
 
-#edit-menu-modal .modal-content {
+#edit-product-modal .modal-content {
     width: 512px;
     padding: 16px;
     display: flex;
@@ -19,12 +19,12 @@
     justify-content: start;
 }
 
-#edit-menu-modal .modal-content > div {
+#edit-product-modal .modal-content > div {
     display: flex;
     align-items: center;
 }
 
-#edit-menu-modal .close-button {
+#edit-product-modal .close-button {
     max-width: 64px;
     height: 64px;
 }
