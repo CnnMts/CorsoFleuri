@@ -4,6 +4,7 @@ import createDessertModalView from '../Views/creatMenu/createDessertModalView.js
 import createDrinkModalView from '../Views/creatMenu/createDrinkModalView.js';
 import createMainCourseModalView from '../Views/creatMenu/createMainCourseModalView.js';
 import ProductModel from '../Models/productModel.js';
+import { loadState } from '../Models/appStateModel.js';
 import '../Styles/createMenu.css';
 
 class CreateMenuController {
@@ -15,6 +16,13 @@ class CreateMenuController {
   }
 
   async init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      return;
+    }
     this.products = await ProductModel.fetchProducts();
     this.render();
     this.initEventListeners();
@@ -120,7 +128,7 @@ class CreateMenuController {
 
   openModal(modalId) {
     const m = document.getElementById(modalId);
-    if (m) m.style.display = 'block';
+    if (m) m.style.display = 'flex';
   }
 
   closeModal(modalId) {
@@ -254,7 +262,10 @@ class CreateMenuController {
     try {
       const res = await fetch('http://localhost:8083/menu', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify(data)
       });
       if (!res.ok) {
@@ -276,7 +287,10 @@ class CreateMenuController {
 
         return fetch('http://localhost:8083/menuProduct', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
           body: JSON.stringify({
             menu_id: data.menu_id,
             product_id: assoc.product_id,

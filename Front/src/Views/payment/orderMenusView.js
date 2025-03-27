@@ -1,7 +1,10 @@
-const orderMenusView = ({ name, quantity }) => `
+const orderMenusView = ({ name, quantity }) => {
+  return `
     <div class="MenusNames">
-      ${name} ${`x${quantity}`}
+      ${name} ${'x' + quantity}
     </div>
   `;
+};
 
 export default orderMenusView;
+

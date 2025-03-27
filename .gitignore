@@ -1,4 +1,6 @@
 .env
-node_modules/
-echo "path/to/env-webpack-vanilla-php.tar" >> .gitignore
-env-webpack-vanilla-php.tar
+*:Zone.Identifier
+/Back/app/vendor/
+/Front/node_modules/
+node_modules
+/Front/env-webpack-vanilla-php.tar

@@ -1,5 +1,5 @@
-import LoginView from '../Views/login/loginView.js';
-import LoginModel from '../Models/loginModel.js';
+import LoginView from "../Views/login/loginView.js";
+import LoginModel from "../Models/loginModel.js"
 
 class LoginController {
   constructor(req, res) {
@@ -23,11 +23,11 @@ class LoginController {
   }
 
   login() {
-    document.querySelector('#login-btn').addEventListener('click', async (event) => {
+    document.querySelector('#login-btn').addEventListener("click", async (event) => {
       event.preventDefault();
-      const name = document.getElementById('name').value;
-      const password = document.getElementById('password').value;
-      LoginModel.connexion(name, password);
+      const name = document.getElementById("name").value;
+      const password = document.getElementById("password").value;
+      LoginModel.connexion(name,password);
     });
   }
 

@@ -1,6 +1,7 @@
 import mainProductView from '../Views/gestionProduct/mainProductView.js';
+import { loadState } from '../Models/appStateModel.js';
+import LogoutModel from '../Models/logoutModel.js';
 import editProductModalView from '../Views/gestionProduct/editProductModalView.js';
-import '../Styles/productPage.css';
 
 class ProductGestionController {
   constructor({ req, res }) {
@@ -11,11 +12,24 @@ class ProductGestionController {
   }
 
   async init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      return;
+    }
+    if (state.role_id != 1) {
+      alert('Permissions Insuffisantes');
+      window.location.href = "/test";
+      return;
+    }
     try {
       this.products = await this.fetchProducts();
       console.log('Produits récupérés :', this.products);
       this.render();
       this.bindEventListeners();
+      this.logout();
     } catch (error) {
       console.error('Erreur lors de l\'initialisation :', error);
     }
@@ -35,6 +49,13 @@ class ProductGestionController {
   render() {
     console.log('Produits passés à la vue :', this.products);
     this.el.innerHTML = mainProductView(this.products || []);
+  }
+
+  logout() {
+    document.querySelector('#logout-button').addEventListener("click", async (event) => {
+      event.preventDefault();
+      LogoutModel.deconnexion();
+    });
   }
 
   bindEventListeners() {
@@ -120,7 +141,10 @@ class ProductGestionController {
     try {
       const res = await fetch(`http://localhost:8083/product/${productId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify({
           name: productName,
           sale_price: productSalePrice,
@@ -162,6 +186,10 @@ class ProductGestionController {
 
     try {
       const res = await fetch(`http://localhost:8083/product/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         method: 'DELETE'
       });
 

@@ -33,21 +33,19 @@ class OrderModel {
                     .map(async (menu) => {
                       const menuChoiceDetails = await Promise.all(
                         menuChoices
-                          .filter((menuChoice) => menuChoice.order_id === orderMenu.order_id
-                          && menuChoice.menu_id === orderMenu.menu_id)
+                          .filter((menuChoice) => menuChoice.order_menu_id === orderMenu.id)
                           .map(async (menuChoice) => {
                             const starter = await this.fetchData(`http://localhost:8083/product/${menuChoice.starter_id}`);
                             const mainCourse = await this.fetchData(`http://localhost:8083/product/${menuChoice.main_course_id}`);
                             const dessert = await this.fetchData(`http://localhost:8083/product/${menuChoice.dessert_id}`);
                             const drink = await this.fetchData(`http://localhost:8083/product/${menuChoice.drink_id}`);
-                            return {
-                              starter, mainCourse, dessert, drink
-                            };
+                            return { starter, mainCourse, dessert, drink };
                           })
-                      );
+                      )
                       return { ...menu, menuChoice: menuChoiceDetails };
+                      
                     })
-                );
+                )
                 return { ...orderMenu, menu: menuDetails };
               })
           );
@@ -63,7 +61,7 @@ class OrderModel {
       throw error;
     }
   }
-
+  
   // Créer un nouvel ordre dans la table "order"
   static async createOrder(order) {
     try {

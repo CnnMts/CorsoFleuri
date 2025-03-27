@@ -7,14 +7,14 @@ use stdClass;
 
 class MenuChoiceModel extends SqlConnect {
   private $table = "menu_choice";
-  public $authorized_fields_to_update = ['menu_id', 'order_id', 'starter_id', 'main_course_id', 'dessert_id', 'drink_id'];
+  public $authorized_fields_to_update = ['menu_id', 'order_id', 'order_menu_id', 'starter_id', 'main_course_id', 'dessert_id', 'drink_id'];
 
   /*========================= ADD ===========================================*/
   
   public function add(array $data) {
     $query = "
-      INSERT INTO $this->table (menu_id, order_id, starter_id, main_course_id, dessert_id, drink_id)
-      VALUES (:menu_id, :order_id, :starter_id, :main_course_id, :dessert_id, :drink_id)
+      INSERT INTO $this->table (menu_id, order_id, order_menu_id, starter_id, main_course_id, dessert_id, drink_id)
+      VALUES (:menu_id, :order_id, :order_menu_id, :starter_id, :main_course_id, :dessert_id, :drink_id)
     ";
 
     $req = $this->db->prepare($query);

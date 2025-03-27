@@ -1,7 +1,9 @@
 import mainView from '../Views/gestionMenu/mainView.js';
+import { loadState } from '../Models/appStateModel.js';
+import LogoutModel from '../Models/logoutModel.js';
 import editMenuModalView from '../Views/gestionMenu/editMenuModalView.js';
 import MenuModel from '../Models/menuModel.js';
-import '../Styles/menuPage.css';
+import '../Styles/menus.css';
 
 class MenuController {
   constructor({ req, res }) {
@@ -12,10 +14,23 @@ class MenuController {
   }
 
   async init() {
+    const state = loadState();
+    console.log(state);
+    if (!state.loggedIn) {
+      alert('Not logged in');
+      window.location.href = "/login";
+      return;
+    }
+    if (state.role_id != 1) {
+      alert('Permissions Insuffisantes');
+      window.location.href = "/test";
+      return;
+    }
     try {
       this.menus = await this.fetchMenus();
       this.render();
       this.bindEventListeners();
+      this.logout();
     } catch (error) {
       console.error("Erreur lors de l'initialisation :", error);
     }
@@ -47,6 +62,13 @@ class MenuController {
   render() {
     // On suppose que mainView intègre aussi un bouton Stats avec id "stats-button"
     this.el.innerHTML = mainView(this.menus || []);
+  }
+
+  logout() {
+    document.querySelector('#logout-button').addEventListener("click", async (event) => {
+      event.preventDefault();
+      LogoutModel.deconnexion();
+    });
   }
 
   bindEventListeners() {
@@ -250,7 +272,10 @@ class MenuController {
     try {
       const res = await fetch(`http://localhost:8083/menu/${menuId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         body: JSON.stringify({
           name: menuData.name,
           price: menuData.price,
@@ -306,6 +331,10 @@ class MenuController {
         products.map(async (product) => {
           if (product.id) {
             const res = await fetch(`http://localhost:8083/menuProduct/${product.id}`, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+              },
               method: 'DELETE'
             });
             if (!res.ok) {

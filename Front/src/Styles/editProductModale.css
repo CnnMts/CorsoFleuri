@@ -1,0 +1,30 @@
+#edit-product-modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #AAAAAA55;
+    backdrop-filter: blur(4px);
+}
+
+#edit-product-modal .modal-content {
+    width: 512px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+#edit-product-modal .modal-content > div {
+    display: flex;
+    align-items: center;
+}
+
+#edit-product-modal .close-button {
+    max-width: 64px;
+    height: 64px;
+}

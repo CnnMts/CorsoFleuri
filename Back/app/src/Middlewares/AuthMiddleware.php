@@ -6,23 +6,23 @@ use App\Utils\JWT;
 
 class AuthMiddleware {
     public function handle(&$request) {
-        $headers = getallheaders();
+        // $headers = getallheaders();
         
-        if (!isset($headers['Authorization'])) {
-            return $this->unauthorizedResponse();
-        }
+        // if (!isset($headers['Authorization'])) {
+        //     return $this->unauthorizedResponse();
+        // }
 
-        $authHeader = $headers['Authorization'];
+        // $authHeader = $headers['Authorization'];
 
-        if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            return $this->unauthorizedResponse();
-        }
+        // if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+        //     return $this->unauthorizedResponse();
+        // }
 
-        $jwt = $matches[1];
+        // $jwt = $matches[1];
 
-        if (!JWT::verify($jwt)) {
-            return $this->unauthorizedResponse();
-        }
+        // if (!JWT::verify($jwt)) {
+        //     return $this->unauthorizedResponse();
+        // }
 
         return true;
     }

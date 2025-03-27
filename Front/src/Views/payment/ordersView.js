@@ -1,9 +1,8 @@
-import orderMenusView from './orderMenusView.js';
-import menuChoicesView from './menuChoicesView.js';
+import orderMenusView from "./orderMenusView.js";
+import menuChoicesView from "./menuChoicesView.js";
 
-const ordersView = ({
-  id, status_id, total_price, menusNames, products
-}) => `
+const ordersView = ({ id, status_id, total_price, menusNames, products }) => {
+    return `
       <div class="containerOrders">
         <div class="Order">
           <h2>Commande Numéro : ${id}</h2>
@@ -17,12 +16,11 @@ const ordersView = ({
 
           <h2>${parseFloat(total_price).toFixed(2)}€</h2>
 
-          <button class="toggle-status-btn" data-order-id="${id}">${status_id === 1 ? 'À Payer' : 'Payée'}</button>
+          <button class="toggle-status-btn" data-order-id="${id}">${status_id == 1 ? 'À Payer' : 'Payée'}</button>
           <button class="delete-order-btn" data-order-id="${id}">Supprimer la commande</button>
-              <button class="print-order-btn" data-order-id="${id}">Imprimer</button>
-          
         </div>
       </div>
     `;
-
-export default ordersView;
+  }
+  
+  export default ordersView;

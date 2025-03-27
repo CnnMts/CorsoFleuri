@@ -1,9 +1,9 @@
 .containerOrders {
-  border: solid;
-  padding: 10px;
-  margin: 10px;
+    border: solid;
+    padding: 10px;
+    margin: 10px;
 }
 
 .listOfOrders {
-  display: flex;
+    display: flex;
 }
