@@ -36,7 +36,7 @@ class MenuChoice extends Controller {
   /*========================= GET ALL =======================================*/
 
   #[Route("GET", "/menuChoice",     
-    middlewares: [AuthMiddleware::class])]
+    /*middlewares: [AuthMiddleware::class]*/)]
   public function getMenusProduct() {
       $limit = isset($this->params['limit']) ? 
         intval($this->params['limit']) : null;

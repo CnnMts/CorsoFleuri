@@ -37,7 +37,7 @@ class OrderMenu extends Controller {
   /*========================= GET ALL =====================================*/
 
   #[Route("GET", "/orderMenu",
-  middlewares: [AuthMiddleware::class])]
+  /*middlewares: [AuthMiddleware::class]*/)]
   public function getOrderMenus() {
       $limit = isset($this->params['limit']) ? 
       intval($this->params['limit']) : null;

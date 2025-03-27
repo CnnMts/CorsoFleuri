@@ -90,6 +90,16 @@ class CashRegisterController {
 
   initEventListeners() {
     this.initAddMenuButtonListener();
+    this.initPrintButtonListener();
+  }
+
+  initPrintButtonListener() {
+    const printButton = document.querySelector('#printAllButton');
+    if (printButton) {
+      printButton.addEventListener('click', () => {
+        this.printAllTickets(this.ticket);
+      });
+    }
   }
 
   initAddMenuButtonListener() {
@@ -143,11 +153,7 @@ class CashRegisterController {
                   <label>
                     <input type="radio" name="${category}" value="${product.id}">
                     ${product.name}
-                    ${
-  product.quantity && product.quantity !== 1
-    ? `<span>Quantité : ${product.quantity}</span>`
-    : ''
-}
+                    ${product.quantity && product.quantity !== 1 ? `<span>Quantité : ${product.quantity}</span>` : ''}
                   </label>
                 </li>
               `).join('')}
@@ -164,12 +170,14 @@ class CashRegisterController {
     }
 
     const productNames = this.mapSelectedProductsToNames(selectedMenu, selectedProducts);
+    const productDetails = this.mapSelectedProducts(selectedMenu, selectedProducts);
+
     const existingTicket = this.findExistingTicket(selectedMenu, productNames);
 
     if (existingTicket) {
       this.updateExistingTicket(existingTicket);
     } else {
-      this.createNewTicket(selectedMenu, productNames);
+      this.createNewTicket(selectedMenu, productNames, productDetails);
     }
 
     this.updateTotalPrice();
@@ -181,12 +189,22 @@ class CashRegisterController {
     return Array.from(selectedItems).map((input) => input.value);
   }
 
+  mapSelectedProducts(selectedMenu, selectedProducts) {
+    return selectedProducts.map((id) => (
+      Object.keys(selectedMenu.products).reduce((foundProduct, category) => {
+        const product = selectedMenu.products[category].find((prod) => String(prod.id) === id);
+        return product || foundProduct;
+      }, null)
+    )).filter((product) => product !== null);
+  }
+
   mapSelectedProductsToNames(selectedMenu, selectedProducts) {
-    return selectedProducts.map((id) => Object.keys(selectedMenu.products)
-      .reduce((foundName, category) => {
+    return selectedProducts.map((id) => (
+      Object.keys(selectedMenu.products).reduce((foundName, category) => {
         const product = selectedMenu.products[category].find((prod) => String(prod.id) === id);
         return product ? product.name : foundName;
-      }, null)).filter((name) => name !== null);
+      }, null)
+    )).filter((name) => name !== null);
   }
 
   findExistingTicket(selectedMenu, productNames) {
@@ -226,7 +244,7 @@ class CashRegisterController {
 
     this.ticket.push(newTicket);
 
-    console.log(`Nouveau ticket '${newTicket.name}' ajouté avec quantité : ${newTicket.quantity}`);
+    console.log(`Nouveau ticket '${newTicket.name}' ajouté :`, newTicket.productQuantity);
 
     const ticketsContainer = document.getElementById('tickets-container');
     if (ticketsContainer) {

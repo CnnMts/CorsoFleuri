@@ -25,6 +25,9 @@ html, body {
   font-size: 1.2vw;
   cursor: pointer;
 }
+.stats-button{
+  
+}
 
 .page-content {
   display: flex;

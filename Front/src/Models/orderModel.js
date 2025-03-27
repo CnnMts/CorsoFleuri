@@ -61,7 +61,6 @@ class OrderModel {
       throw error;
     }
   }
-  
   // Créer un nouvel ordre dans la table "order"
   static async createOrder(order) {
     try {

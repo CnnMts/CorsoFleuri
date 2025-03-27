@@ -2,6 +2,7 @@ import OrderModel from '../Models/orderModel.js';
 import LogoutModel from '../Models/logoutModel.js';
 import { loadState } from '../Models/appStateModel.js';
 import mainPaymentView from '../Views/payment/mainPaymentView.js';
+import BluetoothPrinter from './BluetoothPrinter.js';
 import '../Styles/payment.css';
 
 class PaymentController {
@@ -10,6 +11,7 @@ class PaymentController {
     this.req = req;
     this.res = res;
     this.orders = [];
+    this.bluetoothPrinter = new BluetoothPrinter(); // Initialisation de l'imprimante Bluetooth
     this.run();
   }
 
@@ -224,12 +226,34 @@ class PaymentController {
       });
     });
 
-    // Pour le bouton de suppression
-    document.querySelectorAll('.delete-order-btn').forEach(button => {
+    document.querySelectorAll('.print-order-btn').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const orderId = button.getAttribute('data-order-id');
+        console.log(`Print order button clicked for order ID: ${orderId}`);
+        console.log('zfsffssf', this.orders);
+        const selectedOrder = this.orders.find((o) => o.id === parseInt(orderId, 10));
+        console.log('Selected order:', selectedOrder);
+
+        if (!selectedOrder) {
+          console.error(`Aucune commande trouvée avec l'ID: ${orderId}`);
+          return;
+        }
+
+        try {
+          await this.printOrderTicket(selectedOrder);
+        } catch (error) {
+          console.error('Erreur lors de l\'impression de la commande :', error);
+        }
+      });
+    });
+
+    document.querySelectorAll('.delete-order-btn').forEach((button) => {
       button.addEventListener('click', async (event) => {
         event.preventDefault();
         const orderId = button.getAttribute('data-order-id');
-        if (confirm("Confirmez-vous la suppression de cette commande ?")) {
+        console.log(`Delete order button clicked for order ID: ${orderId}`);
+
+        if (window.confirm('Confirmez-vous la suppression de cette commande ?')) {
           try {
             const response = await fetch(`http://localhost:8083/orders/${orderId}`, {
               method: 'DELETE',
@@ -298,6 +322,52 @@ class PaymentController {
 
   handleError(error) {
     console.error('Erreur dans le contrôleur :', error);
+  }
+
+  async printOrderTicket(order) {
+    try {
+      if (!order || !order.id) {
+        order = {
+          id: 1, menusNames: [], products: [], total_price: 0
+        };
+        console.error('Commande non valide, utilisation de l\'ID par défaut: 1');
+      }
+
+      await this.bluetoothPrinter.connect();
+      console.log("Impression connectée à l'imprimante.");
+
+      let orderText = `Commande Numero: ${order.id || 'Inconnu'}\n`;
+      console.log('Commande générée : ', orderText);
+
+      if (order.menusNames.length > 0) {
+        orderText += 'Menus :\n';
+        order.menusNames.forEach((menuObj) => {
+          orderText += `${menuObj.name} x${menuObj.quantity}\n`;
+        });
+        console.log('Menus ajoutés : ', order.menusNames);
+      } else {
+        console.log('Aucun menu trouvé dans la commande.');
+      }
+
+      if (order.products.length > 0) {
+        orderText += '\nProduits :\n';
+        order.products.forEach((prod) => {
+          orderText += `${prod.name} x${prod.quantity}\n`;
+        });
+        console.log('Produits ajoutés : ', order.products);
+      } else {
+        console.log('Aucun produit trouvé dans la commande.');
+      }
+
+      orderText += `\nTotal : ${order.total_price.toFixed(2)} EUR\n`;
+      console.log('Total de la commande ajouté : ', order.total_price);
+      console.log('Ticket à imprimer : \n', orderText);
+
+      await this.bluetoothPrinter.printText(orderText);
+      console.log(`Ticket pour la commande ${order.id} imprimé avec succès.`);
+    } catch (error) {
+      console.error('Erreur lors de l\'impression de la commande :', error);
+    }
   }
 }
 

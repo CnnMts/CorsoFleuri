@@ -6,6 +6,7 @@ import MenuController from './Controllers/menuController.js';
 import ProductGestionController from './Controllers/productGestionController.js';
 import LoginController from './Controllers/loginController.js';
 import PaymentController from './Controllers/paymentController.js';
+import UserGestion from './Controllers/userController.js';
 // import './index.scss';
 
 const routes = [
@@ -32,6 +33,10 @@ const routes = [
   {
     url: '/login',
     controller: LoginController
+  },
+  {
+    url: '/register',
+    controller: UserGestion
   },
   {
     url: '/payment',

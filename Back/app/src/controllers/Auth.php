@@ -18,8 +18,8 @@ class Auth extends Controller {
  /*========================= REGISTER =======================================*/
 
   #[Route("POST", "/auth/register",
-  middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]])]
+  /*middlewares: [AuthMiddleware::class, 
+  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
   public function register() {
       try {
           $data = $this->body;

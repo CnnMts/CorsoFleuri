@@ -1,5 +1,4 @@
-const Login = () => {
-  return `
+const Login = () => `
         <form action="" method="POST" class="login-form">
           <div class="form-example">
             <label for="name">Enter your name: </label>
@@ -14,8 +13,5 @@ const Login = () => {
           </div>
         </form>
   `;
-};
 
 export default Login;
-
- 

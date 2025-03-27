@@ -27,6 +27,8 @@ const ordersView = ({ id, status_id, total_price, discount_id, menusNames, produ
               <option value="2" ${discount_id == 2 ? 'selected' : ''}>Partenaires</option>
               <option value="3" ${discount_id == 3 ? 'selected' : ''}>VIP</option>
             </select>
+
+            <button class="print-order-btn" data-order-id="${id}">Imprimer</button>
           </div>
         </div>
       </div>
