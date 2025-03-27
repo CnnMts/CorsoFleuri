@@ -33,7 +33,7 @@ class OrderModel {
                     .map(async (menu) => {
                       const menuChoiceDetails = await Promise.all(
                         menuChoices
-                          .filter((menuChoice) => menuChoice.order_id === orderMenu.order_id && menuChoice.menu_id === orderMenu.menu_id)
+                          .filter((menuChoice) => menuChoice.order_menu_id === orderMenu.id)
                           .map(async (menuChoice) => {
                             const starter = await this.fetchData(`http://localhost:8083/product/${menuChoice.starter_id}`);
                             const mainCourse = await this.fetchData(`http://localhost:8083/product/${menuChoice.main_course_id}`);

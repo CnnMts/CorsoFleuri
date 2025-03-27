@@ -42,13 +42,9 @@ class PaymentController {
       total_price: parseFloat(order.total_price) || 0,
       orderMenus: order.orderMenus,
       menus: this.getMenusFromOrderMenus(order.orderMenus),
-      menusNames: this.getMenusNamesAndQuantity(this.getMenusFromOrderMenus(order.orderMenus))
-      // products: this.sortProductsByCategory(
-      //   order.products.map((product) => ({
-      //     ...product,
-      //     quantity: product.quantity ?? 1
-      //   }))
-      // )
+      menusNames: this.getMenusNamesAndQuantity(this.getMenusFromOrderMenus(order.orderMenus)),
+      menuChoices: this.getAllMenuChoices(this.getMenusFromOrderMenus(order.orderMenus)),
+      products: this.getAllProductsFromMenuChoices(this.getAllMenuChoices(this.getMenusFromOrderMenus(order.orderMenus)))
     }));
   }
 
@@ -89,7 +85,116 @@ class PaymentController {
     // Transformer l'objet groupé en un tableau d'objets {name, quantity}
     return Object.entries(grouped).map(([name, quantity]) => ({ name, quantity }));
   }
+
+  getMenuChoices(menu) {
+    // Vérifier d'abord que la propriété "menuChoice" existe et n'est pas vide
+    if (!menu.menuChoice || menu.menuChoice.length === 0) {
+      return {};
+    }
+    // Supposons que le tableau "menu.menuChoice" contient un seul objet
+    const choicesObj = menu.menuChoice[0];
+    
+    // Création d'un nouvel objet pour ne retenir que les clés dont la valeur n'est pas vide
+    const validChoices = {};
+    for (const key in choicesObj) {
+      if (choicesObj.hasOwnProperty(key)) {
+        // Vérifier que l'objet associé n'est pas vide (par exemple, a au moins une clé)
+        if (choicesObj[key] && Object.keys(choicesObj[key]).length > 0) {
+          validChoices[key] = choicesObj[key];
+        }
+      }
+    }
+    
+    return validChoices;
+  }
+
+  getAllMenuChoices(menus) {
+    // L'objet "aggregated" contiendra pour chaque catégorie un objet
+    // avec en clé le nom du menu et en valeur la quantité.
+    const aggregated = {};
   
+      // Supposons que l'attribut "menus" de chaque commande est déjà un tableau d'objets menus,
+      // obtenu via getMenusFromOrderMenus.
+      menus.forEach((menu) => {
+        // Récupère les choix du menu (un objet par catégorie)
+        const choices = this.getMenuChoices(menu);  // Par exemple, { starter: {name: 'Carottes Râpées', ... }, mainCourse: { name: 'Kebab', ... }, dessert: { name: 'Flan', ... } }
+        // Pour chaque catégorie dans cet objet, accumule les occurrences
+        for (const [category, menuObj] of Object.entries(choices)) {
+          // Si l'objet de regroupement n'a pas encore de clé pour cette catégorie, on l'initialise
+          if (!aggregated[category]) {
+            aggregated[category] = {};
+          }
+          // Utilisez le nom du menu comme identifiant
+          const menuName = menuObj.name;
+          // Incrémentez le compteur pour ce menu dans la catégorie
+          aggregated[category][menuName] = (aggregated[category][menuName] || 0) + 1;
+        }
+      });
+  
+    // Convertissez ensuite ce résultat en un format plus facile à utiliser en vue,
+    // par exemple un objet où chaque clé est une catégorie et la valeur un tableau d'objets { name, quantity }.
+    const result = {};
+    for (const category in aggregated) {
+      if (aggregated.hasOwnProperty(category)) {
+        // Transformer l'objet de comptage en tableau d'objets
+        result[category] = Object.entries(aggregated[category]).map(([name, quantity]) => ({ name, quantity }));
+      }
+    }
+    return result;
+  }
+
+  getAllProductsFromMenuChoices(menuChoices) {
+    // Définir les priorités par catégorie.
+    // Les produits froids ("starter", "dessert", "drink") ont priorité 1, ce qui les place en haut,
+    // Alors que les "mainCourse" (plats) ont priorité 2, et les autres, une priorité par défaut élevée.
+    const categoryPriorities = {
+      starter: 1,
+      dessert: 2,
+      drink: 3,
+      mainCourse: 4
+    };
+
+    // Agrégation des produits par une clé composite "category-name"
+    const aggregated = {};
+
+    // Parcourt chaque catégorie dans menuChoices
+    for (const category in menuChoices) {
+      if (Object.prototype.hasOwnProperty.call(menuChoices, category)) {
+        const products = menuChoices[category];
+        if (Array.isArray(products)) {
+          products.forEach(product => {
+            if (product && product.name) {
+              const key = `${category}-${product.name}`; // clé composite pour identifier un produit unique dans une catégorie
+              if (!aggregated[key]) {
+                aggregated[key] = {
+                  name: product.name,
+                  category: category, // On conserve la catégorie telle quelle
+                  quantity: product.quantity,
+                  priority: categoryPriorities[category] || 99 // Priorité par défaut si non définie
+                };
+              } else {
+                aggregated[key].quantity++;
+              }
+            }
+          });
+        }
+      }
+    }
+
+    // Transformer l'objet agrégé en tableau
+    const groupedArray = Object.values(aggregated);
+
+    // Trier selon la priorité (les petites valeurs apparaissent en premier)
+    // En cas d'égalité de priorité, trier par ordre alphabétique du nom
+    groupedArray.sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return a.priority - b.priority;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    return groupedArray;
+  }
 
   render() {
     this.el.innerHTML = mainPaymentView({
