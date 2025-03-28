@@ -1,3 +1,5 @@
+import '../Styles/menus.css';
+
 const menusView = ({ id, name, price }) => {
   const imgSrc = `/Assets/testMenu${id}.png`;
 

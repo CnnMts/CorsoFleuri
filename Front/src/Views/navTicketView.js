@@ -1,3 +1,5 @@
+import '../Styles/navTicket.css';
+
 const navTicketView = () => `
     <div class="containerRight">
       <div class="containerTicket">

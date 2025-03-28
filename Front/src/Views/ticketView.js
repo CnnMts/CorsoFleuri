@@ -1,3 +1,5 @@
+import '../Styles/ticket.css';
+
 const ticketView = (ticketData) => {
   if (!ticketData || !ticketData.products) {
     return '<p>Aucun élément sélectionné dans le ticket.</p>';

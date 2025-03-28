@@ -1,5 +1,6 @@
 import CorsoFleuriLogo from '../Assets/CorsoLogo.png';
 import { getAppState } from '../Models/appStateModel.js';
+import '../Styles/containerTop.css';
 
 const navTopView = () => `
   <div class="containerTop">

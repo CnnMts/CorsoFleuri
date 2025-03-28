@@ -2,6 +2,7 @@ import navTopView from './navTopView.js';
 import menusView from './menusView.js';
 import navTicketView from './navTicketView.js';
 import logoutButtonView from './logoutButtonView.js';
+import '../Styles/cashRegister.css';
 
 const CashRegister = ({ menus, ticket }) => `
   ${navTopView()}

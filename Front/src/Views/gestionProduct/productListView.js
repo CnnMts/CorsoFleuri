@@ -1,3 +1,5 @@
+import '../../Styles/productsGestion.css';
+
 const productListView = (products) => `
   <section class="product-list">
     ${products.map((product) => `

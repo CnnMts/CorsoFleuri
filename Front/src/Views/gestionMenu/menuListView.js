@@ -1,3 +1,5 @@
+import '../../Styles/menusGestion.css';
+
 const menuListView = (menus) => `
   <section class="menu-list">
     ${menus.map((menu) => `

@@ -5,7 +5,7 @@ import cashRegisterView from '../Views/cashRegisterView.js';
 import ticketView from '../Views/ticketView.js';
 import testMenu1 from '../Assets/testMenu1.png';
 import '../Styles/cashRegister.css';
-
+import '../Styles/menuModal.css';
 
 class CashRegisterController {
   constructor({ req, res }) {

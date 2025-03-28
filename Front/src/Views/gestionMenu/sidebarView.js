@@ -1,4 +1,5 @@
 import logoutButtonView from "../logoutButtonView.js";
+import '../../Styles/sidebar.css';
 
 const sidebarView = () => `
   <nav class="containerLeftGestion">

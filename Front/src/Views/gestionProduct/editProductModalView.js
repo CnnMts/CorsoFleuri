@@ -1,3 +1,5 @@
+import '../../Styles/editProductModal.css';
+
 const editProductModalView = (product) => `
   <div id="edit-product-modal" data-id="${product.id || ''}" class="modal">
     <div class="modal-content">

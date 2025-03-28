@@ -1,3 +1,5 @@
+import '../../Styles/editMenuModal.css';
+
 const editMenuModalView = (menu) => `
   <div id="edit-menu-modal" data-id="${menu.id}" class="modal">
     <div class="modal-content">

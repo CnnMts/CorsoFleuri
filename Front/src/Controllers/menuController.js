@@ -3,7 +3,7 @@ import { loadState } from '../Models/appStateModel.js';
 import LogoutModel from '../Models/logoutModel.js';
 import editMenuModalView from '../Views/gestionMenu/editMenuModalView.js';
 import MenuModel from '../Models/menuModel.js';
-import '../Styles/menuPage.css';
+import '../Styles/menus.css';
 
 class MenuController {
   constructor({ req, res }) {
