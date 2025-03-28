@@ -4,6 +4,8 @@ import navTicketView from './navTicketView.js';
 import logoutButtonView from './logoutButtonView.js';
 import '../Styles/cashRegister.css';
 
+import '../Styles/cashRegisterer.css';
+
 const CashRegister = ({ menus, ticket }) => `
   ${navTopView()}
   <div class="container">

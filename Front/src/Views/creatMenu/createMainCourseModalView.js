@@ -1,7 +1,7 @@
 const createMainCourseModalView = ({ mainCourses }) => `
-  <div id="main-course-modal" class="modal">
-    <div class="modal-content">
-      <h3>Choisissez les plats principaux</h3>
+  <div id="main-course-modal" class="menu-modal">
+    <div class="modal-content color-bg-white border-black font-carlito font-size-16">
+      <h3 class="font-barlow font-size-32">Choisissez les plats principaux</h3>
       <ul class="main-course-list">
         ${mainCourses.map((course) => `
           <li>
@@ -18,8 +18,8 @@ const createMainCourseModalView = ({ mainCourses }) => `
           </li>
         `).join('')}
       </ul>
-      <button id="validate-main-courses">Valider</button>
-      <button class="close-modal">Fermer</button>
+      <button id="validate-main-courses" class="border-black color-bg-warning color-white font-size-32 font-barlow">Valider</button>
+      <button class="close-modal border-black color-bg-negative color-white font-size-32 font-barlow">Fermer</button>
     </div>
   </div>
 `;

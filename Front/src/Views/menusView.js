@@ -5,14 +5,14 @@ const menusView = ({ id, name, price }) => {
 
   return `
     <div class="containerMenus">
-      <div class="imgMenu">
+      <div class="imgMenu border-black">
         <img src="${imgSrc}" alt="${name}" />
         <div class="priceOnImgMenu">
-          <h2>${parseFloat(price).toFixed(2)}€</h2>
+          <h2 class="font-barlow font-size-32">${parseFloat(price).toFixed(2)}€</h2>
         </div>
       </div>
       <div class="buttonAdd">
-        <button type="button" class="addMenuButton" data-name="${name}">Ajouter</button>
+        <button type="button" class="addMenuButton font-barlow font-size-32 border-black color-bg-negative color-white" data-name="${name}">Ajouter</button>
       </div>
     </div>
   `;

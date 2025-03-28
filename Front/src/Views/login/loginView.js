@@ -1,6 +1,7 @@
 import '../../Styles/login.css';
 
-const Login = () => `
+const Login = () => {
+  return `
     <section class="login">
       <form action="" method="POST" class="login-form font-barlow">
         <div class="form-example">
@@ -17,5 +18,6 @@ const Login = () => `
       </form>
     </section>
   `;
+}
 
 export default Login;

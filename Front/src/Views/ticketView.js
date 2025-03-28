@@ -6,23 +6,23 @@ const ticketView = (ticketData) => {
   }
 
   const productList = ticketData.products
-    .map((product) => `<li>${product}</li>`)
+    .map((product) => `<li class="font-carlito font-size-32">${product}</li>`)
     .join('');
 
   return `
-    <div class="ticket" data-name="${ticketData.name}">
+    <div class="ticket color-bg-tertiary color-white border-black" data-name="${ticketData.name}">
       <div class="nameMenu">
-        <h2>${ticketData.name}</h2>
+        <h2 class="font-barlow font-size-32">${ticketData.name}</h2>
       </div>
       <div class="listMenu">
-        <div class="listorder">
+        <div class="listOrder">
           <ul>
             ${productList}
           </ul>
         </div>
       </div>
       <div class="quatity">
-        <p>Quantité : ${ticketData.quantity || 1} </p>
+        <p class="font-barlow font-size-32">× ${ticketData.quantity || 1} </p>
       </div>
     </div>
   `;

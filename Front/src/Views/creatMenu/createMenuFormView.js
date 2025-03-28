@@ -14,7 +14,7 @@ const createMenuFormView = ({
     ${createMenuMainCourseView({ mainCourses })}
     ${createMenuDessertView({ desserts })}
     ${createMenuDrinkView({ drinks })}
-    <button type="submit" id="save-menu">ENREGISTRER</button>
+    <button type="submit" id="save-menu" class="border-black color-bg-negative color-white font-size-32">ENREGISTRER</button>
   </form>
 `;
 

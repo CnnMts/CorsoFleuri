@@ -19,12 +19,12 @@ class MenuController {
     if (!state.loggedIn) {
       alert('Not logged in');
       window.location.href = "/login";
-      exit;
+      return;
     }
     if (state.role_id != 1) {
       alert('Permissions Insuffisantes');
       window.location.href = "/test";
-      exit;
+      return;
     }
     try {
       this.menus = await this.fetchMenus();
