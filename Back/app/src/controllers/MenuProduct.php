@@ -86,9 +86,7 @@ class MenuProduct extends Controller {
 
   /*======================== CHECK =========================================*/
 
-  #[Route("POST", "/menuProduct/check", 
-  /*middlewares: [AuthMiddleware::class, 
-  [RoleMiddleware::class, Roles::ROLE_ADMIN]]*/)]
+  #[Route("POST", "/menuProduct/check")]
   public function checkMenuProduct() {
     try {
       $menuId = intval($this->body['menu_id'] ?? 0);

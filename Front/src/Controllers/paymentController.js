@@ -43,6 +43,7 @@ class PaymentController {
       status_id: order.status_id,
       total_price: parseFloat(order.total_price) || 0,
       discount_id: order.discount_id,
+      payment_method_id: order.payment_method_id,
       orderMenus: order.orderMenus,
       menus: this.getMenusFromOrderMenus(order.orderMenus),
       menusNames: this.getMenusNamesAndQuantity(this.getMenusFromOrderMenus(order.orderMenus)),
@@ -304,7 +305,38 @@ class PaymentController {
         }
       });
     });
+
+      // Écouteur pour le select de Moyen de Paiement
+      document.querySelectorAll('.payment-select').forEach(select => {
+        select.addEventListener('change', async (event) => {
+          const orderId = event.currentTarget.getAttribute('data-payment-order-id');
+          const payment_method_id = parseInt(event.currentTarget.value, 10);
+          console.log(payment_method_id);
+          try {
+            const response = await fetch(`http://localhost:8083/orders/${orderId}/update-payment`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+              },
+              body: JSON.stringify({ payment_method_id })
+            });
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+              alert(`Moyen de paiement mis à jour avec succès`);
+              window.location.reload();
+            } else {
+              alert(`Erreur: ${data.error}`);
+            }
+          } catch (error) {
+            console.error("Erreur lors de la mise à jour du Moyen de paiement :", error);
+          }
+        });
+      });
   }
+
+  
 
 
   render() {

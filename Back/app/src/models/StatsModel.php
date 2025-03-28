@@ -15,23 +15,22 @@ class StatsModel extends SqlConnect {
     orders.id AS NumeroCommande,
     payment_method.name AS MoyenPaiement,
     menu.id AS MenuID,
-    menu.name AS ProductName,
-    order_menu.quantity AS ItemsQuantity,
+    product.name AS ProductName,
     menu.price AS PrixVenteParItem,
     category.name AS CategorieProduit,
     product.purchase_price AS PrixAchat,
     discount.name AS RemiseVIP
     FROM 
 			orders
-    INNER JOIN 
+    LEFT JOIN 
 			user ON orders.user_id = user.id
-    INNER JOIN 
+    LEFT JOIN
 			payment_method ON orders.payment_method_id = payment_method.id
-    INNER JOIN 
+    LEFT JOIN
 			order_menu ON orders.id = order_menu.order_id
-    INNER JOIN 
+    LEFT JOIN
 			menu ON order_menu.menu_id = menu.id
-    INNER JOIN 
+    LEFT JOIN 
 			menu_product ON menu.id = menu_product.menu_id  -- Jointure ajoutée ici
     LEFT JOIN 
 			product ON menu_product.product_id = product.id 

@@ -306,6 +306,8 @@ class CreateMenuController {
       });
 
       const results = await Promise.all(proms);
+
+      window.location.href = "/gestion";
       return {
         message: 'Produits associés avec succès.',
         details: results

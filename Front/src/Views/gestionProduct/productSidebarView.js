@@ -1,3 +1,5 @@
+import logoutButtonView from '../logoutButtonView.js'
+
 const sidebarView = () => `
   <nav class="containerLeftGestion">
     <button type="button" class="menu-button-gestion" onclick="window.location.href='http://localhost:8085/gestion';">

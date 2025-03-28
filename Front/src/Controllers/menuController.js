@@ -172,6 +172,8 @@ class MenuController {
     const modal = document.getElementById('edit-menu-modal');
     if (!modal) return;
 
+    modal.querySelector('.close-button').addEventListener('click', () => modal.remove());
+
     const productList = modal.querySelector('#product-list');
     const addProductBtn = modal.querySelector('#add-product');
 
@@ -293,7 +295,10 @@ class MenuController {
           newProducts.map(async (product) => {
             const addRes = await fetch('http://localhost:8083/menuProduct', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+              },
               body: JSON.stringify({
                 menu_id: menuId,
                 product_id: product.id,
@@ -325,28 +330,14 @@ class MenuController {
 
       const menu = this.menus.find((m) => m.id === Number(menuId));
       if (!menu) throw new Error('Menu non trouvé');
-      const products = menu.products || [];
 
-      await Promise.all(
-        products.map(async (product) => {
-          if (product.id) {
-            const res = await fetch(`http://localhost:8083/menuProduct/${product.id}`, {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-              },
-              method: 'DELETE'
-            });
-            if (!res.ok) {
-              console.error(`Erreur lors de la suppression de menuProduct.id=${product.id}`);
-            } else {
-              console.log(`menuProduct.id=${product.id} supprimé avec succès`);
-            }
-          }
-        })
-      );
-
-      const res = await fetch(`http://localhost:8083/menu/${menuId}`, { method: 'DELETE' });
+      const res = await fetch(`http://localhost:8083/menu/${menuId}`, { 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        method: 'DELETE' 
+      });
       if (!res.ok) {
         throw new Error('Erreur lors de la suppression du menu');
       }

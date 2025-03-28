@@ -140,6 +140,27 @@ class Order extends Controller {
       }
   }
 
+  /*========================= PAYMENT =======================================*/
+
+  #[Route("PATCH", "/orders/:id/update-payment")]
+  public function updatePayment() {
+      $orderId = intval($this->params['id']);
+      $data = $this->body; // JSON payload
+      $rawInput = file_get_contents('php://input');
+      $data = json_decode($rawInput);
+      $payment_method_id = intval($data->payment_method_id); // Par défaut 1 pour N/A
+      
+      $result = $this->order->updatePayment($orderId, $payment_method_id);
+      
+      if ($result) {
+          header('Content-Type: application/json');
+          return['success' => true, 'payment_method_id' => $payment_method_id];
+      } else {
+          header("HTTP/1.1 500 Internal Server Error");
+          return['success' => false, 'error' => 'Erreur de mise à jour de la remise'];
+      }
+  }
+
 
   /*========================= DELETE ========================================*/
 

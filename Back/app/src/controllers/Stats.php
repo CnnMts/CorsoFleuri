@@ -23,6 +23,7 @@ class Stats extends Controller {
       // Récupération de l'année depuis les paramètres
       $year = $this->params['years'];
       $data = $this->stats->getAll($year);
+      error_log(print_r($data, true));
     
       header('Content-Type: text/csv; charset=utf-8');
       header('Content-Disposition: attachment; filename="stats_' . $year . '.csv"');
@@ -40,7 +41,6 @@ class Stats extends Controller {
           'MoyenPaiement',
           'MenuID',
           'ProductName',
-          'ItemsQuantity',
           'PrixVenteParItem',
           'CategorieProduit',
           'PrixAchat',

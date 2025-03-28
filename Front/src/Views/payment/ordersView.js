@@ -1,7 +1,7 @@
 import orderMenusView from "./orderMenusView.js";
 import menuChoicesView from "./menuChoicesView.js";
 
-const ordersView = ({ id, status_id, total_price, discount_id, menusNames, products }) => {
+const ordersView = ({ id, status_id, total_price, discount_id, payment_method_id, menusNames, products }) => {
     return `
       <div class="containerOrders">
         <div class="Order">
@@ -27,9 +27,18 @@ const ordersView = ({ id, status_id, total_price, discount_id, menusNames, produ
               <option value="2" ${discount_id == 2 ? 'selected' : ''}>Partenaires</option>
               <option value="3" ${discount_id == 3 ? 'selected' : ''}>VIP</option>
             </select>
-
-            <button class="print-order-btn" data-order-id="${id}">Imprimer</button>
           </div>
+
+          <!-- Définition du moyen de paiement via un select -->
+          <div class="PaymentStatus">
+          <label for="payment-${id}">Moyen de paiement :</label>
+            <select id="payment-${id}" class="payment-select" data-payment-order-id="${id}">
+              <option value="1" ${payment_method_id == 1 ? 'selected' : ''}>Espèces</option>
+              <option value="2" ${payment_method_id == 2 ? 'selected' : ''}>Carte Bancaire</option>
+            </select>
+          </div>
+
+          <button class="print-order-btn" data-order-id="${id}">Imprimer</button>
         </div>
       </div>
     `;

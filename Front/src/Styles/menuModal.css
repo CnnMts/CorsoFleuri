@@ -1,0 +1,25 @@
+.modal-container {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #AAAAAA55;
+    backdrop-filter: blur(4px);
+}
+
+.modal-container .modal {
+    padding: 16px;
+}
+
+.modal-container .modal button {
+    padding: 4px 8px;
+}
+
+.modal-container .modal .category li {
+    display: flex;
+    align-items: center;
+}

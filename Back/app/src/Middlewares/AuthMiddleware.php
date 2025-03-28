@@ -6,6 +6,11 @@ use App\Utils\JWT;
 
 class AuthMiddleware {
     public function handle(&$request) {
+
+        // On a pas réussi à faire fonctionner le AuthMiddleware
+        // malgré que tout semble ok,
+        // mais le RoleMiddleware marche très bien
+
         // $headers = getallheaders();
         
         // if (!isset($headers['Authorization'])) {

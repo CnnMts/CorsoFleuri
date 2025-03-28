@@ -11,38 +11,6 @@ class OrderModel extends SqlConnect {
     'user_id', 'status_id', 'discount_id', 'payment_method_id'];
 
   /*========================= ADD ===========================================*/
-
-  // public function add(array $data) {
-  //   $query = "
-  //     INSERT INTO $this->table (user_id, status_id, discount_id, payment_method_id)
-  //     VALUES (:user_id, :status_id, :discount_id, :payment_method_id)
-  //   ";
-
-  //   $req = $this->db->prepare($query);
-  //   $req->execute($data);
-  // }
-  // Supposons que $menuData->productsDetails est un tableau d'objets contenant les produits,
-// par exemple :
-// [
-//   { "id":3,  "name":"Taboule",     "category_id":1, ... },
-//   { "id":5,  "name":"Chipolatas",  "category_id":2, ... },
-//   { "id":9,  "name":"Frites",      "category_id":5, ... },
-//   { "id":11, "name":"Tarte",       "category_id":3, ... }
-// ]
-//
-// Vous devez définir le mapping de vos catégories tel que vous l'entendez.
-// Par exemple, supposons :
-//
-// - category_id 1  => starter
-// - category_id 2  => main_course
-// - category_id 3  => dessert
-// - category_id 4  => drink
-//
-// Si dans vos données le produit "Frites" a category_id 5 et n'est pas attendu, vous pouvez l'ignorer,
-// ou bien définir une règle alternative (par exemple, traiter 5 comme "drink" ou "autre").
-// Ici, nous utiliserons uniquement les valeurs 1, 2, 3 et 4.
-
-// La fonction récupère les ID en fonction de category_id
   
   public function createOrder($orderData) {
     try {
@@ -252,10 +220,16 @@ class OrderModel extends SqlConnect {
     return $newStatus;
   }
 
-  /*========================= DISCOUNT ========================================*/
+  /*========================= DISCOUNT =======================================*/
   public function updateDiscount(int $orderId, int $discount_id) {
     $stmt = $this->db->prepare("UPDATE `orders` SET discount_id = :discount_id WHERE id = :orderId");
     return $stmt->execute(['discount_id' => $discount_id, 'orderId' => $orderId]);
+  }
+
+  /*========================= PAYMENT ========================================*/
+  public function updatePayment(int $orderId, int $payment_method_id) {
+    $stmt = $this->db->prepare("UPDATE `orders` SET payment_method_id = :payment_method_id WHERE id = :orderId");
+    return $stmt->execute(['payment_method_id' => $payment_method_id, 'orderId' => $orderId]);
   }
 
   /*========================= DELETE ========================================*/
